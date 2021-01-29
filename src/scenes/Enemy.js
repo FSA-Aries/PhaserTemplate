@@ -8,12 +8,17 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.y = y;
     this.enemy = this.scene.physics.add.sprite(x, y, "enemy");
   }
+
+  // const randomizedPosition = Math.random() * 450;
+  // this.enemy.create(randomizedPosition, 10, "enemy");
+
   // update(){
-  //   this.enemy.outOfBoundsKill = true;
-  //   if (this.game.physics.arcade.distanceBetween(this.enemy, this.enemy) < 400) {
-  //     if(this.pe.x < this.enemy.x && this.enemy.body.velocity.x >= 0) {
-  //       this.enemy.body.velocity
-  //     }
-  //   }
+
+  // //   this.enemy.outOfBoundsKill = true;
+  // //   if (this.game.physics.arcade.distanceBetween(this.enemy, this.enemy) < 400) {
+  // //     if(this.pe.x < this.enemy.x && this.enemy.body.velocity.x >= 0) {
+  // //       this.enemy.body.velocity
+  // //     }
+  // //   }
   // }
 }

@@ -48,9 +48,6 @@ export default class GameScene extends Phaser.Scene {
 
     this.player = this.createPlayer();
     this.enemy = this.createEnemy();
-    // this.enemy = this.physics.add.group();
-    // const randomizedPosition = Math.random() * 450;
-    // this.enemy.create(randomizedPosition, 10, "enemy");
 
     this.cursors = this.input.keyboard.createCursorKeys();
   }
@@ -76,16 +73,6 @@ export default class GameScene extends Phaser.Scene {
     } else if (this.cursors.down.isDown) {
       this.player.setVelocityY(150);
     }
-    // ENEMY BEHAVIOR
-    // this.enemy.outOfBoundsKill = true;
-
-    // if (
-    //   this.game.physics.arcade.distanceBetween(this.enemy, this.player) < 400
-    // ) {
-    //   if (this.player.x < this.enemy.x && this.enemy.body.velocity.x >= 0) {
-    //     this.enemy.body.velocity;
-    //   }
-    // }
   }
 
   ///// HELPER FUNCTIONS /////
@@ -114,6 +101,13 @@ export default class GameScene extends Phaser.Scene {
     return player;
   }
   createEnemy() {
-    return new Enemy(this, 450, 450, ENEMY, ENEMY_KEY);
+    const randomizedPosition = Math.random() * 450;
+    return new Enemy(
+      this,
+      randomizedPosition,
+      randomizedPosition,
+      ENEMY,
+      ENEMY_KEY
+    );
   }
 }

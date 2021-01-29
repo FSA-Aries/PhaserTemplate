@@ -1,13 +1,19 @@
-import Phaser from 'phaser';
+import Phaser from "phaser";
 
-import GameScene from './scenes/GameScene';
+import GameScene from "./scenes/GameScene";
+
+const MAP_WIDTH = 1600;
+
+const WIDTH = document.body.offsetWidth;
+const HEIGHT = 600;
 
 const config = {
   type: Phaser.AUTO,
-  width: 800,
-  height: 800,
+  mapOffset: MAP_WIDTH > WIDTH ? MAP_WIDTH - WIDTH : 0,
+  width: WIDTH,
+  height: HEIGHT,
   physics: {
-    default: 'arcade',
+    default: "arcade",
     arcade: {
       gravity: { y: 0 },
     },

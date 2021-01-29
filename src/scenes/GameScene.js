@@ -37,6 +37,8 @@ export default class GameScene extends Phaser.Scene {
     const worldLayer = map.createLayer("Walls", tileSet, 0, 0);
 
     this.player = this.createPlayer();
+
+    this.setupFollowupCameraOn(this.player);
   }
 
   ///// UPDATE /////
@@ -47,5 +49,9 @@ export default class GameScene extends Phaser.Scene {
   // PLAYER ANIMATION
   createPlayer() {
     return new Player(this, 400, 375);
+  }
+
+  setupFollowupCameraOn(player) {
+    this.cameras.main.startFollow(player);
   }
 }

@@ -1,17 +1,18 @@
 import Phaser from "phaser";
+import Enemy from "./Enemy.js";
 
 // PLAYER
 const PLAYER = "assets/characters/Player.png";
 const PLAYER_KEY = "player";
+//ENEMY
+const ENEMY = "assets/characters/Enemy/zombies.png";
+const ENEMY_KEY = "enemy";
 // TILESET
 const TILESET = "assets/tilesets/TileSet.png";
 const TILESET_KEY = "tileSet";
 // TILEMAP
 const TILEMAP = "assets/tilesets/TiledMap.json";
 const TILEMAP_KEY = "main";
-//ENEMY
-const ENEMY = "assets/characters/Enemy.png";
-const ENEMY_KEY = "enemy";
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -19,6 +20,7 @@ export default class GameScene extends Phaser.Scene {
     this.player = undefined;
     this.enemy = undefined;
     this.cursors = undefined;
+    this.game = undefined;
   }
 
   ///// PRELOAD /////
@@ -28,7 +30,7 @@ export default class GameScene extends Phaser.Scene {
 
     this.load.spritesheet(ENEMY_KEY, ENEMY, {
       frameWidth: 32,
-      frameHeight: 48,
+      frameHeight: 72,
     });
 
     this.load.spritesheet(PLAYER_KEY, PLAYER, {
@@ -45,12 +47,17 @@ export default class GameScene extends Phaser.Scene {
     const worldLayer = map.createLayer("Walls", tileSet, 0, 0);
 
     this.player = this.createPlayer();
+    this.enemy = this.createEnemy();
+    // this.enemy = this.physics.add.group();
+    // const randomizedPosition = Math.random() * 450;
+    // this.enemy.create(randomizedPosition, 10, "enemy");
 
     this.cursors = this.input.keyboard.createCursorKeys();
   }
 
   ///// UPDATE /////
   update() {
+    //PLAYER
     this.player.body.setVelocity(0);
 
     if (this.cursors.left.isDown) {
@@ -69,6 +76,16 @@ export default class GameScene extends Phaser.Scene {
     } else if (this.cursors.down.isDown) {
       this.player.setVelocityY(150);
     }
+    // ENEMY BEHAVIOR
+    // this.enemy.outOfBoundsKill = true;
+
+    // if (
+    //   this.game.physics.arcade.distanceBetween(this.enemy, this.player) < 400
+    // ) {
+    //   if (this.player.x < this.enemy.x && this.enemy.body.velocity.x >= 0) {
+    //     this.enemy.body.velocity;
+    //   }
+    // }
   }
 
   ///// HELPER FUNCTIONS /////
@@ -97,25 +114,6 @@ export default class GameScene extends Phaser.Scene {
     return player;
   }
   createEnemy() {
-    const player = this.physics.add.sprite(400, 375, PLAYER_KEY);
-    player.setCollideWorldBounds(true);
-    this.anims.create({
-      key: "left",
-      frames: this.anims.generateFrameNumbers(PLAYER_KEY, { start: 0, end: 3 }),
-      frameRate: 10,
-      repeat: -1,
-    });
-    this.anims.create({
-      key: "turn",
-      frames: [{ key: PLAYER_KEY, frame: 4 }],
-      frameRate: 10,
-    });
-    this.anims.create({
-      key: "right",
-      frames: this.anims.generateFrameNumbers(PLAYER_KEY, { start: 5, end: 8 }),
-      frameRate: 10,
-      repeat: -1,
-    });
-    return player;
+    return new Enemy(this, 450, 450, ENEMY, ENEMY_KEY);
   }
 }

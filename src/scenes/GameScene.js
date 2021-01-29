@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import Bullet from '../classes/Bullet'
 
 // PLAYER
 const PLAYER = 'assets/characters/pokemonDude.png';
@@ -15,10 +16,16 @@ export default class GameScene extends Phaser.Scene {
     super('game-scene');
     this.player = undefined;
     this.cursors = undefined;
+    this.reticle = undefined;
   }
+
+
 
   ///// PRELOAD /////
   preload() {
+    this.load.image('bullet', 'assets/characters/Bullet.png')
+    this.load.image('reticle', 'assets/characters/reticle.png')
+
     this.load.image(TILESET_KEY, TILESET);
     this.load.tilemapTiledJSON(TILEMAP_KEY, TILEMAP);
 
@@ -30,6 +37,14 @@ export default class GameScene extends Phaser.Scene {
 
   ///// CREATE /////
   create() {
+
+    let playerBullets = this.physics.add.group({ classType: Bullet, runChildUpdate: true })
+    this.reticle = this.physics.add.sprite(0, 0, 'reticle')
+    this.reticle.setDisplaySize(25, 25).setCollideWorldBounds(true);
+
+
+
+
     let map = this.make.tilemap({ key: TILEMAP_KEY });
     let tileSet = map.addTilesetImage('TiledSet', TILESET_KEY);
     const belowLayer = map.createLayer('Ground', tileSet, 0, 0);
@@ -40,6 +55,26 @@ export default class GameScene extends Phaser.Scene {
 
 
     this.cursors = this.input.keyboard.createCursorKeys();
+
+    ///////////////////
+
+
+
+
+    this.input.on('pointerdown', function (pointer, time, lastFired) {
+      if (this.player.active === false)
+        return;
+
+      // Get bullet from bullets group
+      let bullet = playerBullets.get().setActive(true).setVisible(true);
+
+      if (bullet) {
+        bullet.fire(this.player, this.reticle);
+        //this.physics.add.collider(enemy, bullet, enemyHitCallback);
+      }
+    }, this);
+
+    //////////////////////
   }
 
   ///// UPDATE /////
@@ -77,33 +112,23 @@ export default class GameScene extends Phaser.Scene {
     }
 
 
+    let angle = 0;
+    this.input.on('pointermove', function (pointer) {
+      angle = Phaser.Math.Angle.BetweenPoints(this.player, pointer);
+
+      //console.log(this.input.mousePointer.x)
+
+      this.reticle.x = this.input.x
+      this.reticle.y = this.input.y
+      //console.log('if')
 
 
-    /*     if (this.cursors.left.isDown && this.cursors.up.isDown) {
-          this.player.setVelocityX(-150);
-          this.player.setVelocityY(-150);
-          this.player.anims.play('left', true);
-        }
-        if (this.cursors.left.isDown && this.cursors.down.isDown) {
-          this.player.setVelocityX(-150);
-          this.player.setVelocityY(150);
-          this.player.anims.play('left', true);
-        }
-        if (this.cursors.right.isDown && this.cursors.up.isDown) {
-          this.player.setVelocityX(150);
-          this.player.setVelocityY(-150);
-          this.player.anims.play('right', true);
-        }
-        if (this.cursors.right.isDown && this.cursors.down.isDown) {
-          this.player.setVelocityX(150);
-          this.player.setVelocityY(150);
-          this.player.anims.play('right', true);
-        } */
+      //console.log(this.reticle)
 
-    /* if (this.player.body.velocity.x === 0 && this.player.body.velocity.y === 0) {
-      this.player.setVelocityX(0);
-      this.player.anims.play('turn');
-    } */
+
+      //console.log(pointer.movementY)
+      //this.player.rotation = angle;
+    }, this);
 
 
   }
@@ -146,3 +171,4 @@ export default class GameScene extends Phaser.Scene {
     return player;
   }
 }
+

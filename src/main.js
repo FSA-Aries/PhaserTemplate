@@ -2,16 +2,17 @@ import Phaser from "phaser";
 
 import GameScene from "./scenes/GameScene";
 
-const MAP_WIDTH = 1600;
+const MAP_WIDTH = 800;
 
 const WIDTH = document.body.offsetWidth;
-const HEIGHT = 600;
+const HEIGHT = 800;
 
-const config = {
+export const config = {
   type: Phaser.AUTO,
   mapOffset: MAP_WIDTH > WIDTH ? MAP_WIDTH - WIDTH : 0,
   width: WIDTH,
   height: HEIGHT,
+  zoomFactor: 1.5,
   physics: {
     default: "arcade",
     arcade: {

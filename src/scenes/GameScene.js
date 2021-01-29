@@ -1,6 +1,8 @@
 import Phaser from "phaser";
 import Player from "../entities/Player";
 
+import { config } from "../main";
+
 // PLAYER
 const PLAYER = "assets/characters/Player.png";
 const PLAYER_KEY = "player";
@@ -52,15 +54,16 @@ export default class GameScene extends Phaser.Scene {
   }
 
   setupFollowupCameraOn(player) {
+    this.physics.world.setBounds(
+      0,
+      0,
+      config.width + config.mapOffset,
+      config.height
+    );
+
+    this.cameras.main
+      .setBounds(0, 0, config.width + config.mapOffset, config.height)
+      .setZoom(1.25);
     this.cameras.main.startFollow(player);
   }
-
-  // setupFollowupCameraOn(player) {
-  //   const { height, width, mapOffset, zoomFactor } = this.config;
-  //   this.physics.world.setBounds(0, 0, width + mapOffset, height);
-  //   this.cameras.main
-  //     .setBounds(0, 0, width + mapOffset, height)
-  //     .setZoom(zoomFactor);
-  //   this.cameras.main.startFollow(player);
-  // }
 }

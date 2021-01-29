@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 
 // PLAYER
-const PLAYER = 'assets/characters/Player.png';
+const PLAYER = 'assets/characters/pokemonDude.png';
 const PLAYER_KEY = 'player';
 // TILESET
 const TILESET = 'assets/tilesets/TileSet.png';
@@ -23,8 +23,8 @@ export default class GameScene extends Phaser.Scene {
     this.load.tilemapTiledJSON(TILEMAP_KEY, TILEMAP);
 
     this.load.spritesheet(PLAYER_KEY, PLAYER, {
-      frameWidth: 32,
-      frameHeight: 48,
+      frameWidth: 50,
+      frameHeight: 69,
     });
   }
 
@@ -50,15 +50,15 @@ export default class GameScene extends Phaser.Scene {
     } else if (this.cursors.right.isDown) {
       this.player.setVelocityX(150);
       this.player.anims.play('right', true);
+    } else if (this.cursors.up.isDown) {
+      this.player.setVelocityY(-150);
+      this.player.anims.play('up', true);
+    } else if (this.cursors.down.isDown) {
+      this.player.setVelocityY(150);
+      this.player.anims.play('down', true);
     } else {
       this.player.setVelocityX(0);
       this.player.anims.play('turn');
-    }
-
-    if (this.cursors.up.isDown) {
-      this.player.setVelocityY(-150);
-    } else if (this.cursors.down.isDown) {
-      this.player.setVelocityY(150);
     }
   }
 
@@ -70,20 +70,30 @@ export default class GameScene extends Phaser.Scene {
     player.setCollideWorldBounds(true);
     this.anims.create({
       key: 'left',
-      frames: this.anims.generateFrameNumbers(PLAYER_KEY, { start: 0, end: 3 }),
+      frames: this.anims.generateFrameNumbers(PLAYER_KEY, { start: 3, end: 5 }),
       frameRate: 10,
       repeat: -1,
     });
     this.anims.create({
       key: 'turn',
-      frames: [{ key: PLAYER_KEY, frame: 4 }],
+      frames: [{ key: PLAYER_KEY, frame: 1 }],
       frameRate: 10,
     });
     this.anims.create({
       key: 'right',
-      frames: this.anims.generateFrameNumbers(PLAYER_KEY, { start: 5, end: 8 }),
+      frames: this.anims.generateFrameNumbers(PLAYER_KEY, { start: 6, end: 8 }),
       frameRate: 10,
       repeat: -1,
+    });
+    this.anims.create({
+      key: 'up',
+      frames: this.anims.generateFrameNumbers(PLAYER_KEY, { start: 9, end: 11 }),
+      frameRate: 10,
+    });
+    this.anims.create({
+      key: 'down',
+      frames: this.anims.generateFrameNumbers(PLAYER_KEY, { start: 0, end: 2 }),
+      frameRate: 10,
     });
     return player;
   }

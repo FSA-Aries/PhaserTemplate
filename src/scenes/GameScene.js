@@ -33,8 +33,8 @@ export default class GameScene extends Phaser.Scene {
   create() {
     let map = this.make.tilemap({ key: TILEMAP_KEY });
     let tileSet = map.addTilesetImage("TiledSet", TILESET_KEY);
-    const belowLayer = map.createLayer("Ground", tileSet, 0, 0);
-    const worldLayer = map.createLayer("Walls", tileSet, 0, 0);
+    map.createLayer("Ground", tileSet, 0, 0);
+    map.createLayer("Walls", tileSet, 0, 0);
 
     this.player = this.createPlayer();
 
@@ -54,4 +54,13 @@ export default class GameScene extends Phaser.Scene {
   setupFollowupCameraOn(player) {
     this.cameras.main.startFollow(player);
   }
+
+  // setupFollowupCameraOn(player) {
+  //   const { height, width, mapOffset, zoomFactor } = this.config;
+  //   this.physics.world.setBounds(0, 0, width + mapOffset, height);
+  //   this.cameras.main
+  //     .setBounds(0, 0, width + mapOffset, height)
+  //     .setZoom(zoomFactor);
+  //   this.cameras.main.startFollow(player);
+  // }
 }

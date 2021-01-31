@@ -72,12 +72,6 @@ export default class GameScene extends Phaser.Scene {
     } else if (this.cursors.down.isDown) {
       this.player.setVelocityY(150);
     }
-
-    // if (Phaser.Math.Distance.BetweenPoints(this.player, this.enemy) < 400) {
-    //   if (this.player.x < this.enemy.x && this.enemy.body.velocity.x >= 0) {
-    //     this.enemy.body.velocity;
-    //   }
-    // }
   }
 
   ///// HELPER FUNCTIONS /////
@@ -112,7 +106,8 @@ export default class GameScene extends Phaser.Scene {
       randomizedPosition,
       randomizedPosition,
       ENEMY_KEY,
-      ENEMY
+      ENEMY,
+      this.player
     );
   }
 }

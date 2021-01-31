@@ -7,7 +7,7 @@ assets.RETICLE_KEY = 'reticle';
 assets.RETICLE_URL = 'assets/arsenal/Reticle.png';
 // CHARACTERS
 assets.PLAYER_KEY = 'player';
-assets.PLAYER_URL = 'assets/characters/Player.png';
+assets.PLAYER_URL = 'assets/characters/PokemonDude.png';
 // TILESET
 assets.TILEMAP_KEY = 'tileMap';
 assets.TILEMAP_URL = 'assets/tilesets/TiledMap.json';

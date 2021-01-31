@@ -29,8 +29,8 @@ export default class GameScene extends Phaser.Scene {
     this.load.tilemapTiledJSON(TILEMAP_KEY, TILEMAP);
 
     this.load.spritesheet(ENEMY_KEY, ENEMY, {
-      frameWidth: 32,
-      frameHeight: 72,
+      frameWidth: 30,
+      frameHeight: 62,
     });
 
     this.load.spritesheet(PLAYER_KEY, PLAYER, {
@@ -56,7 +56,6 @@ export default class GameScene extends Phaser.Scene {
   update() {
     //PLAYER
     this.player.body.setVelocity(0);
-
     if (this.cursors.left.isDown) {
       this.player.setVelocityX(-150);
       this.player.anims.play("left", true);
@@ -73,6 +72,12 @@ export default class GameScene extends Phaser.Scene {
     } else if (this.cursors.down.isDown) {
       this.player.setVelocityY(150);
     }
+
+    // if (Phaser.Math.Distance.BetweenPoints(this.player, this.enemy) < 400) {
+    //   if (this.player.x < this.enemy.x && this.enemy.body.velocity.x >= 0) {
+    //     this.enemy.body.velocity;
+    //   }
+    // }
   }
 
   ///// HELPER FUNCTIONS /////
@@ -106,8 +111,8 @@ export default class GameScene extends Phaser.Scene {
       this,
       randomizedPosition,
       randomizedPosition,
-      ENEMY,
-      ENEMY_KEY
+      ENEMY_KEY,
+      ENEMY
     );
   }
 }

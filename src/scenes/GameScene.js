@@ -20,8 +20,6 @@ export default class GameScene extends Phaser.Scene {
     this.reticle = undefined;
   }
 
-
-
   ///// PRELOAD /////
   preload() {
     this.load.image(assets.BULLET_KEY, assets.BULLET_URL);
@@ -49,7 +47,15 @@ export default class GameScene extends Phaser.Scene {
 
     this.player = this.createPlayer();
     this.player.setTexture(assets.PLAYER_KEY, 1);
-    this.enemy = this.createEnemy();
+    for (let i = 0; i < 2; i++) {
+      this.time.addEvent({
+        delay: 2000,
+        callback: () => {
+          this.createEnemy();
+        },
+        loop: true,
+      });
+    }
 
     this.cursors = this.input.keyboard.createCursorKeys();
     let playerBullets = this.physics.add.group({
@@ -80,7 +86,10 @@ export default class GameScene extends Phaser.Scene {
       "pointermove",
       function (pointer) {
         //console.log(this.input.mousePointer.x)
-        const transformedPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
+        const transformedPoint = this.cameras.main.getWorldPoint(
+          pointer.x,
+          pointer.y
+        );
 
         this.reticle.x = transformedPoint.x;
         this.reticle.y = transformedPoint.y;
@@ -97,7 +106,7 @@ export default class GameScene extends Phaser.Scene {
   //       this
   //     );
   //   }
-  update() { }
+  update() {}
 
   ///// HELPER FUNCTIONS /////
 
@@ -133,4 +142,3 @@ export default class GameScene extends Phaser.Scene {
     );
   }
 }
-

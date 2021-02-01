@@ -1,10 +1,14 @@
-import Phaser from 'phaser';
+import Phaser from "phaser";
+import Player from "../entities/Player";
 import Bullet from '../classes/Bullet';
 import assets from '../../public/assets';
 
+import { config } from "../main";
+
+
 export default class GameScene extends Phaser.Scene {
   constructor() {
-    super('game-scene');
+    super("game-scene");
     this.player = undefined;
     this.cursors = undefined;
     this.reticle = undefined;
@@ -57,115 +61,124 @@ export default class GameScene extends Phaser.Scene {
       },
       this
     );
-
     this.setupFollowupCameraOn(this.player);
   }
 
   ///// UPDATE /////
-  update() {
-    this.player.body.setVelocity(0);
-    const prevVelocity = this.player.body.velocity.clone();
+//   update() {
+//     this.player.body.setVelocity(0);
+//     const prevVelocity = this.player.body.velocity.clone();
 
-    if (this.cursors.left.isDown) {
-      this.player.setVelocityX(-150);
-    } else if (this.cursors.right.isDown) {
-      this.player.setVelocityX(150);
-    }
-    if (this.cursors.up.isDown) {
-      this.player.setVelocityY(-150);
-    } else if (this.cursors.down.isDown) {
-      this.player.setVelocityY(150);
-    }
+//     if (this.cursors.left.isDown) {
+//       this.player.setVelocityX(-150);
+//     } else if (this.cursors.right.isDown) {
+//       this.player.setVelocityX(150);
+//     }
+//     if (this.cursors.up.isDown) {
+//       this.player.setVelocityY(-150);
+//     } else if (this.cursors.down.isDown) {
+//       this.player.setVelocityY(150);
+//     }
 
-    if (this.cursors.left.isDown) {
-      this.player.anims.play('left', true);
-    } else if (this.cursors.right.isDown) {
-      this.player.anims.play('right', true);
-    } else if (this.cursors.up.isDown) {
-      this.player.anims.play('up', true);
-    } else if (this.cursors.down.isDown) {
-      this.player.anims.play('down', true);
-    } else {
-      this.player.anims.stop();
+//     if (this.cursors.left.isDown) {
+//       this.player.anims.play('left', true);
+//     } else if (this.cursors.right.isDown) {
+//       this.player.anims.play('right', true);
+//     } else if (this.cursors.up.isDown) {
+//       this.player.anims.play('up', true);
+//     } else if (this.cursors.down.isDown) {
+//       this.player.anims.play('down', true);
+//     } else {
+//       this.player.anims.stop();
 
-      if (prevVelocity.x < 0) this.player.setTexture(assets.PLAYER_KEY, 4);
-      else if (prevVelocity.x > 0) this.player.setTexture(assets.PLAYER_KEY, 8);
-      else if (prevVelocity.y < 0)
-        this.player.setTexture(assets.PLAYER_KEY, 10);
-      else if (prevVelocity.y > 0) this.player.setTexture(assets.PLAYER_KEY, 1);
-    }
+//       if (prevVelocity.x < 0) this.player.setTexture(assets.PLAYER_KEY, 4);
+//       else if (prevVelocity.x > 0) this.player.setTexture(assets.PLAYER_KEY, 8);
+//       else if (prevVelocity.y < 0)
+//         this.player.setTexture(assets.PLAYER_KEY, 10);
+//       else if (prevVelocity.y > 0) this.player.setTexture(assets.PLAYER_KEY, 1);
+//     }
 
-    this.input.on(
-      'pointermove',
-      function () {
-        //console.log(this.input.mousePointer.x)
+//     this.input.on(
+//       'pointermove',
+//       function () {
+//         //console.log(this.input.mousePointer.x)
 
-        this.reticle.x = this.input.mousePointer.x;
-        this.reticle.y = this.input.mousePointer.y;
-        //console.log('if')
+//         this.reticle.x = this.input.mousePointer.x;
+//         this.reticle.y = this.input.mousePointer.y;
+//         //console.log('if')
 
-        //console.log(this.reticle)
+//         //console.log(this.reticle)
 
-        //console.log(pointer.movementY)
-        //this.player.rotation = angle;
-      },
-      this
-    );
-  }
+//         //console.log(pointer.movementY)
+//         //this.player.rotation = angle;
+//       },
+//       this
+//     );
+//   }
+  update() {}
 
   ///// HELPER FUNCTIONS /////
 
   // PLAYER ANIMATION
   createPlayer() {
-    const player = this.physics.add.sprite(400, 375, assets.PLAYER_KEY);
-    player.setCollideWorldBounds(true);
-    this.anims.create({
-      key: 'left',
-      frames: this.anims.generateFrameNumbers(assets.PLAYER_KEY, {
-        start: 3,
-        end: 5,
-      }),
-      frameRate: 10,
-      //repeat: -1,
-    });
-    this.anims.create({
-      key: 'turn',
-      frames: [{ key: assets.PLAYER_KEY, frame: 1 }],
-      frameRate: 10,
-    });
-    this.anims.create({
-      key: 'right',
-      frames: this.anims.generateFrameNumbers(assets.PLAYER_KEY, {
-        start: 6,
-        end: 8,
-      }),
-      frameRate: 10,
-      //repeat: -1,
-    });
-    this.anims.create({
-      key: 'up',
-      frames: this.anims.generateFrameNumbers(assets.PLAYER_KEY, {
-        start: 9,
-        end: 11,
-      }),
-      frameRate: 10,
-      //repeat: -1
-    });
-    this.anims.create({
-      key: 'down',
-      frames: this.anims.generateFrameNumbers(assets.PLAYER_KEY, {
-        start: 0,
-        end: 2,
-      }),
-      frameRate: 10,
-      //repeat: -1
-    });
-    return player;
+//     const player = this.physics.add.sprite(400, 375, assets.PLAYER_KEY);
+//     player.setCollideWorldBounds(true);
+//     this.anims.create({
+//       key: 'left',
+//       frames: this.anims.generateFrameNumbers(assets.PLAYER_KEY, {
+//         start: 3,
+//         end: 5,
+//       }),
+//       frameRate: 10,
+//       //repeat: -1,
+//     });
+//     this.anims.create({
+//       key: 'turn',
+//       frames: [{ key: assets.PLAYER_KEY, frame: 1 }],
+//       frameRate: 10,
+//     });
+//     this.anims.create({
+//       key: 'right',
+//       frames: this.anims.generateFrameNumbers(assets.PLAYER_KEY, {
+//         start: 6,
+//         end: 8,
+//       }),
+//       frameRate: 10,
+//       //repeat: -1,
+//     });
+//     this.anims.create({
+//       key: 'up',
+//       frames: this.anims.generateFrameNumbers(assets.PLAYER_KEY, {
+//         start: 9,
+//         end: 11,
+//       }),
+//       frameRate: 10,
+//       //repeat: -1
+//     });
+//     this.anims.create({
+//       key: 'down',
+//       frames: this.anims.generateFrameNumbers(assets.PLAYER_KEY, {
+//         start: 0,
+//         end: 2,
+//       }),
+//       frameRate: 10,
+//       //repeat: -1
+//     });
+//     return player;
+    return new Player(this, 400, 375);
   }
 
   setupFollowupCameraOn(player) {
-    this.physics.world.setBounds(0, 0, 800, 800);
-    this.cameras.main.setBounds(0, 0, 800, 800).setZoom(1.5);
+    this.physics.world.setBounds(
+      0,
+      0,
+      config.width + config.mapOffset,
+      config.height
+    );
+
+    this.cameras.main
+      .setBounds(0, 0, config.width + config.mapOffset, config.height)
+      .setZoom(1.5);
     this.cameras.main.startFollow(player);
   }
 }

@@ -63,18 +63,22 @@ export default class GameScene extends Phaser.Scene {
     );
     this.setupFollowupCameraOn(this.player);
 
-    this.input.on('pointermove', function () {
-      //console.log(this.input.mousePointer.x)
+    this.input.on(
+      'pointermove',
+      function () {
+        //console.log(this.input.mousePointer.x)
 
-      this.reticle.x = this.input.x;
-      this.reticle.y = this.input.y;
-      //console.log('if')
+        this.reticle.x = this.input.x;
+        this.reticle.y = this.input.y;
+        //console.log('if')
 
-      //console.log(this.reticle)
+        //console.log(this.reticle)
 
-      //console.log(pointer.movementY)
-      //this.player.rotation = angle;
-    });
+        //console.log(pointer.movementY)
+        //this.player.rotation = angle;
+      },
+      this
+    );
   }
 
   //       this

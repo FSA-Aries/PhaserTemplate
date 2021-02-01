@@ -1,4 +1,9 @@
+// //ENEMY
+// const ENEMY = "assets/characters/Enemy/zombies.png";
+// const ENEMY_KEY = "enemy";
+
 import Phaser from 'phaser';
+import Enemy from "./Enemy.js";
 import Player from '../classes/Player';
 import Bullet from '../classes/Bullet';
 import assets from '../../public/assets';
@@ -7,9 +12,11 @@ import { config } from '../main';
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
-    super('game-scene');
+    super("game-scene");
     this.player = undefined;
+    this.enemy = undefined;
     this.cursors = undefined;
+    this.game = undefined;
     this.reticle = undefined;
   }
 
@@ -20,6 +27,10 @@ export default class GameScene extends Phaser.Scene {
     this.load.image(assets.TILESET_KEY, assets.TILESET_URL);
     this.load.tilemapTiledJSON(assets.TILEMAP_KEY, assets.TILEMAP_URL);
 
+    this.load.spritesheet(ENEMY_KEY, ENEMY, {
+      frameWidth: 30,
+      frameHeight: 62,
+    });
     this.load.spritesheet(assets.PLAYER_KEY, assets.PLAYER_URL, {
       frameWidth: 50,
       frameHeight: 69,
@@ -36,9 +47,9 @@ export default class GameScene extends Phaser.Scene {
 
     this.player = this.createPlayer();
     this.player.setTexture(assets.PLAYER_KEY, 1);
+    this.enemy = this.createEnemy();
 
     this.cursors = this.input.keyboard.createCursorKeys();
-
     let playerBullets = this.physics.add.group({
       classType: Bullet,
       runChildUpdate: true,
@@ -108,5 +119,16 @@ export default class GameScene extends Phaser.Scene {
       .setBounds(0, 0, config.width + config.mapOffset, config.height)
       .setZoom(1.5);
     this.cameras.main.startFollow(player);
+  }
+  createEnemy() {
+    const randomizedPosition = Math.random() * 450;
+    return new Enemy(
+      this,
+      randomizedPosition,
+      randomizedPosition,
+      ENEMY_KEY,
+      ENEMY,
+      this.player
+    );
   }
 }

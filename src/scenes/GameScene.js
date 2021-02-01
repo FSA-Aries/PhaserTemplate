@@ -20,6 +20,8 @@ export default class GameScene extends Phaser.Scene {
     this.reticle = undefined;
   }
 
+
+
   ///// PRELOAD /////
   preload() {
     this.load.image(assets.BULLET_KEY, assets.BULLET_URL);
@@ -76,15 +78,15 @@ export default class GameScene extends Phaser.Scene {
 
     this.input.on(
       "pointermove",
-      function () {
+      function (pointer) {
         //console.log(this.input.mousePointer.x)
+        const transformedPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
 
-        this.reticle.x = this.input.x;
-        this.reticle.y = this.input.y;
+        this.reticle.x = transformedPoint.x;
+        this.reticle.y = transformedPoint.y;
         //console.log('if')
 
         //console.log(this.reticle)
-
         //console.log(pointer.movementY)
         //this.player.rotation = angle;
       },
@@ -95,8 +97,7 @@ export default class GameScene extends Phaser.Scene {
   //       this
   //     );
   //   }
-
-  update() {}
+  update() { }
 
   ///// HELPER FUNCTIONS /////
 
@@ -132,3 +133,4 @@ export default class GameScene extends Phaser.Scene {
     );
   }
 }
+

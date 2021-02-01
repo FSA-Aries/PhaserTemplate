@@ -24,7 +24,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         end: 2,
       }),
       frameRate: 10,
-      repeat: -1,
+      // repeat: -1,
     });
     this.enemy.anims.create({
       key: "zombie-left",
@@ -33,7 +33,6 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         end: 5,
       }),
       frameRate: 10,
-      repeat: -1,
     }),
       this.enemy.anims.create({
         key: "zombie-right",
@@ -42,7 +41,6 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
           end: 8,
         }),
         frameRate: 10,
-        repeat: -1,
       }),
       this.enemy.anims.create({
         key: "zombie-idleBack",
@@ -51,7 +49,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
           end: 11,
         }),
         frameRate: 10,
-        repeat: -1,
+        // repeat: -1,
       });
   }
   initEvents() {
@@ -61,19 +59,25 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
   update() {
     //Use A* search algo or Pathfinder algo to find shortest distance
     if (Phaser.Math.Distance.BetweenPoints(this.player, this.enemy) < 400) {
-      if (this.player.x < this.enemy.x) {
-        this.enemy.setVelocityX(-50);
-        this.enemy.anims.play("zombie-left", true);
+      if (
+        Math.abs(this.enemy.x - this.player.x) >
+        Math.abs(this.enemy.y - this.player.y)
+      ) {
+        if (this.player.x < this.enemy.x) {
+          this.enemy.setVelocityX(-50);
+          this.enemy.anims.play("zombie-left", true);
+        } else {
+          this.enemy.setVelocityX(50);
+          this.enemy.anims.play("zombie-right", true);
+        }
       } else {
-        this.enemy.setVelocityX(50);
-        this.enemy.anims.play("zombie-right", true);
-      }
-      if (this.player.y < this.enemy.y) {
-        this.enemy.setVelocityY(-50);
-        this.enemy.anims.play("zombie-idleBack", true);
-      } else {
-        this.enemy.setVelocityY(50);
-        this.enemy.anims.play("zombie-idleFront", true);
+        if (this.player.y < this.enemy.y) {
+          this.enemy.setVelocityY(-50);
+          this.enemy.anims.play("zombie-idleBack", true);
+        } else {
+          this.enemy.setVelocityY(50);
+          this.enemy.anims.play("zombie-idleFront", true);
+        }
       }
     }
   }

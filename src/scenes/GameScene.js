@@ -127,11 +127,11 @@ export default class GameScene extends Phaser.Scene {
 
     this.cameras.main
       .setBounds(0, 0, config.width + config.mapOffset, config.height)
-      .setZoom(1.5);
+      .setZoom(config.zoomFactor);
     this.cameras.main.startFollow(player);
   }
   createEnemy() {
-    const randomizedPosition = Math.random() * 450;
+    const randomizedPosition = Math.random() * 800;
     return new Enemy(
       this,
       randomizedPosition,

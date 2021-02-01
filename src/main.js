@@ -1,4 +1,3 @@
-
 import Phaser from "phaser";
 
 import GameScene from "./scenes/GameScene";
@@ -17,6 +16,7 @@ export const config = {
   physics: {
     default: "arcade",
     arcade: {
+      debug: true,
       gravity: { y: 0 },
     },
   },

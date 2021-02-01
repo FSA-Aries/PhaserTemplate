@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import addCollider from "../mixins/collidable";
 
 const ENEMY_KEY = "enemy";
 
@@ -10,6 +11,12 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.y = y;
     this.enemy = this.scene.physics.add.sprite(x, y, key);
     this.player = player;
+
+    //Mixins
+    Object.assign(this, addCollider);
+
+    this.addCollider = addCollider;
+
     this.init();
     this.initEvents();
   }
@@ -53,6 +60,9 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         frameRate: 10,
         repeat: -1,
       });
+    this.enemy.setImmovable(true);
+    // this.enemy.setSize(this.width, this.height);
+    // this.enemy.setOffset(0, 10);
   }
   initEvents() {
     this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
@@ -76,5 +86,9 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.enemy.anims.play("zombie-idleFront", true);
       }
     }
+  }
+
+  hasHit(player) {
+    console.log("I have hit,", player);
   }
 }

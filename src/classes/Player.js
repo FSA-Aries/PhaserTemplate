@@ -1,13 +1,18 @@
-import Phaser from 'phaser';
-
-import assets from '../../public/assets';
+import Phaser from "phaser";
+import addCollider from "../mixins/collidable";
+import assets from "../../public/assets";
 
 class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
-    super(scene, x, y, 'player');
+    super(scene, x, y, "player");
     scene.add.existing(this);
     scene.physics.add.existing(this);
     this.cursors = undefined;
+
+    //Mixins
+    Object.assign(this, addCollider);
+
+    this.addCollider = addCollider;
 
     this.init();
     this.initEvents();
@@ -16,7 +21,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.setCollideWorldBounds(true);
     this.cursors = this.scene.input.keyboard.createCursorKeys();
     this.anims.create({
-      key: 'left',
+      key: "left",
       frames: this.anims.generateFrameNumbers(assets.PLAYER_KEY, {
         start: 3,
         end: 5,
@@ -25,12 +30,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       //repeat: -1,
     });
     this.anims.create({
-      key: 'turn',
+      key: "turn",
       frames: [{ key: assets.PLAYER_KEY, frame: 1 }],
       frameRate: 10,
     });
     this.anims.create({
-      key: 'right',
+      key: "right",
       frames: this.anims.generateFrameNumbers(assets.PLAYER_KEY, {
         start: 6,
         end: 8,
@@ -39,7 +44,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       //repeat: -1,
     });
     this.anims.create({
-      key: 'up',
+      key: "up",
       frames: this.anims.generateFrameNumbers(assets.PLAYER_KEY, {
         start: 9,
         end: 11,
@@ -48,7 +53,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       //repeat: -1
     });
     this.anims.create({
-      key: 'down',
+      key: "down",
       frames: this.anims.generateFrameNumbers(assets.PLAYER_KEY, {
         start: 0,
         end: 2,
@@ -79,13 +84,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     if (this.cursors.left.isDown) {
-      this.anims.play('left', true);
+      this.anims.play("left", true);
     } else if (this.cursors.right.isDown) {
-      this.anims.play('right', true);
+      this.anims.play("right", true);
     } else if (this.cursors.up.isDown) {
-      this.anims.play('up', true);
+      this.anims.play("up", true);
     } else if (this.cursors.down.isDown) {
-      this.anims.play('down', true);
+      this.anims.play("down", true);
     } else {
       this.anims.stop();
 
@@ -94,6 +99,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       else if (prevVelocity.y < 0) this.setTexture(assets.PLAYER_KEY, 10);
       else if (prevVelocity.y > 0) this.setTexture(assets.PLAYER_KEY, 1);
     }
+  }
+
+  takesHit() {
+    console.log("I have been hit");
   }
 }
 

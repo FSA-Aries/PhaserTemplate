@@ -3,10 +3,11 @@
 // const ENEMY_KEY = "enemy";
 
 import Phaser from "phaser";
-import Enemy from "./Enemy.js";
+import Enemy from "../classes/Enemy.js";
 import Player from "../classes/Player";
 import Bullet from "../classes/Bullet";
 import assets from "../../public/assets";
+// import addCollider from "../mixins/collidable";
 
 import { config } from "../main";
 
@@ -20,8 +21,6 @@ export default class GameScene extends Phaser.Scene {
     this.reticle = undefined;
   }
 
-
-
   ///// PRELOAD /////
   preload() {
     this.load.image(assets.BULLET_KEY, assets.BULLET_URL);
@@ -31,7 +30,7 @@ export default class GameScene extends Phaser.Scene {
 
     this.load.spritesheet(assets.ENEMY_KEY, assets.ENEMY_URL, {
       frameWidth: 30,
-      frameHeight: 62,
+      frameHeight: 60,
     });
     this.load.spritesheet(assets.PLAYER_KEY, assets.PLAYER_URL, {
       frameWidth: 50,
@@ -50,6 +49,21 @@ export default class GameScene extends Phaser.Scene {
     this.player = this.createPlayer();
     this.player.setTexture(assets.PLAYER_KEY, 1);
     this.enemy = this.createEnemy();
+
+    // const player = this.player;
+    // const enemy = this.enemy;
+
+    this.createPlayerColliders(this.player, {
+      colliders: {
+        enemy: this.enemy,
+      },
+    });
+
+    this.createEnemyColliders(this.enemy, {
+      colliders: {
+        player: this.player,
+      },
+    });
 
     this.cursors = this.input.keyboard.createCursorKeys();
     let playerBullets = this.physics.add.group({
@@ -79,15 +93,14 @@ export default class GameScene extends Phaser.Scene {
     this.input.on(
       "pointermove",
       function (pointer) {
-        //console.log(this.input.mousePointer.x)
-        const transformedPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
+        const transformedPoint = this.cameras.main.getWorldPoint(
+          pointer.x,
+          pointer.y
+        );
 
         this.reticle.x = transformedPoint.x;
         this.reticle.y = transformedPoint.y;
-        //console.log('if')
 
-        //console.log(this.reticle)
-        //console.log(pointer.movementY)
         //this.player.rotation = angle;
       },
       this
@@ -97,7 +110,7 @@ export default class GameScene extends Phaser.Scene {
   //       this
   //     );
   //   }
-  update() { }
+  update() {}
 
   ///// HELPER FUNCTIONS /////
 
@@ -132,5 +145,20 @@ export default class GameScene extends Phaser.Scene {
       this.player
     );
   }
-}
 
+  onPlayerCollision(enemy, player) {
+    player.takesHit();
+  }
+
+  onEnemyCollision(player) {
+    player.takesHit();
+  }
+
+  createPlayerColliders(player, { colliders }) {
+    player.addCollider(colliders.enemy.enemy, this.onEnemyCollision);
+  }
+
+  createEnemyColliders(enemy, { colliders }) {
+    enemy.addCollider(colliders.player, this.onPlayerCollision);
+  }
+}

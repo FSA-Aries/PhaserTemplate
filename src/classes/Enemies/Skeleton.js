@@ -10,16 +10,17 @@ export default class Skeleton extends Phaser.Physics.Arcade.Sprite {
     this.x = x;
     this.y = y;
     this.scene = scene;
+    this.scene.physics.world.enable(this);
     this.scene.add.existing(this);
     // this.skeleton = this.scene.physics.add.sprite(x, y, key);
     this.player = player;
     this.init();
     this.initEvents();
   }
-  // this.setCollideWorldBounds(true);
   //Have to add setCollideWorldBounds + add existing sprite
 
   init() {
+    this.setCollideWorldBounds(true);
     this.anims.create({
       key: "skeleton-idleFront",
       frames: this.anims.generateFrameNumbers(SKELETON_KEY, {

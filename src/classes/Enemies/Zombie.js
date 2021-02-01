@@ -9,14 +9,15 @@ export default class Zombie extends Phaser.Physics.Arcade.Sprite {
     this.y = y;
     this.scene = scene;
     // this.zombie = this.scene.physics.add.sprite(x, y, key);
+    this.scene.physics.world.enable(this);
     this.scene.add.existing(this);
     this.player = player;
     this.init();
     this.initEvents();
   }
 
-  // this.setCollideWorldBounds(true);
   init() {
+    this.setCollideWorldBounds(true);
     this.anims.create({
       key: "zombie-idleFront",
       frames: this.anims.generateFrameNumbers(ZOMBIE_KEY, {

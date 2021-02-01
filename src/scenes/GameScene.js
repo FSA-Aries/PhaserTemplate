@@ -1,18 +1,14 @@
-import Phaser from "phaser";
-import Enemy from "./Enemy.js";
+// //ENEMY
+// const ENEMY = "assets/characters/Enemy/zombies.png";
+// const ENEMY_KEY = "enemy";
 
-// PLAYER
-const PLAYER = "assets/characters/Player.png";
-const PLAYER_KEY = "player";
-//ENEMY
-const ENEMY = "assets/characters/Enemy/zombies.png";
-const ENEMY_KEY = "enemy";
-// TILESET
-const TILESET = "assets/tilesets/TileSet.png";
-const TILESET_KEY = "tileSet";
-// TILEMAP
-const TILEMAP = "assets/tilesets/TiledMap.json";
-const TILEMAP_KEY = "main";
+import Phaser from 'phaser';
+import Enemy from "./Enemy.js";
+import Player from '../classes/Player';
+import Bullet from '../classes/Bullet';
+import assets from '../../public/assets';
+
+import { config } from '../main';
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -21,83 +17,108 @@ export default class GameScene extends Phaser.Scene {
     this.enemy = undefined;
     this.cursors = undefined;
     this.game = undefined;
+    this.reticle = undefined;
   }
 
   ///// PRELOAD /////
   preload() {
-    this.load.image(TILESET_KEY, TILESET);
-    this.load.tilemapTiledJSON(TILEMAP_KEY, TILEMAP);
+    this.load.image(assets.BULLET_KEY, assets.BULLET_URL);
+    this.load.image(assets.RETICLE_KEY, assets.RETICLE_URL);
+    this.load.image(assets.TILESET_KEY, assets.TILESET_URL);
+    this.load.tilemapTiledJSON(assets.TILEMAP_KEY, assets.TILEMAP_URL);
 
     this.load.spritesheet(ENEMY_KEY, ENEMY, {
       frameWidth: 30,
       frameHeight: 62,
     });
-
-    this.load.spritesheet(PLAYER_KEY, PLAYER, {
-      frameWidth: 32,
-      frameHeight: 48,
+    this.load.spritesheet(assets.PLAYER_KEY, assets.PLAYER_URL, {
+      frameWidth: 50,
+      frameHeight: 69,
     });
+    // const player = this.physics.add.sprite(400, 375, assets.PLAYER_KEY);
   }
 
   ///// CREATE /////
   create() {
-    let map = this.make.tilemap({ key: TILEMAP_KEY });
-    let tileSet = map.addTilesetImage("TiledSet", TILESET_KEY);
-    const belowLayer = map.createLayer("Ground", tileSet, 0, 0);
-    const worldLayer = map.createLayer("Walls", tileSet, 0, 0);
+    let map = this.make.tilemap({ key: assets.TILEMAP_KEY });
+    let tileSet = map.addTilesetImage('TiledSet', assets.TILESET_KEY);
+    map.createLayer('Ground', tileSet, 0, 0);
+    map.createLayer('Walls', tileSet, 0, 0);
 
     this.player = this.createPlayer();
+    this.player.setTexture(assets.PLAYER_KEY, 1);
     this.enemy = this.createEnemy();
 
     this.cursors = this.input.keyboard.createCursorKeys();
+    let playerBullets = this.physics.add.group({
+      classType: Bullet,
+      runChildUpdate: true,
+    });
+    this.reticle = this.physics.add.sprite(0, 0, assets.RETICLE_KEY);
+    this.reticle.setDisplaySize(25, 25).setCollideWorldBounds(true);
+
+    this.input.on(
+      'pointerdown',
+      function () {
+        if (this.player.active === false) return;
+
+        // Get bullet from bullets group
+        let bullet = playerBullets.get().setActive(true).setVisible(true);
+
+        if (bullet) {
+          bullet.fire(this.player, this.reticle);
+          //this.physics.add.collider(enemy, bullet, enemyHitCallback);
+        }
+      },
+      this
+    );
+    this.setupFollowupCameraOn(this.player);
+
+    this.input.on(
+      'pointermove',
+      function () {
+        //console.log(this.input.mousePointer.x)
+
+        this.reticle.x = this.input.x;
+        this.reticle.y = this.input.y;
+        //console.log('if')
+
+        //console.log(this.reticle)
+
+        //console.log(pointer.movementY)
+        //this.player.rotation = angle;
+      },
+      this
+    );
   }
 
-  ///// UPDATE /////
-  update() {
-    //PLAYER
-    this.player.body.setVelocity(0);
-    if (this.cursors.left.isDown) {
-      this.player.setVelocityX(-150);
-      this.player.anims.play("left", true);
-    } else if (this.cursors.right.isDown) {
-      this.player.setVelocityX(150);
-      this.player.anims.play("right", true);
-    } else {
-      this.player.setVelocityX(0);
-      this.player.anims.play("turn");
-    }
+  //       this
+  //     );
+  //   }
 
-    if (this.cursors.up.isDown) {
-      this.player.setVelocityY(-150);
-    } else if (this.cursors.down.isDown) {
-      this.player.setVelocityY(150);
-    }
-  }
+  update() {}
 
   ///// HELPER FUNCTIONS /////
 
   // PLAYER ANIMATION
   createPlayer() {
-    const player = this.physics.add.sprite(400, 375, PLAYER_KEY);
-    player.setCollideWorldBounds(true);
-    this.anims.create({
-      key: "left",
-      frames: this.anims.generateFrameNumbers(PLAYER_KEY, { start: 0, end: 3 }),
-      frameRate: 10,
-      repeat: -1,
-    });
-    this.anims.create({
-      key: "turn",
-      frames: [{ key: PLAYER_KEY, frame: 4 }],
-      frameRate: 10,
-    });
-    this.anims.create({
-      key: "right",
-      frames: this.anims.generateFrameNumbers(PLAYER_KEY, { start: 5, end: 8 }),
-      frameRate: 10,
-      repeat: -1,
-    });
-    return player;
+    //const player = this.physics.add.sprite(400, 375, assets.PLAYER_KEY);
+
+    return new Player(this, 400, 375);
+  }
+
+  setupFollowupCameraOn(player) {
+    this.physics.world.setBounds(
+      0,
+      0,
+      config.width + config.mapOffset,
+      config.height
+    );
+
+    this.cameras.main
+      .setBounds(0, 0, config.width + config.mapOffset, config.height)
+      .setZoom(1.5);
+    this.cameras.main.startFollow(player);
   }
   createEnemy() {
     const randomizedPosition = Math.random() * 450;

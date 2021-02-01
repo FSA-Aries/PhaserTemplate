@@ -88,10 +88,11 @@ export default class GameScene extends Phaser.Scene {
     } else {
       this.player.anims.stop();
 
-      if (prevVelocity.x < 0) this.player.setTexture(PLAYER_KEY, 4);
-      else if (prevVelocity.x > 0) this.player.setTexture(PLAYER_KEY, 8);
-      else if (prevVelocity.y < 0) this.player.setTexture(PLAYER_KEY, 10);
-      else if (prevVelocity.y > 0) this.player.setTexture(PLAYER_KEY, 1);
+      if (prevVelocity.x < 0) this.player.setTexture(assets.PLAYER_KEY, 4);
+      else if (prevVelocity.x > 0) this.player.setTexture(assets.PLAYER_KEY, 8);
+      else if (prevVelocity.y < 0)
+        this.player.setTexture(assets.PLAYER_KEY, 10);
+      else if (prevVelocity.y > 0) this.player.setTexture(assets.PLAYER_KEY, 1);
     }
 
     this.input.on(

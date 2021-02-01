@@ -2,13 +2,13 @@
 // const ENEMY = "assets/characters/Enemy/zombies.png";
 // const ENEMY_KEY = "enemy";
 
-import Phaser from 'phaser';
+import Phaser from "phaser";
 import Enemy from "./Enemy.js";
-import Player from '../classes/Player';
-import Bullet from '../classes/Bullet';
-import assets from '../../public/assets';
+import Player from "../classes/Player";
+import Bullet from "../classes/Bullet";
+import assets from "../../public/assets";
 
-import { config } from '../main';
+import { config } from "../main";
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -27,7 +27,7 @@ export default class GameScene extends Phaser.Scene {
     this.load.image(assets.TILESET_KEY, assets.TILESET_URL);
     this.load.tilemapTiledJSON(assets.TILEMAP_KEY, assets.TILEMAP_URL);
 
-    this.load.spritesheet(ENEMY_KEY, ENEMY, {
+    this.load.spritesheet(assets.ENEMY_KEY, assets.ENEMY_URL, {
       frameWidth: 30,
       frameHeight: 62,
     });
@@ -41,9 +41,9 @@ export default class GameScene extends Phaser.Scene {
   ///// CREATE /////
   create() {
     let map = this.make.tilemap({ key: assets.TILEMAP_KEY });
-    let tileSet = map.addTilesetImage('TiledSet', assets.TILESET_KEY);
-    map.createLayer('Ground', tileSet, 0, 0);
-    map.createLayer('Walls', tileSet, 0, 0);
+    let tileSet = map.addTilesetImage("TiledSet", assets.TILESET_KEY);
+    map.createLayer("Ground", tileSet, 0, 0);
+    map.createLayer("Walls", tileSet, 0, 0);
 
     this.player = this.createPlayer();
     this.player.setTexture(assets.PLAYER_KEY, 1);
@@ -58,7 +58,7 @@ export default class GameScene extends Phaser.Scene {
     this.reticle.setDisplaySize(25, 25).setCollideWorldBounds(true);
 
     this.input.on(
-      'pointerdown',
+      "pointerdown",
       function () {
         if (this.player.active === false) return;
 
@@ -75,7 +75,7 @@ export default class GameScene extends Phaser.Scene {
     this.setupFollowupCameraOn(this.player);
 
     this.input.on(
-      'pointermove',
+      "pointermove",
       function () {
         //console.log(this.input.mousePointer.x)
 
@@ -126,8 +126,8 @@ export default class GameScene extends Phaser.Scene {
       this,
       randomizedPosition,
       randomizedPosition,
-      ENEMY_KEY,
-      ENEMY,
+      assets.ENEMY_KEY,
+      assets.ENEMY_URL,
       this.player
     );
   }

@@ -1,9 +1,6 @@
-// //ENEMY
-// const ENEMY = "assets/characters/Enemy/zombies.png";
-// const ENEMY_KEY = "enemy";
-
 import Phaser from "phaser";
-import Enemy from "./Enemy.js";
+import Zombie from "./Zombie.js";
+import Skeleton from "../classes/Skeleton.js";
 import Player from "../classes/Player";
 import Bullet from "../classes/Bullet";
 import assets from "../../public/assets";
@@ -14,7 +11,8 @@ export default class GameScene extends Phaser.Scene {
   constructor() {
     super("game-scene");
     this.player = undefined;
-    this.enemy = undefined;
+    this.zombie = undefined;
+    this.skeleton = undefined;
     this.cursors = undefined;
     this.game = undefined;
     this.reticle = undefined;
@@ -26,16 +24,20 @@ export default class GameScene extends Phaser.Scene {
     this.load.image(assets.RETICLE_KEY, assets.RETICLE_URL);
     this.load.image(assets.TILESET_KEY, assets.TILESET_URL);
     this.load.tilemapTiledJSON(assets.TILEMAP_KEY, assets.TILEMAP_URL);
-
-    this.load.spritesheet(assets.ENEMY_KEY, assets.ENEMY_URL, {
-      frameWidth: 30,
-      frameHeight: 62,
-    });
     this.load.spritesheet(assets.PLAYER_KEY, assets.PLAYER_URL, {
       frameWidth: 50,
       frameHeight: 69,
     });
-    // const player = this.physics.add.sprite(400, 375, assets.PLAYER_KEY);
+
+    //Enemies
+    this.load.spritesheet(assets.ZOMBIE_KEY, assets.ZOMBIE_URL, {
+      frameWidth: 30,
+      frameHeight: 62,
+    });
+    this.load.spritesheet(assets.SKELETON_KEY, assets.SKELETON_URL, {
+      frameWidth: 30,
+      frameHeight: 64,
+    });
   }
 
   ///// CREATE /////
@@ -47,11 +49,22 @@ export default class GameScene extends Phaser.Scene {
 
     this.player = this.createPlayer();
     this.player.setTexture(assets.PLAYER_KEY, 1);
+
+    //Enemy Creation
     for (let i = 0; i < 2; i++) {
       this.time.addEvent({
         delay: 2000,
         callback: () => {
-          this.createEnemy();
+          this.createZombie();
+        },
+        loop: true,
+      });
+    }
+    for (let i = 0; i < 1; i++) {
+      this.time.addEvent({
+        delay: 2000,
+        callback: () => {
+          this.createSkeleton();
         },
         loop: true,
       });
@@ -112,8 +125,6 @@ export default class GameScene extends Phaser.Scene {
 
   // PLAYER ANIMATION
   createPlayer() {
-    //const player = this.physics.add.sprite(400, 375, assets.PLAYER_KEY);
-
     return new Player(this, 400, 375);
   }
 
@@ -130,14 +141,25 @@ export default class GameScene extends Phaser.Scene {
       .setZoom(config.zoomFactor);
     this.cameras.main.startFollow(player);
   }
-  createEnemy() {
+  createZombie() {
     const randomizedPosition = Math.random() * 800;
-    return new Enemy(
+    return new Zombie(
       this,
       randomizedPosition,
       randomizedPosition,
-      assets.ENEMY_KEY,
-      assets.ENEMY_URL,
+      assets.ZOMBIE_KEY,
+      assets.ZOMBIE_URL,
+      this.player
+    );
+  }
+  createSkeleton() {
+    const randomizedPosition = Math.random() * 800;
+    return new Skeleton(
+      this,
+      randomizedPosition,
+      randomizedPosition,
+      assets.SKELETON_KEY,
+      assets.SKELETON_URL,
       this.player
     );
   }

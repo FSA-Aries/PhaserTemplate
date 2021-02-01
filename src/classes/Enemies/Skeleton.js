@@ -48,6 +48,14 @@ export default class Skeleton extends Phaser.Physics.Arcade.Sprite {
         }),
         frameRate: 10,
       });
+    this.skeleton.anims.create({
+      key: "skeletonHit",
+      frames: this.anims.generateFrameNumbers(SKELETON_KEY, {
+        start: 12,
+        end: 14,
+      }),
+      frameRate: 10,
+    });
   }
   initEvents() {
     this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
@@ -62,7 +70,9 @@ export default class Skeleton extends Phaser.Physics.Arcade.Sprite {
       ) {
         if (this.player.x < this.skeleton.x) {
           this.skeleton.setVelocityX(-50);
-          this.skeleton.anims.play("skeleton-left", true);
+          // this.skeleton.anims.play("skeleton-left", true);
+          //Add skeletonhit for now for demo purposes but revert back to above after
+          this.skeleton.anims.play("skeletonHit", true);
         } else {
           this.skeleton.setVelocityX(50);
           this.skeleton.anims.play("skeleton-right", true);

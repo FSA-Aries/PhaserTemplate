@@ -13,6 +13,8 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.init();
     this.update();
   }
+  // let playerBullets = this.physics.add.group({     classType: Bullet, runChildUpdate: true});
+
   init() {
     this.enemy.setCollideWorldBounds(true);
     this.enemy.anims.create({
@@ -54,6 +56,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
   }
   update() {
     //Use A* search algo or Pathfinder algo to find shortest distance
+    console.log(Phaser.Math.Distance.BetweenPoints(this.player, this.enemy));
     if (Phaser.Math.Distance.BetweenPoints(this.player, this.enemy) < 400) {
       if (this.player.x < this.enemy.x) {
         this.enemy.setVelocityX(-50);

@@ -87,7 +87,6 @@ export default class GameScene extends Phaser.Scene {
         //console.log('if')
 
         //console.log(this.reticle)
-
         //console.log(pointer.movementY)
         //this.player.rotation = angle;
       },
@@ -98,7 +97,6 @@ export default class GameScene extends Phaser.Scene {
   //       this
   //     );
   //   }
-
   update() { }
 
   ///// HELPER FUNCTIONS /////

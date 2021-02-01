@@ -5,18 +5,19 @@ const ZOMBIE_KEY = "zombie";
 export default class Zombie extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y, key, type, player) {
     super(scene, x, y, key, type);
-    this.scene = scene;
     this.x = x;
     this.y = y;
-    this.zombie = this.scene.physics.add.sprite(x, y, key);
+    this.scene = scene;
+    // this.zombie = this.scene.physics.add.sprite(x, y, key);
+    this.scene.add.existing(this);
     this.player = player;
     this.init();
     this.initEvents();
   }
 
+  // this.setCollideWorldBounds(true);
   init() {
-    this.zombie.setCollideWorldBounds(true);
-    this.zombie.anims.create({
+    this.anims.create({
       key: "zombie-idleFront",
       frames: this.anims.generateFrameNumbers(ZOMBIE_KEY, {
         start: 0,
@@ -24,7 +25,7 @@ export default class Zombie extends Phaser.Physics.Arcade.Sprite {
       }),
       frameRate: 10,
     });
-    this.zombie.anims.create({
+    this.anims.create({
       key: "zombie-left",
       frames: this.anims.generateFrameNumbers(ZOMBIE_KEY, {
         start: 3,
@@ -32,7 +33,7 @@ export default class Zombie extends Phaser.Physics.Arcade.Sprite {
       }),
       frameRate: 10,
     }),
-      this.zombie.anims.create({
+      this.anims.create({
         key: "zombie-right",
         frames: this.anims.generateFrameNumbers(ZOMBIE_KEY, {
           start: 6,
@@ -40,7 +41,7 @@ export default class Zombie extends Phaser.Physics.Arcade.Sprite {
         }),
         frameRate: 10,
       }),
-      this.zombie.anims.create({
+      this.anims.create({
         key: "zombie-idleBack",
         frames: this.anims.generateFrameNumbers(ZOMBIE_KEY, {
           start: 9,
@@ -55,25 +56,22 @@ export default class Zombie extends Phaser.Physics.Arcade.Sprite {
 
   update() {
     //Use A* search algo or Pathfinder algo to find shortest distance
-    if (Phaser.Math.Distance.BetweenPoints(this.player, this.zombie) < 400) {
-      if (
-        Math.abs(this.zombie.x - this.player.x) >
-        Math.abs(this.zombie.y - this.player.y)
-      ) {
-        if (this.player.x < this.zombie.x) {
-          this.zombie.setVelocityX(-50);
-          this.zombie.anims.play("zombie-left", true);
+    if (Phaser.Math.Distance.BetweenPoints(this.player, this) < 400) {
+      if (Math.abs(this.x - this.player.x) > Math.abs(this.y - this.player.y)) {
+        if (this.player.x < this.x) {
+          this.setVelocityX(-50);
+          this.anims.play("zombie-left", true);
         } else {
-          this.zombie.setVelocityX(50);
-          this.zombie.anims.play("zombie-right", true);
+          this.setVelocityX(50);
+          this.anims.play("zombie-right", true);
         }
       } else {
-        if (this.player.y < this.zombie.y) {
-          this.zombie.setVelocityY(-50);
-          this.zombie.anims.play("zombie-idleBack", true);
+        if (this.player.y < this.y) {
+          this.setVelocityY(-50);
+          this.anims.play("zombie-idleBack", true);
         } else {
-          this.zombie.setVelocityY(50);
-          this.zombie.anims.play("zombie-idleFront", true);
+          this.setVelocityY(50);
+          this.anims.play("zombie-idleFront", true);
         }
       }
     }

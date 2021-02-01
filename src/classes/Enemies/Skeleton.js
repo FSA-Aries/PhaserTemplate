@@ -2,21 +2,25 @@ import Phaser from "phaser";
 
 const SKELETON_KEY = "skeleton";
 
+//set this to just skeleton
+
 export default class Skeleton extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y, key, type, player) {
     super(scene, x, y, key, type);
-    this.scene = scene;
     this.x = x;
     this.y = y;
-    this.skeleton = this.scene.physics.add.sprite(x, y, key);
+    this.scene = scene;
+    this.scene.add.existing(this);
+    // this.skeleton = this.scene.physics.add.sprite(x, y, key);
     this.player = player;
     this.init();
     this.initEvents();
   }
+  // this.setCollideWorldBounds(true);
+  //Have to add setCollideWorldBounds + add existing sprite
 
   init() {
-    this.skeleton.setCollideWorldBounds(true);
-    this.skeleton.anims.create({
+    this.anims.create({
       key: "skeleton-idleFront",
       frames: this.anims.generateFrameNumbers(SKELETON_KEY, {
         start: 0,
@@ -24,7 +28,7 @@ export default class Skeleton extends Phaser.Physics.Arcade.Sprite {
       }),
       frameRate: 10,
     });
-    this.skeleton.anims.create({
+    this.anims.create({
       key: "skeleton-left",
       frames: this.anims.generateFrameNumbers(SKELETON_KEY, {
         start: 3,
@@ -32,7 +36,7 @@ export default class Skeleton extends Phaser.Physics.Arcade.Sprite {
       }),
       frameRate: 10,
     }),
-      this.skeleton.anims.create({
+      this.anims.create({
         key: "skeleton-right",
         frames: this.anims.generateFrameNumbers(SKELETON_KEY, {
           start: 6,
@@ -40,7 +44,7 @@ export default class Skeleton extends Phaser.Physics.Arcade.Sprite {
         }),
         frameRate: 10,
       }),
-      this.skeleton.anims.create({
+      this.anims.create({
         key: "skeleton-idleBack",
         frames: this.anims.generateFrameNumbers(SKELETON_KEY, {
           start: 9,
@@ -48,7 +52,7 @@ export default class Skeleton extends Phaser.Physics.Arcade.Sprite {
         }),
         frameRate: 10,
       });
-    this.skeleton.anims.create({
+    this.anims.create({
       key: "skeletonHit",
       frames: this.anims.generateFrameNumbers(SKELETON_KEY, {
         start: 12,
@@ -63,27 +67,24 @@ export default class Skeleton extends Phaser.Physics.Arcade.Sprite {
 
   update() {
     //Use A* search algo or Pathfinder algo to find shortest distance
-    if (Phaser.Math.Distance.BetweenPoints(this.player, this.skeleton) < 400) {
-      if (
-        Math.abs(this.skeleton.x - this.player.x) >
-        Math.abs(this.skeleton.y - this.player.y)
-      ) {
-        if (this.player.x < this.skeleton.x) {
-          this.skeleton.setVelocityX(-50);
+    if (Phaser.Math.Distance.BetweenPoints(this.player, this) < 400) {
+      if (Math.abs(this.x - this.player.x) > Math.abs(this.y - this.player.y)) {
+        if (this.player.x < this.x) {
+          this.setVelocityX(-50);
           // this.skeleton.anims.play("skeleton-left", true);
           //Add skeletonhit for now for demo purposes but revert back to above after
-          this.skeleton.anims.play("skeletonHit", true);
+          this.anims.play("skeletonHit", true);
         } else {
-          this.skeleton.setVelocityX(50);
-          this.skeleton.anims.play("skeleton-right", true);
+          this.setVelocityX(50);
+          this.anims.play("skeleton-right", true);
         }
       } else {
-        if (this.player.y < this.skeleton.y) {
-          this.skeleton.setVelocityY(-50);
-          this.skeleton.anims.play("skeleton-idleBack", true);
+        if (this.player.y < this.y) {
+          this.setVelocityY(-50);
+          this.anims.play("skeleton-idleBack", true);
         } else {
-          this.skeleton.setVelocityY(50);
-          this.skeleton.anims.play("skeleton-idleFront", true);
+          this.setVelocityY(50);
+          this.anims.play("skeleton-idleFront", true);
         }
       }
     }

@@ -100,6 +100,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
+  playDamageTween() {
+    return this.scene.tweens.add({
+      targets: this,
+      duration: 100,
+      repeat: -1,
+      tint: 0xffffff,
+    });
+  }
+
   bounceOff() {
     if (this.body.touching.right) {
       setTimeout(() => this.setVelocityX(-this.bounceVelocity), 0);
@@ -116,24 +125,33 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   takesHit(monster) {
-    // if (this.health > 0) {
-    if (this.hasBeenHit) {
-      return;
-    }
-    this.health -= monster.damage;
-    // this.body.checkCollision.none = true; ????
-    this.hasBeenHit = true;
-    this.bounceOff();
+    if (this.health > 0) {
+      console.log(this.health);
+      if (this.hasBeenHit) {
+        return;
+      }
+      this.health -= monster.damage;
+      // this.body.checkCollision.none = true; ????
+      this.hasBeenHit = true;
+      this.bounceOff();
+      const hitAnim = this.playDamageTween();
 
-    this.scene.time.addEvent({
-      delay: 160,
-      callback: () => {
+      //controls how far and for how long the bounce happens
+      this.scene.time.delayedCall(250, () => {
         this.hasBeenHit = false;
-      },
-      loop: false,
-    });
+        hitAnim.stop();
+        this.clearTint();
+      });
 
-    // }
+      // this.scene.time.addEvent({
+      //   //controls how far and for how long the bounce happens
+      //   delay: 250,
+      //   callback: () => {
+      //     this.hasBeenHit = false;
+      //   },
+      //   loop: false,
+      // });
+    }
   }
   // bounceBack(monster) {
   //   // 1) Animation that we play

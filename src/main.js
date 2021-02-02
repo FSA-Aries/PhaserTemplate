@@ -1,11 +1,11 @@
-
-import Phaser from 'phaser';
+import Phaser from "phaser";
 
 import GameScene from "./scenes/GameScene";
 
-const MAP_WIDTH = 800;
+const WIDTH = 800;
 
-const WIDTH = document.body.offsetWidth;
+// const MAP_WIDTH = document.body.offsetWidth;
+const MAP_WIDTH = document.body.offsetWidth;
 const HEIGHT = 800;
 
 export const config = {
@@ -17,6 +17,7 @@ export const config = {
   physics: {
     default: "arcade",
     arcade: {
+      debug: true,
       gravity: { y: 0 },
     },
   },

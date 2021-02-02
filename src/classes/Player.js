@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import assets from "../../public/assets";
+import HealthBar from "../hud/healthbar";
 
 class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
@@ -10,17 +11,21 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.cursors = undefined;
 
     //Mixins
-    this.health = 500;
+    this.health = 100;
     this.damage = 50;
 
     this.init();
     this.initEvents();
   }
+
   init() {
     this.hasBeenHit = false;
     this.bounceVelocity = 250;
     this.setCollideWorldBounds(true);
     this.cursors = this.scene.input.keyboard.createCursorKeys();
+
+    this.hp = new HealthBar(this.scene, 200, 200, this.health);
+
     this.anims.create({
       key: "left",
       frames: this.anims.generateFrameNumbers(assets.PLAYER_KEY, {
@@ -137,7 +142,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       const hitAnim = this.playDamageTween();
 
       //controls how far and for how long the bounce happens
-      this.scene.time.delayedCall(250, () => {
+      this.scene.time.delayedCall(300, () => {
         this.hasBeenHit = false;
         hitAnim.stop();
         this.clearTint();

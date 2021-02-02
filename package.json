@@ -5,7 +5,8 @@
 	"scripts": {
 		"start": "parcel src/index.html -p 8000",
 		"build": "parcel build src/index.html --out-dir dist",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start-dev": "node server/index.js"
 	},
 	"author": "supertommy",
 	"license": "MIT",

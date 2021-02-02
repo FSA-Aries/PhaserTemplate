@@ -4,7 +4,6 @@ import Skeleton from "../classes/Enemies/Skeleton.js";
 import Player from "../classes/Player";
 import Bullet from "../classes/Bullet";
 import assets from "../../public/assets";
-// import addCollider from "../mixins/collidable";
 
 import { config } from "../main";
 
@@ -12,8 +11,6 @@ export default class GameScene extends Phaser.Scene {
   constructor() {
     super("game-scene");
     this.player = undefined;
-    this.zombie = undefined;
-    this.skeleton = undefined;
     this.cursors = undefined;
     this.game = undefined;
     this.reticle = undefined;
@@ -51,41 +48,33 @@ export default class GameScene extends Phaser.Scene {
 
     this.player = this.createPlayer();
     this.player.setTexture(assets.PLAYER_KEY, 1);
+    this.skeleton = this.createSkeleton();
 
-    //Enemy Creation
+    //Zombie and Skeleton Groups
+    let zombieGroup = this.add.group();
+    let skeletonGroup = this.add.group();
+
+    // Enemy Creation
     for (let i = 0; i < 2; i++) {
       this.time.addEvent({
-        delay: 2000,
+        delay: 10000,
         callback: () => {
-          this.createZombie();
+          zombieGroup.add(this.createZombie());
         },
         loop: true,
       });
     }
     for (let i = 0; i < 1; i++) {
       this.time.addEvent({
-        delay: 2000,
+        delay: 10000,
         callback: () => {
-          this.createSkeleton();
+          skeletonGroup.add(this.createSkeleton());
         },
         loop: true,
       });
     }
 
-    // const player = this.player;
-    // const enemy = this.enemy;
-
-    this.createPlayerColliders(this.player, {
-      colliders: {
-        enemy: this.enemy,
-      },
-    });
-
-    this.createEnemyColliders(this.enemy, {
-      colliders: {
-        player: this.player,
-      },
-    });
+    this.physics.add.collider(this.player, zombieGroup, this.onPlayerCollision);
 
     this.cursors = this.input.keyboard.createCursorKeys();
     let playerBullets = this.physics.add.group({
@@ -177,25 +166,11 @@ export default class GameScene extends Phaser.Scene {
       this.player
     );
   }
-  // onPlayerCollision(enemy, player) {
-  //   player.takesHit();
-  // }
-
-  onEnemyCollision(player) {
-    player.takesHit();
-  }
-
-  createPlayerColliders(player, { colliders }) {
-    console.log(colliders.enemy);
-    // player.addCollider(colliders.enemy.enemy, this.onEnemyCollision);
-  }
-
-  createEnemyColliders(enemy, { colliders }) {
-    console.log(colliders.player);
-    enemy.addCollider(
-      colliders.player
-
-      // this.onPlayerCollision
-    );
+  onPlayerCollision(player, monster) {
+    console.log("HEALTH ->", player.health);
+    //It should be the bullet's damage but we will just set a default value for now to test
+    // monster.takesHit(player.damage);
+    player.takesHit(monster);
+    // player.setBounce(0.5, 0.5);
   }
 }

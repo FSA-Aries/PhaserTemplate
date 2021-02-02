@@ -1,18 +1,17 @@
 import Phaser from "phaser";
-import addCollider from "../mixins/collidable";
 import assets from "../../public/assets";
 
 class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
     super(scene, x, y, "player");
     scene.add.existing(this);
-    scene.physics.add.existing(this);
+    // scene.physics.add.existing(this);
+    scene.physics.world.enable(this);
     this.cursors = undefined;
 
     //Mixins
-    Object.assign(this, addCollider);
-
-    this.addCollider = addCollider;
+    this.health = 500;
+    this.damage = 50;
 
     this.init();
     this.initEvents();
@@ -27,7 +26,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         end: 5,
       }),
       frameRate: 10,
-      //repeat: -1,
     });
     this.anims.create({
       key: "turn",
@@ -41,7 +39,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         end: 8,
       }),
       frameRate: 10,
-      //repeat: -1,
     });
     this.anims.create({
       key: "up",
@@ -50,7 +47,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         end: 11,
       }),
       frameRate: 10,
-      //repeat: -1
     });
     this.anims.create({
       key: "down",
@@ -59,7 +55,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         end: 2,
       }),
       frameRate: 10,
-      //repeat: -1
     });
   }
   initEvents() {
@@ -69,7 +64,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   update() {
     //const { left, right, up, down } = this.cursors;
 
-    this.body.setVelocity(0);
+    this.setVelocity(0);
     const prevVelocity = this.body.velocity.clone();
 
     if (this.cursors.left.isDown) {
@@ -101,9 +96,45 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
-  takesHit() {
-    console.log("I have been hit");
+  takesHit(monster) {
+    // if (this.health > 0) {
+    this.health -= monster.damage;
+    // }
   }
+  // bounceBack(monster) {
+  //   // 1) Animation that we play
+  //   // 2) The velocity that moves
+  //   let direction;
+  //   if (this.body.touching.right) {
+  //     direction = "right";
+  //   } else if (this.body.touching.left) {
+  //     direction = "left";
+  //   } else if (this.body.touching.up) {
+  //     direction = "up";
+  //   } else if (this.body.touching.down) {
+  //     direction = "down";
+  //   }
+
+  //   console.log("DIRECTION ->", direction);
+  //   console.log("VELOCITY ->", this.body.velocity);
+  //   if (direction === "left") {
+  //     // this.anims.play("right", true);
+  //     this.setVelocityX(-600);
+  //   } else if (direction === "right") {
+  //     // this.anims.play("left", true);
+  //     this.setVelocityX(600);
+  //   } else if (direction === "up") {
+  //     // this.anims.play("down", true);
+  //     this.setVelocityY(-600);
+  //   } else if (direction === "down") {
+  //     // this.anims.play("up", true);
+  //     this.setVelocityY(600);
+  //   }
+  // }
+
+  // hasHit(player) {
+  //   console.log("I have hit,", player);
+  // }
 }
 
 export default Player;

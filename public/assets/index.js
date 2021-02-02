@@ -11,8 +11,10 @@ assets.PLAYER_KEY = "player";
 assets.PLAYER_URL = "assets/characters/PokemonDude.png";
 
 //ENEMIES
-assets.ENEMY_KEY = "enemy";
-assets.ENEMY_URL = "assets/characters/Enemy/zombies.png";
+assets.ZOMBIE_KEY = "zombie";
+assets.ZOMBIE_URL = "assets/characters/Enemy/zombies.png";
+assets.SKELETON_KEY = "skeleton";
+assets.SKELETON_URL = "assets/characters/Enemy/skeleton.png";
 
 // TILESET
 assets.TILEMAP_KEY = "tileMap";

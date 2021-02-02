@@ -53,8 +53,6 @@ export default class GameScene extends Phaser.Scene {
     //Zombie and Skeleton Groups
     let zombieGroup = this.add.group();
     let skeletonGroup = this.add.group();
-    console.log("Zombie test ->", zombieGroup);
-    console.log("Skeleton test ->", skeletonGroup);
 
     // Enemy Creation
     for (let i = 0; i < 2; i++) {
@@ -75,8 +73,6 @@ export default class GameScene extends Phaser.Scene {
         loop: true,
       });
     }
-    console.log("PLAYER ->", this.player);
-    console.log("ZOMBIE GROUP ->", zombieGroup);
 
     this.physics.add.collider(this.player, zombieGroup, this.onPlayerCollision);
 
@@ -173,7 +169,8 @@ export default class GameScene extends Phaser.Scene {
   onPlayerCollision(player, monster) {
     console.log("HEALTH ->", player.health);
     //It should be the bullet's damage but we will just set a default value for now to test
-    monster.takesHit(player.damage);
-    player.takesHit(monster.damage);
+    // monster.takesHit(player.damage);
+    player.takesHit(monster);
+    // player.setBounce(0.5, 0.5);
   }
 }

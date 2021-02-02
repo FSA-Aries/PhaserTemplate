@@ -96,11 +96,42 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
-  takesHit(damage) {
-    if (this.health > 0) {
-      this.health -= damage;
-    }
+  takesHit(monster) {
+    // if (this.health > 0) {
+    this.health -= monster.damage;
+    // }
   }
+  // bounceBack(monster) {
+  //   // 1) Animation that we play
+  //   // 2) The velocity that moves
+  //   let direction;
+  //   if (this.body.touching.right) {
+  //     direction = "right";
+  //   } else if (this.body.touching.left) {
+  //     direction = "left";
+  //   } else if (this.body.touching.up) {
+  //     direction = "up";
+  //   } else if (this.body.touching.down) {
+  //     direction = "down";
+  //   }
+
+  //   console.log("DIRECTION ->", direction);
+  //   console.log("VELOCITY ->", this.body.velocity);
+  //   if (direction === "left") {
+  //     // this.anims.play("right", true);
+  //     this.setVelocityX(-600);
+  //   } else if (direction === "right") {
+  //     // this.anims.play("left", true);
+  //     this.setVelocityX(600);
+  //   } else if (direction === "up") {
+  //     // this.anims.play("down", true);
+  //     this.setVelocityY(-600);
+  //   } else if (direction === "down") {
+  //     // this.anims.play("up", true);
+  //     this.setVelocityY(600);
+  //   }
+  // }
+
   // hasHit(player) {
   //   console.log("I have hit,", player);
   // }

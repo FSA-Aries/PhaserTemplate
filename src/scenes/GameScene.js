@@ -36,7 +36,7 @@ export default class GameScene extends Phaser.Scene {
       frameWidth: 50,
       frameHeight: 69,
     });
-    // const player = this.physics.add.sprite(400, 375, assets.PLAYER_KEY);
+    // this.physics.add.sprite(400, 375, assets.PLAYER_KEY);
   }
 
   ///// CREATE /////
@@ -146,19 +146,25 @@ export default class GameScene extends Phaser.Scene {
     );
   }
 
-  onPlayerCollision(enemy, player) {
-    player.takesHit();
-  }
+  // onPlayerCollision(enemy, player) {
+  //   player.takesHit();
+  // }
 
   onEnemyCollision(player) {
     player.takesHit();
   }
 
   createPlayerColliders(player, { colliders }) {
-    player.addCollider(colliders.enemy.enemy, this.onEnemyCollision);
+    console.log(colliders.enemy);
+    // player.addCollider(colliders.enemy.enemy, this.onEnemyCollision);
   }
 
   createEnemyColliders(enemy, { colliders }) {
-    enemy.addCollider(colliders.player, this.onPlayerCollision);
+    console.log(colliders.player);
+    enemy.addCollider(
+      colliders.player
+
+      // this.onPlayerCollision
+    );
   }
 }

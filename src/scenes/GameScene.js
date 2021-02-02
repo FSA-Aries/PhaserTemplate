@@ -4,6 +4,7 @@ import Skeleton from "../classes/Enemies/Skeleton.js";
 import Player from "../classes/Player";
 import Bullet from "../classes/Bullet";
 import assets from "../../public/assets";
+// import addCollider from "../mixins/collidable";
 
 import { config } from "../main";
 
@@ -32,12 +33,13 @@ export default class GameScene extends Phaser.Scene {
     //Enemies
     this.load.spritesheet(assets.ZOMBIE_KEY, assets.ZOMBIE_URL, {
       frameWidth: 30,
-      frameHeight: 62,
+      frameHeight: 60,
     });
     this.load.spritesheet(assets.SKELETON_KEY, assets.SKELETON_URL, {
       frameWidth: 30,
       frameHeight: 64,
     });
+    // this.physics.add.sprite(400, 375, assets.PLAYER_KEY);
   }
 
   ///// CREATE /////
@@ -69,6 +71,21 @@ export default class GameScene extends Phaser.Scene {
         loop: true,
       });
     }
+
+    // const player = this.player;
+    // const enemy = this.enemy;
+
+    this.createPlayerColliders(this.player, {
+      colliders: {
+        enemy: this.enemy,
+      },
+    });
+
+    this.createEnemyColliders(this.enemy, {
+      colliders: {
+        player: this.player,
+      },
+    });
 
     this.cursors = this.input.keyboard.createCursorKeys();
     let playerBullets = this.physics.add.group({
@@ -106,10 +123,7 @@ export default class GameScene extends Phaser.Scene {
 
         this.reticle.x = transformedPoint.x;
         this.reticle.y = transformedPoint.y;
-        //console.log('if')
 
-        //console.log(this.reticle)
-        //console.log(pointer.movementY)
         //this.player.rotation = angle;
       },
       this
@@ -161,6 +175,27 @@ export default class GameScene extends Phaser.Scene {
       assets.SKELETON_KEY,
       assets.SKELETON_URL,
       this.player
+    );
+  }
+  // onPlayerCollision(enemy, player) {
+  //   player.takesHit();
+  // }
+
+  onEnemyCollision(player) {
+    player.takesHit();
+  }
+
+  createPlayerColliders(player, { colliders }) {
+    console.log(colliders.enemy);
+    // player.addCollider(colliders.enemy.enemy, this.onEnemyCollision);
+  }
+
+  createEnemyColliders(enemy, { colliders }) {
+    console.log(colliders.player);
+    enemy.addCollider(
+      colliders.player
+
+      // this.onPlayerCollision
     );
   }
 }

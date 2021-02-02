@@ -14,6 +14,9 @@ export default class Skeleton extends Phaser.Physics.Arcade.Sprite {
     this.scene.add.existing(this);
     // this.skeleton = this.scene.physics.add.sprite(x, y, key);
     this.player = player;
+    //Mixins
+    this.damage = 10;
+    this.health = 50;
     this.init();
     this.initEvents();
   }
@@ -61,6 +64,7 @@ export default class Skeleton extends Phaser.Physics.Arcade.Sprite {
       }),
       frameRate: 10,
     });
+    this.setImmovable(true);
   }
   initEvents() {
     this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
@@ -89,5 +93,8 @@ export default class Skeleton extends Phaser.Physics.Arcade.Sprite {
         }
       }
     }
+  }
+  hasHit(player) {
+    console.log("I have hit,", player);
   }
 }

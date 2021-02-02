@@ -17,6 +17,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.initEvents();
   }
   init() {
+    this.hasBeenHit = false;
+    this.bounceVelocity = 250;
     this.setCollideWorldBounds(true);
     this.cursors = this.scene.input.keyboard.createCursorKeys();
     this.anims.create({
@@ -63,7 +65,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
   update() {
     //const { left, right, up, down } = this.cursors;
-
+    if (this.hasBeenHit) {
+      return;
+    }
     this.setVelocity(0);
     const prevVelocity = this.body.velocity.clone();
 
@@ -96,9 +100,39 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
+  bounceOff() {
+    if (this.body.touching.right) {
+      setTimeout(() => this.setVelocityX(-this.bounceVelocity), 0);
+    }
+    if (this.body.touching.left) {
+      setTimeout(() => this.setVelocityX(this.bounceVelocity), 0);
+    }
+    if (this.body.touching.up) {
+      setTimeout(() => this.setVelocityY(this.bounceVelocity), 0);
+    }
+    if (this.body.touching.down) {
+      setTimeout(() => this.setVelocityY(-this.bounceVelocity), 0);
+    }
+  }
+
   takesHit(monster) {
     // if (this.health > 0) {
+    if (this.hasBeenHit) {
+      return;
+    }
     this.health -= monster.damage;
+    // this.body.checkCollision.none = true; ????
+    this.hasBeenHit = true;
+    this.bounceOff();
+
+    this.scene.time.addEvent({
+      delay: 160,
+      callback: () => {
+        this.hasBeenHit = false;
+      },
+      loop: false,
+    });
+
     // }
   }
   // bounceBack(monster) {

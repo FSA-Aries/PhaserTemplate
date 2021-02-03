@@ -6,6 +6,7 @@ import Bullet from "../classes/Bullet";
 import assets from "../../public/assets";
 import socket from "../socket/index.js";
 
+import EventEmitter from "../events/Emitter";
 import { config } from "../main";
 
 export default class GameScene extends Phaser.Scene {
@@ -43,7 +44,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   ///// CREATE /////
-  create() {
+  create({ gameStatus }) {
     let map = this.make.tilemap({ key: assets.TILEMAP_KEY });
     let tileSet = map.addTilesetImage("TiledSet", assets.TILESET_KEY);
     map.createLayer("Ground", tileSet, 0, 0);
@@ -78,12 +79,16 @@ export default class GameScene extends Phaser.Scene {
     }
 
     this.physics.add.collider(this.player, zombieGroup, this.onPlayerCollision);
+    this.physics.add.collider(this.player, skeletonGroup, this.onPlayerCollision);
+
 
     this.cursors = this.input.keyboard.createCursorKeys();
     let playerBullets = this.physics.add.group({
       classType: Bullet,
       runChildUpdate: true,
     });
+    this.physics.add.collider(playerBullets, zombieGroup, this.onBulletCollision)
+    this.physics.add.collider(playerBullets, skeletonGroup, this.onBulletCollision)
     this.reticle = this.physics.add.sprite(0, 0, assets.RETICLE_KEY);
     this.reticle.setDisplaySize(25, 25).setCollideWorldBounds(true);
 
@@ -102,6 +107,7 @@ export default class GameScene extends Phaser.Scene {
       },
       this
     );
+
     this.setupFollowupCameraOn(this.player);
 
     this.input.on(
@@ -120,12 +126,17 @@ export default class GameScene extends Phaser.Scene {
       },
       this
     );
+
+    if (gameStatus === "PLAYER_LOSE") {
+      return;
+    }
+    this.createGameEvents();
   }
 
   //       this
   //     );
   //   }
-  update() {}
+  update() { }
 
   ///// HELPER FUNCTIONS /////
 
@@ -169,11 +180,24 @@ export default class GameScene extends Phaser.Scene {
       this.player
     );
   }
+
+  createGameEvents() {
+    EventEmitter.on("PLAYER_LOSE", () => {
+      this.scene.restart({ gameStatus: "PLAYER_LOSE" });
+    });
+  }
   onPlayerCollision(player, monster) {
     console.log("HEALTH ->", player.health);
     //It should be the bullet's damage but we will just set a default value for now to test
     // monster.takesHit(player.damage);
     player.takesHit(monster);
     // player.setBounce(0.5, 0.5);
+  }
+
+  onBulletCollision(monster, bullet) {
+    //console.log('bullet hit')
+    //console.log(bullet)
+    bullet.hitsEnemy(monster)
+
   }
 }

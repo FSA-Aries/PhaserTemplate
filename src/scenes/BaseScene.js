@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { config } from "../main";
+import assets from "../../public/assets";
 
 class BaseScene extends Phaser.Scene {
   constructor(key) {
@@ -11,14 +12,14 @@ class BaseScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image(
-      "menu-bg",
-      "public/assets/backgrounds/Hello_World_Menu_Background.jpg"
-    );
+    this.load.image("menu-bg", assets.MENU_URL);
   }
 
   create() {
-    this.add.image(0, 0, "menu-bg").setOrigin(0);
+    this.background = this.add.image(0, 0, "menu-bg").setOrigin(0, 0);
+    // Based on your game size, it may "stretch" and distort.
+    this.background.displayWidth = this.sys.canvas.width;
+    this.background.displayHeight = this.sys.canvas.height;
 
     if (config.canGoBack) {
       const backButton = this.add

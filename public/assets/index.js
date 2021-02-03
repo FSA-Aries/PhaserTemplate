@@ -22,4 +22,7 @@ assets.TILEMAP_URL = "assets/tilesets/TiledMap.json";
 assets.TILESET_KEY = "tileSet";
 assets.TILESET_URL = "assets/tilesets/TileSet.png";
 
+//BACKGROUND
+assets.MENU_URL = "assets/backgrounds/Hello_World_Menu_Background.png";
+
 export default assets;

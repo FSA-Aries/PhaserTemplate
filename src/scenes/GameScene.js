@@ -4,6 +4,7 @@ import Skeleton from "../classes/Enemies/Skeleton.js";
 import Player from "../classes/Player";
 import Bullet from "../classes/Bullet";
 import assets from "../../public/assets";
+import socket from "../socket/index.js";
 
 import { config } from "../main";
 
@@ -14,6 +15,8 @@ export default class GameScene extends Phaser.Scene {
     this.cursors = undefined;
     this.game = undefined;
     this.reticle = undefined;
+    //Setup Sockets
+    this.socket = socket;
   }
 
   ///// PRELOAD /////

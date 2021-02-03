@@ -75,12 +75,16 @@ export default class GameScene extends Phaser.Scene {
     }
 
     this.physics.add.collider(this.player, zombieGroup, this.onPlayerCollision);
+    this.physics.add.collider(this.player, skeletonGroup, this.onPlayerCollision);
+
 
     this.cursors = this.input.keyboard.createCursorKeys();
     let playerBullets = this.physics.add.group({
       classType: Bullet,
       runChildUpdate: true,
     });
+    this.physics.add.collider(playerBullets, zombieGroup, this.onBulletCollision)
+    this.physics.add.collider(playerBullets, skeletonGroup, this.onBulletCollision)
     this.reticle = this.physics.add.sprite(0, 0, assets.RETICLE_KEY);
     this.reticle.setDisplaySize(25, 25).setCollideWorldBounds(true);
 
@@ -122,7 +126,7 @@ export default class GameScene extends Phaser.Scene {
   //       this
   //     );
   //   }
-  update() {}
+  update() { }
 
   ///// HELPER FUNCTIONS /////
 
@@ -172,5 +176,12 @@ export default class GameScene extends Phaser.Scene {
     // monster.takesHit(player.damage);
     player.takesHit(monster);
     // player.setBounce(0.5, 0.5);
+  }
+
+  onBulletCollision(monster, bullet) {
+    //console.log('bullet hit')
+    //console.log(bullet)
+    bullet.hitsEnemy(monster)
+
   }
 }

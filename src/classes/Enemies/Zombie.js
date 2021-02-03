@@ -13,8 +13,7 @@ export default class Zombie extends Phaser.Physics.Arcade.Sprite {
     this.scene.add.existing(this);
     this.player = player;
     this.health = 30;
-    this.damage = 5;
-    //Mixins
+    this.damage = 27;
 
     this.init();
     this.initEvents();
@@ -67,6 +66,10 @@ export default class Zombie extends Phaser.Physics.Arcade.Sprite {
 
   update() {
     //Use A* search algo or Pathfinder algo to find shortest distance
+
+    if (!this.active) {
+      return;
+    }
     if (Phaser.Math.Distance.BetweenPoints(this.player, this) < 400) {
       if (Math.abs(this.x - this.player.x) > Math.abs(this.y - this.player.y)) {
         if (this.player.x < this.x) {

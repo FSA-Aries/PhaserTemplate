@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 
 import GameScene from "./scenes/GameScene";
+import MenuScene from "./scenes/MenuScene";
 
 const WIDTH = 800;
 
@@ -31,7 +32,7 @@ export const config = {
       gravity: { y: 0 },
     },
   },
-  scene: [GameScene],
+  scene: [MenuScene, GameScene],
 };
 
 export default new Phaser.Game(config);

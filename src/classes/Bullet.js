@@ -10,6 +10,7 @@ export default class Bullet extends Phaser.GameObjects.Image {
         this.direction = 0;
         this.xSpeed = 0;
         this.ySpeed = 0;
+        this.damage = 100;
         //this.setSize(12, 12, true);
     }
 
@@ -27,6 +28,15 @@ export default class Bullet extends Phaser.GameObjects.Image {
         }
         this.rotation = shooter.rotation; // angle bullet with shooters rotation
         this.born = 0; // Time since new bullet spawned
+    }
+
+    hitsEnemy(target) {
+        //target.setActive(false).setVisible(false);
+        target.takesHit(this.damage)
+        //target.destroyEvents();
+        console.log(target.health)
+        this.destroy();
+        //target.destroy();
     }
 
     // Updates the position of the bullet each cycle

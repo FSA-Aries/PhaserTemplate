@@ -14,6 +14,11 @@ export default class GameScene extends Phaser.Scene {
     this.cursors = undefined;
     this.game = undefined;
     this.reticle = undefined;
+
+    // this.leftTopCorner = {
+    //   x: (config.WIDTH - config.WIDTH / config.ZOOM_FACTOR) / 2,
+    //   y: (config.HEIGHT - config.HEIGHT / config.ZOOM_FACTOR) / 2,
+    // }
   }
 
   ///// PRELOAD /////

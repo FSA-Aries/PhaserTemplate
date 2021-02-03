@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 
 import GameScene from "./scenes/GameScene";
+import WaitingRoom from "./scenes/WaitingRoom";
 import MenuScene from "./scenes/MenuScene";
 
 const WIDTH = 800;

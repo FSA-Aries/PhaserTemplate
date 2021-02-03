@@ -4,6 +4,8 @@ import Skeleton from "../classes/Enemies/Skeleton.js";
 import Player from "../classes/Player";
 import Bullet from "../classes/Bullet";
 import assets from "../../public/assets";
+import socket from "../socket/index.js";
+
 import EventEmitter from "../events/Emitter";
 import { config } from "../main";
 
@@ -14,11 +16,8 @@ export default class GameScene extends Phaser.Scene {
     this.cursors = undefined;
     this.game = undefined;
     this.reticle = undefined;
-
-    // this.leftTopCorner = {
-    //   x: (config.WIDTH - config.WIDTH / config.ZOOM_FACTOR) / 2,
-    //   y: (config.HEIGHT - config.HEIGHT / config.ZOOM_FACTOR) / 2,
-    // }
+    //Setup Sockets
+    this.socket = socket;
   }
 
   ///// PRELOAD /////

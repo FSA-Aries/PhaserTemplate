@@ -69,6 +69,11 @@ export default class Skeleton extends Phaser.Physics.Arcade.Sprite {
   initEvents() {
     this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
   }
+  takesHit(damage) {
+    if (this.health > 0) {
+      this.health -= damage;
+    }
+  }
 
   update() {
     //Use A* search algo or Pathfinder algo to find shortest distance
@@ -97,8 +102,11 @@ export default class Skeleton extends Phaser.Physics.Arcade.Sprite {
         }
       }
     }
-  }
-  hasHit(player) {
-    console.log("I have hit,", player);
+
+    if (this.health <= 0) {
+      this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.update, this);
+      this.destroy();
+    }
+
   }
 }

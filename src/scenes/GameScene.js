@@ -4,7 +4,7 @@ import Skeleton from "../classes/Enemies/Skeleton.js";
 import Player from "../classes/Player";
 import Bullet from "../classes/Bullet";
 import assets from "../../public/assets";
-
+import EventEmitter from "../events/Emitter";
 import { config } from "../main";
 
 export default class GameScene extends Phaser.Scene {
@@ -14,6 +14,11 @@ export default class GameScene extends Phaser.Scene {
     this.cursors = undefined;
     this.game = undefined;
     this.reticle = undefined;
+
+    // this.leftTopCorner = {
+    //   x: (config.WIDTH - config.WIDTH / config.ZOOM_FACTOR) / 2,
+    //   y: (config.HEIGHT - config.HEIGHT / config.ZOOM_FACTOR) / 2,
+    // }
   }
 
   ///// PRELOAD /////
@@ -40,7 +45,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   ///// CREATE /////
-  create() {
+  create({ gameStatus }) {
     let map = this.make.tilemap({ key: assets.TILEMAP_KEY });
     let tileSet = map.addTilesetImage("TiledSet", assets.TILESET_KEY);
     map.createLayer("Ground", tileSet, 0, 0);
@@ -103,6 +108,7 @@ export default class GameScene extends Phaser.Scene {
       },
       this
     );
+
     this.setupFollowupCameraOn(this.player);
 
     this.input.on(
@@ -121,6 +127,11 @@ export default class GameScene extends Phaser.Scene {
       },
       this
     );
+
+    if (gameStatus === "PLAYER_LOSE") {
+      return;
+    }
+    this.createGameEvents();
   }
 
   //       this
@@ -169,6 +180,12 @@ export default class GameScene extends Phaser.Scene {
       assets.SKELETON_URL,
       this.player
     );
+  }
+
+  createGameEvents() {
+    EventEmitter.on("PLAYER_LOSE", () => {
+      this.scene.restart({ gameStatus: "PLAYER_LOSE" });
+    });
   }
   onPlayerCollision(player, monster) {
     console.log("HEALTH ->", player.health);

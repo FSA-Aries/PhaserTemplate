@@ -11,6 +11,7 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
         this.xSpeed = 0;
         this.ySpeed = 0;
         this.damage = 15;
+
         //this.setSize(12, 12, true);
     }
 
@@ -53,7 +54,10 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
         target.takesHit(this.damage)
         //target.destroyEvents();
         console.log(target.health)
+
+
         this.destroy();
+
         //target.destroy();
     }
 

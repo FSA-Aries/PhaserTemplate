@@ -57,7 +57,7 @@ export default class GameScene extends Phaser.Scene {
     this.player = this.createPlayer();
     this.player.setTexture(assets.PLAYER_KEY, 1);
 
-    this.score = this.createScoreLabel(config.leftTopCorner.x + 5, config.rightTopCorner.y, 0)
+    this.score = this.createScoreLabel(config.rightTopCorner.x + 5, config.rightTopCorner.y, 0)
     //this.score = new Score(this, config.leftTopCorner.x + 5, config.rightTopCorner.y, 0)
 
 
@@ -222,7 +222,7 @@ export default class GameScene extends Phaser.Scene {
 
 
   createScoreLabel(x, y, score) {
-    const style = { fontSize: '32px', fill: '#888' }
+    const style = { fontSize: '32px', fill: '#ff0000', fontStyle: 'bold' }
     const label = new Score(this, x, y, score, style)
     label.setScrollFactor(0, 0).setScale(1);
     this.add.existing(label)

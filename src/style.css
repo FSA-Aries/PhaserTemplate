@@ -4,8 +4,10 @@ body {
   max-height: 600px;
 }
 
+
 canvas {
   display: block;
   margin-left: 50vh;
   margin-right: 50vh;
+
 }

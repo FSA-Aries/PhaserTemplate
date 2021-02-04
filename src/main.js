@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import GameOver from "./scenes/GameOver";
 
 import GameScene from "./scenes/GameScene";
 import WaitingRoom from "./scenes/WaitingRoom";
@@ -33,7 +34,7 @@ export const config = {
       gravity: { y: 0 },
     },
   },
-  scene: [MenuScene, GameScene],
+  scene: [MenuScene, GameScene, GameOver],
 };
 
 export default new Phaser.Game(config);

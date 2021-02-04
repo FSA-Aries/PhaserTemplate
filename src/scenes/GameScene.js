@@ -10,6 +10,8 @@ import Score from '../hud/score'
 import EventEmitter from "../events/Emitter";
 import { config } from "../main";
 
+// import { getEnemyTypes } from "../types";
+
 export default class GameScene extends Phaser.Scene {
   constructor() {
     super("game-scene");
@@ -24,6 +26,10 @@ export default class GameScene extends Phaser.Scene {
 
   ///// PRELOAD /////
   preload() {
+    this.game.scale.pageAlignHorizontally = true;
+    this.game.scale.pageAlignVertically = true;
+    this.game.scale.refresh();
+
     this.load.image(assets.BULLET_KEY, assets.BULLET_URL);
     this.load.image(assets.RETICLE_KEY, assets.RETICLE_URL);
     this.load.image(assets.TILESET_KEY, assets.TILESET_URL);
@@ -32,6 +38,11 @@ export default class GameScene extends Phaser.Scene {
       frameWidth: 50,
       frameHeight: 69,
     });
+
+    this.load.audio(
+      "zombie-attack",
+      "assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3"
+    );
 
     //Enemies
     this.load.spritesheet(assets.ZOMBIE_KEY, assets.ZOMBIE_URL, {
@@ -60,21 +71,19 @@ export default class GameScene extends Phaser.Scene {
     this.score = this.createScoreLabel(config.rightTopCorner.x + 5, config.rightTopCorner.y, 0)
     //this.score = new Score(this, config.leftTopCorner.x + 5, config.rightTopCorner.y, 0)
 
-
-
-
     //Zombie and Skeleton Groups
     let zombieGroup = this.physics.add.group();
     let skeletonGroup = this.physics.add.group();
 
     // Enemy Creation
-    for (let i = 0; i < 2; i++) {
+
+    for (let i = 0; i < 1; i++) {
       this.time.addEvent({
-        delay: 5000,
+        delay: 1000,
         callback: () => {
           zombieGroup.add(this.createZombie());
         },
-        loop: true,
+        repeat: 15,
       });
     }
     for (let i = 0; i < 1; i++) {
@@ -88,10 +97,12 @@ export default class GameScene extends Phaser.Scene {
     }
 
     this.physics.add.collider(this.player, zombieGroup, this.onPlayerCollision);
+
     this.physics.add.collider(this.player, skeletonGroup, this.onPlayerCollision);
     this.physics.add.collider(zombieGroup, skeletonGroup, null);
     this.physics.add.collider(zombieGroup, zombieGroup, null);
     this.physics.add.collider(skeletonGroup, skeletonGroup, null);
+
 
 
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -99,8 +110,10 @@ export default class GameScene extends Phaser.Scene {
       classType: Bullet,
       runChildUpdate: true,
     });
+
     this.physics.add.collider(playerBullets, zombieGroup, this.onBulletCollision, null, this)
     this.physics.add.collider(playerBullets, skeletonGroup, this.onBulletCollision, null, this)
+
     this.reticle = this.physics.add.sprite(0, 0, assets.RETICLE_KEY);
     this.reticle.setDisplaySize(25, 25).setCollideWorldBounds(true);
 
@@ -150,7 +163,7 @@ export default class GameScene extends Phaser.Scene {
   //       this
   //     );
   //   }
-  update() { }
+  update() {}
 
   ///// HELPER FUNCTIONS /////
 
@@ -183,6 +196,20 @@ export default class GameScene extends Phaser.Scene {
       this.player
     );
   }
+
+  // createEnemies(monster) {
+  //   const enemyTypes = getEnemyTypes();
+  //   const randomizedPosition = Math.random() * 800;
+
+  //   return new enemyTypes[monster](
+  //     this,
+  //     randomizedPosition,
+  //     randomizedPosition,
+  //     assets.SKELETON_KEY,
+  //     assets.SKELETON_URL,
+  //     this.player
+  //   );
+  // }
   createSkeleton() {
     const randomizedPosition = Math.random() * 800;
     return new Skeleton(
@@ -199,16 +226,19 @@ export default class GameScene extends Phaser.Scene {
 
   createGameEvents() {
     EventEmitter.on("PLAYER_LOSE", () => {
-      this.scene.restart({ gameStatus: "PLAYER_LOSE" });
+      this.scene.start("game-over", { gameStatus: "PLAYER_LOSE" });
     });
   }
   onPlayerCollision(player, monster) {
     console.log("HEALTH ->", player.health);
     //It should be the bullet's damage but we will just set a default value for now to test
     // monster.takesHit(player.damage);
+    console.log(monster);
     player.takesHit(monster);
+    if (monster.zombieAttackSound) monster.zombieAttackSound.play();
     // player.setBounce(0.5, 0.5);
   }
+
 
   onBulletCollision(bullet, monster) {
     if (monster.health - bullet.damage <= 0) {
@@ -227,5 +257,6 @@ export default class GameScene extends Phaser.Scene {
     label.setScrollFactor(0, 0).setScale(1);
     this.add.existing(label)
     return label;
+
   }
 }

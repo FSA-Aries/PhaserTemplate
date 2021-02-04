@@ -1,8 +1,8 @@
-import Phaser from 'phaser';
+import Phaser from "phaser";
 
-import GameScene from './scenes/GameScene';
-import WaitingRoom from './scenes/WaitingRoom';
-import MenuScene from './scenes/MenuScene';
+import GameScene from "./scenes/GameScene";
+import WaitingRoom from "./scenes/WaitingRoom";
+import MenuScene from "./scenes/MenuScene";
 
 const WIDTH = 800;
 
@@ -26,18 +26,18 @@ export const config = {
     y: (HEIGHT - HEIGHT / ZOOM_FACTOR) / 2,
   },
   physics: {
-    default: 'arcade',
+    default: "arcade",
     arcade: {
       debug: true,
 
       gravity: { y: 0 },
     },
   },
-  parent: 'mygame',
+  parent: "mygame",
   dom: {
     createContainer: true,
   },
-  scene: [WaitingRoom, MenuScene, GameScene],
+  scene: [MenuScene, WaitingRoom, GameScene],
 };
 
 export default new Phaser.Game(config);

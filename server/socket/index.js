@@ -12,14 +12,13 @@ module.exports = (io) => {
       `A socket connection to the server has been made: ${socket.id}`
     );
     socket.on("joinRoom", (roomKey) => {
-      console.log("Roomkey -->", roomKey);
+      console.log("Joined room -->", roomKey);
       socket.join(roomKey);
     });
     socket.on("isKeyValid", function (input) {
-      const keyArray = Object.keys(gameRooms)
-        ? socket.emit("keyisValid", input)
+      Object.keys(gameRooms).includes(input)
+        ? socket.emit("keyIsValid", input)
         : socket.emit("keyNotValid");
-      console.log("keyArray -->", keyArray);
     });
     socket.on("getRoomCode", async function () {
       let key = codeGenerator();

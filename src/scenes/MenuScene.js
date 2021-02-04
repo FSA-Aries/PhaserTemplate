@@ -11,19 +11,27 @@ class MenuScene extends BaseScene {
     ];
   }
 
-  preload() {
-    this.load.image(
-      "arrow-keys",
-      "https://thumbs.dreamstime.com/t/arrow-keys-black-3784132.jpg"
-    );
-  }
+  // preload() {
+  //   this.load.image(
+  //     "arrow-keys",
+  //     "https://thumbs.dreamstime.com/t/arrow-keys-black-3784132.jpg"
+  //   );
+  // }
 
   create() {
     super.create();
 
     this.createMenu(this.menu, this.setupMenuEvents.bind(this));
 
-    this.add.image(100, 100, "arrow-keys");
+    this.add.text(570, 579, "Move", {
+      fontSize: "37px",
+    });
+    this.add.image(600, 700, "arrow-keys");
+
+    this.add.text(150, 500, "Shoot", {
+      fontSize: "37px",
+    });
+    this.add.image(200, 700, "left-mouse-click");
   }
 
   setupMenuEvents(menuItem) {

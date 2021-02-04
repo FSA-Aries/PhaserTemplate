@@ -14,7 +14,15 @@ class BaseScene extends Phaser.Scene {
   preload() {
     this.load.image("menu-bg", assets.MENU_URL);
 
-    
+    this.load.image(
+      "arrow-keys",
+      "https://thumbs.dreamstime.com/t/arrow-keys-black-3784132.jpg"
+    );
+
+    this.load.image(
+      "left-mouse-click",
+      "https://support.biodigital.com/hc/article_attachments/360038101893/mouse_click-left.jpg"
+    );
   }
 
   create() {

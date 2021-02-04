@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import GameOver from "./scenes/GameOver";
 
 import GameScene from "./scenes/GameScene";
+import WaitingRoom from "./scenes/WaitingRoom";
 import MenuScene from "./scenes/MenuScene";
 
 const WIDTH = 800;
@@ -22,7 +23,7 @@ export const config = {
     y: (HEIGHT - HEIGHT / ZOOM_FACTOR) / 2,
   },
   rightTopCorner: {
-    x: WIDTH / ZOOM_FACTOR + (WIDTH - WIDTH / ZOOM_FACTOR) / 2,
+    x: (((WIDTH / ZOOM_FACTOR) + (WIDTH - WIDTH / ZOOM_FACTOR)) / 2) + 45,
     y: (HEIGHT - HEIGHT / ZOOM_FACTOR) / 2,
   },
   physics: {

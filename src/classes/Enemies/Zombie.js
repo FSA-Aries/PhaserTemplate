@@ -8,7 +8,7 @@ export default class Zombie extends Enemy {
     super(scene, x, y, key, type, player);
 
     this.health = 30;
-    this.damage = 27;
+    this.damage = 25;
 
     this.init();
   }
@@ -57,6 +57,19 @@ export default class Zombie extends Enemy {
       });
   }
 
+
+  takesHit(damage) {
+    if (this.health - damage >= 1) {
+      this.health -= damage;
+    } else {
+      this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.update, this);
+
+      this.destroy();
+
+    }
+  }
+
+
   update() {
     //Use A* search algo or Pathfinder algo to find shortest distance
 
@@ -83,10 +96,5 @@ export default class Zombie extends Enemy {
       }
     }
 
-    if (this.health <= 0) {
-      this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.update, this);
-
-      this.destroy();
-    }
   }
 }

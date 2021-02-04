@@ -33,7 +33,10 @@ export const config = {
       gravity: { y: 0 },
     },
   },
-  scene: [MenuScene, GameScene],
+  dom: {
+    createContainer: true,
+  },
+  scene: [WaitingRoom, MenuScene, GameScene],
 };
 
 export default new Phaser.Game(config);

@@ -11,11 +11,14 @@ export default class WaitingRoom extends Phaser.Scene {
   }
 
   preload() {
-    this.load.html("codeform", "assets/text/codeform.html");
+    this.load.html("codeform", "public/assets/text/codeform.html");
+    var data = this.cache.html.get("codeform");
+    console.log("DATA ->", data);
   }
 
   create() {
     const scene = this;
+    // this.load.html("codeform", "assets/text/codeform.html");
 
     scene.popUp = scene.add.graphics();
     scene.boxes = scene.add.graphics();
@@ -51,15 +54,17 @@ export default class WaitingRoom extends Phaser.Scene {
     //right popup
     scene.boxes.strokeRect(425, 200, 275, 100);
     scene.boxes.fillRect(425, 200, 275, 100);
-    scene.inputElement = scene.add.dom(562.5, 250).createFromCache("codeform");
-    scene.inputElement.addListener("click");
-    scene.inputElement.on("click", function (event) {
-      if (event.target.name === "enterRoom") {
-        const input = scene.inputElement.getChildByName("code-form");
+    scene.add.dom(562.5, 250).createFromCache("codeform");
 
-        scene.socket.emit("isKeyValid", input.value);
-      }
-    });
+    // scene.inputElement.addListener("click");
+    // scene.inputElement.on("click", function (event) {
+    //   console.log("Enter room -->", event.target.name);
+    //   if (event.target.name === "enterRoom") {
+    //     const input = scene.inputElement.getChildByName("code-form");
+
+    //     scene.socket.emit("isKeyValid", input.value);
+    //   }
+    // });
 
     scene.requestButton.setInteractive();
     scene.requestButton.on("pointerdown", () => {
@@ -77,6 +82,7 @@ export default class WaitingRoom extends Phaser.Scene {
     });
 
     scene.socket.on("roomCreated", function (roomKey) {
+      console.log("WaitingRoom key --> ", roomKey);
       scene.roomKey = roomKey;
       scene.roomKeyText.setText(scene.roomKey);
     });

@@ -12,18 +12,19 @@ module.exports = (io) => {
       `A socket connection to the server has been made: ${socket.id}`
     );
     socket.on("joinRoom", (roomKey) => {
+      console.log("Roomkey -->", roomKey);
       socket.join(roomKey);
     });
     socket.on("isKeyValid", function (input) {
       const keyArray = Object.keys(gameRooms)
         ? socket.emit("keyisValid", input)
         : socket.emit("keyNotValid");
+      console.log("keyArray -->", keyArray);
     });
     socket.on("getRoomCode", async function () {
       let key = codeGenerator();
-      while (Object.keys(gameRooms).includes(key)) {
-        key = codeGenerator();
-      }
+      console.log("key -->", key);
+      Object.keys(gameRooms).includes(key) ? (key = codeGenerator()) : key;
       gameRooms[key] = {
         roomKey: key,
         players: {},

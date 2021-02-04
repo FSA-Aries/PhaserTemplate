@@ -19,6 +19,10 @@ export default class Zombie extends Enemy {
   }
 
   init() {
+    this.zombieAttackSound = this.scene.sound.add("zombie-attack", {
+      volume: 0.2,
+    });
+
     this.anims.create({
       key: "zombie-idleFront",
       frames: this.anims.generateFrameNumbers(ZOMBIE_KEY, {

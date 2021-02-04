@@ -14,6 +14,8 @@ class BaseScene extends Phaser.Scene {
   preload() {
     this.load.image("menu-bg", assets.MENU_URL);
 
+    this.load.audio("theme", "assets/audio/City-of-the-Disturbed_Looping.mp3");
+
     this.load.image(
       "arrow-keys",
       "https://thumbs.dreamstime.com/t/arrow-keys-black-3784132.jpg"
@@ -26,6 +28,8 @@ class BaseScene extends Phaser.Scene {
   }
 
   create() {
+    this.playBgMusic();
+
     this.background = this.add.image(0, 0, "menu-bg").setOrigin(0, 0);
     // Based on your game size, it may "stretch" and distort.
     this.background.displayWidth = this.sys.canvas.width;
@@ -42,6 +46,13 @@ class BaseScene extends Phaser.Scene {
         this.scene.start("MenuScene");
       });
     }
+  }
+
+  playBgMusic() {
+    if (this.sound.get("theme")) {
+      return;
+    }
+    this.sound.add("theme", { loop: true, volume: 0.13 }).play();
   }
 
   createMenu(menu, setupMenuEvents) {

@@ -7,7 +7,7 @@ import assets from "../../public/assets";
 import EventEmitter from "../events/Emitter";
 import { config } from "../main";
 
-import { getEnemyTypes } from "../types";
+// import { getEnemyTypes } from "../types";
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -37,6 +37,11 @@ export default class GameScene extends Phaser.Scene {
       frameWidth: 50,
       frameHeight: 69,
     });
+
+    this.load.audio(
+      "zombie-attack",
+      "assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3"
+    );
 
     //Enemies
     this.load.spritesheet(assets.ZOMBIE_KEY, assets.ZOMBIE_URL, {
@@ -73,11 +78,11 @@ export default class GameScene extends Phaser.Scene {
 
     for (let i = 0; i < 1; i++) {
       this.time.addEvent({
-        delay: 2000,
+        delay: 1000,
         callback: () => {
           zombieGroup.add(this.createZombie());
         },
-        loop: true,
+        repeat: 15,
       });
     }
     for (let i = 0; i < 1; i++) {
@@ -227,7 +232,9 @@ export default class GameScene extends Phaser.Scene {
     console.log("HEALTH ->", player.health);
     //It should be the bullet's damage but we will just set a default value for now to test
     // monster.takesHit(player.damage);
+    console.log(monster);
     player.takesHit(monster);
+    if (monster.zombieAttackSound) monster.zombieAttackSound.play();
     // player.setBounce(0.5, 0.5);
   }
 

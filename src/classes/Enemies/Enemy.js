@@ -20,6 +20,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
   init() {
     this.setCollideWorldBounds(true);
+
     this.anims.create({
       key: "zombie-idleFront",
       frames: this.anims.generateFrameNumbers(ZOMBIE_KEY, {

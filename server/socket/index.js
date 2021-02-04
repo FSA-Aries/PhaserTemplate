@@ -14,7 +14,26 @@ module.exports = (io) => {
     socket.on("joinRoom", (roomKey) => {
       console.log("Joined room -->", roomKey);
       socket.join(roomKey);
+      const roomInfo = gameRooms[roomKey];
+      console.log("roomInfo -->", roomInfo);
+      roomInfo.players[socket.id] = {
+        rotation: 0,
+        x: 400,
+        y: 300,
+        playerId: socket.id,
+      };
+      roomInfo.numPlayers = Object.keys(roomInfo.players).length;
+      socket.emit("setState", roomInfo);
+      socket.emit("currentPlayers", {
+        player: roomInfo.players,
+        numPlayers: roomInfo.numPlayers,
+      });
+      socket.to(roomKey).emit("newPlayer", {
+        playerInfo: roomInfo.players[socket.id],
+        numPlayers: roomInfo.numPlayers,
+      });
     });
+
     socket.on("isKeyValid", function (input) {
       Object.keys(gameRooms).includes(input)
         ? socket.emit("keyIsValid", input)

@@ -11,6 +11,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     scene.physics.add.existing(this);
     scene.physics.world.enable(this);
     this.cursors = undefined;
+    this.playerId = undefined;
 
     //Mixins
     this.damage = 50;

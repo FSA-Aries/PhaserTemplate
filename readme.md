@@ -4,10 +4,10 @@ Senior Phaser is a free to play survival shooter with multiplayer functionality.
 
 # Team Members
 
-Brandon Fox
-Juan Velasquez
-Kelvin Lin
-Morgan Hu
+1. Brandon Fox (https://github.com/thespiritfox)
+2. Juan Velasquez (https://github.com/juandvelaz)
+3. Kelvin Lin (https://github.com/kelvinlin97)
+4. Morgan Hu (http://github.com/morgan738)
 
 
 # Demo

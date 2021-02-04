@@ -1,9 +1,8 @@
 import BaseScene from "./BaseScene";
-import GameScene from "./GameScene";
 
 class MenuScene extends BaseScene {
   constructor() {
-    super("MenuScene");
+    super("menu-scene");
 
     this.menu = [
       { scene: "PlayScene", text: "Play" },
@@ -12,10 +11,19 @@ class MenuScene extends BaseScene {
     ];
   }
 
+  preload() {
+    this.load.image(
+      "arrow-keys",
+      "https://thumbs.dreamstime.com/t/arrow-keys-black-3784132.jpg"
+    );
+  }
+
   create() {
     super.create();
 
     this.createMenu(this.menu, this.setupMenuEvents.bind(this));
+
+    this.add.image(100, 100, "arrow-keys");
   }
 
   setupMenuEvents(menuItem) {

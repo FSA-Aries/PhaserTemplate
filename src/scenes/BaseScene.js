@@ -13,6 +13,8 @@ class BaseScene extends Phaser.Scene {
 
   preload() {
     this.load.image("menu-bg", assets.MENU_URL);
+
+    
   }
 
   create() {

@@ -7,6 +7,8 @@ import assets from "../../public/assets";
 import EventEmitter from "../events/Emitter";
 import { config } from "../main";
 
+import { getEnemyTypes } from "../types";
+
 export default class GameScene extends Phaser.Scene {
   constructor() {
     super("game-scene");
@@ -23,6 +25,10 @@ export default class GameScene extends Phaser.Scene {
 
   ///// PRELOAD /////
   preload() {
+    this.game.scale.pageAlignHorizontally = true;
+    this.game.scale.pageAlignVertically = true;
+    this.game.scale.refresh();
+
     this.load.image(assets.BULLET_KEY, assets.BULLET_URL);
     this.load.image(assets.RETICLE_KEY, assets.RETICLE_URL);
     this.load.image(assets.TILESET_KEY, assets.TILESET_URL);
@@ -53,16 +59,21 @@ export default class GameScene extends Phaser.Scene {
 
     this.player = this.createPlayer();
     this.player.setTexture(assets.PLAYER_KEY, 1);
-    this.skeleton = this.createSkeleton();
+
+    // this.gameOverText = this.add.text(400, 300, "Game Over", {
+    //   fontSize: "32px",
+    //   color: "#000",
+    // });
 
     //Zombie and Skeleton Groups
     let zombieGroup = this.add.group();
     let skeletonGroup = this.add.group();
 
     // Enemy Creation
-    for (let i = 0; i < 2; i++) {
+
+    for (let i = 0; i < 1; i++) {
       this.time.addEvent({
-        delay: 5000,
+        delay: 2000,
         callback: () => {
           zombieGroup.add(this.createZombie());
         },
@@ -80,16 +91,27 @@ export default class GameScene extends Phaser.Scene {
     }
 
     this.physics.add.collider(this.player, zombieGroup, this.onPlayerCollision);
-    this.physics.add.collider(this.player, skeletonGroup, this.onPlayerCollision);
-
+    this.physics.add.collider(
+      this.player,
+      skeletonGroup,
+      this.onPlayerCollision
+    );
 
     this.cursors = this.input.keyboard.createCursorKeys();
     let playerBullets = this.physics.add.group({
       classType: Bullet,
       runChildUpdate: true,
     });
-    this.physics.add.collider(playerBullets, zombieGroup, this.onBulletCollision)
-    this.physics.add.collider(playerBullets, skeletonGroup, this.onBulletCollision)
+    this.physics.add.collider(
+      playerBullets,
+      zombieGroup,
+      this.onBulletCollision
+    );
+    this.physics.add.collider(
+      playerBullets,
+      skeletonGroup,
+      this.onBulletCollision
+    );
     this.reticle = this.physics.add.sprite(0, 0, assets.RETICLE_KEY);
     this.reticle.setDisplaySize(25, 25).setCollideWorldBounds(true);
 
@@ -137,7 +159,7 @@ export default class GameScene extends Phaser.Scene {
   //       this
   //     );
   //   }
-  update() { }
+  update() {}
 
   ///// HELPER FUNCTIONS /////
 
@@ -170,6 +192,20 @@ export default class GameScene extends Phaser.Scene {
       this.player
     );
   }
+
+  // createEnemies(monster) {
+  //   const enemyTypes = getEnemyTypes();
+  //   const randomizedPosition = Math.random() * 800;
+
+  //   return new enemyTypes[monster](
+  //     this,
+  //     randomizedPosition,
+  //     randomizedPosition,
+  //     assets.SKELETON_KEY,
+  //     assets.SKELETON_URL,
+  //     this.player
+  //   );
+  // }
   createSkeleton() {
     const randomizedPosition = Math.random() * 800;
     return new Skeleton(
@@ -184,7 +220,7 @@ export default class GameScene extends Phaser.Scene {
 
   createGameEvents() {
     EventEmitter.on("PLAYER_LOSE", () => {
-      this.scene.restart({ gameStatus: "PLAYER_LOSE" });
+      this.scene.start("game-over", { gameStatus: "PLAYER_LOSE" });
     });
   }
   onPlayerCollision(player, monster) {
@@ -196,9 +232,8 @@ export default class GameScene extends Phaser.Scene {
   }
 
   onBulletCollision(monster, bullet) {
-    //console.log('bullet hit')
+    console.log(monster);
     //console.log(bullet)
-    bullet.hitsEnemy(monster)
-
+    bullet.hitsEnemy(monster);
   }
 }

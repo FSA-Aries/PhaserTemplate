@@ -52,7 +52,7 @@ export default class GameScene extends Phaser.Scene {
 
     this.player = this.createPlayer();
     this.player.setTexture(assets.PLAYER_KEY, 1);
-    this.skeleton = this.createSkeleton();
+    //this.skeleton = this.createSkeleton();
 
     //Zombie and Skeleton Groups
     let zombieGroup = this.add.group();
@@ -195,7 +195,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   onBulletCollision(monster, bullet) {
-    //console.log('bullet hit')
+    console.log('bullet hit')
     //console.log(bullet)
     bullet.hitsEnemy(monster)
 

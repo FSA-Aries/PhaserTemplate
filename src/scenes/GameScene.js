@@ -5,6 +5,7 @@ import Player from "../classes/Player";
 import Bullet from "../classes/Bullet";
 import assets from "../../public/assets";
 import socket from "../socket/index.js";
+import Score from '../hud/score'
 
 import EventEmitter from "../events/Emitter";
 import { config } from "../main";
@@ -16,6 +17,7 @@ export default class GameScene extends Phaser.Scene {
     this.cursors = undefined;
     this.game = undefined;
     this.reticle = undefined;
+    this.score = undefined;
     //Setup Sockets
     this.socket = socket;
   }
@@ -41,6 +43,8 @@ export default class GameScene extends Phaser.Scene {
       frameHeight: 64,
     });
     // this.physics.add.sprite(400, 375, assets.PLAYER_KEY);
+
+
   }
 
   ///// CREATE /////
@@ -52,11 +56,16 @@ export default class GameScene extends Phaser.Scene {
 
     this.player = this.createPlayer();
     this.player.setTexture(assets.PLAYER_KEY, 1);
-    this.skeleton = this.createSkeleton();
+
+    this.score = this.createScoreLabel(config.rightTopCorner.x + 5, config.rightTopCorner.y, 0)
+    //this.score = new Score(this, config.leftTopCorner.x + 5, config.rightTopCorner.y, 0)
+
+
+
 
     //Zombie and Skeleton Groups
-    let zombieGroup = this.add.group();
-    let skeletonGroup = this.add.group();
+    let zombieGroup = this.physics.add.group();
+    let skeletonGroup = this.physics.add.group();
 
     // Enemy Creation
     for (let i = 0; i < 2; i++) {
@@ -80,6 +89,9 @@ export default class GameScene extends Phaser.Scene {
 
     this.physics.add.collider(this.player, zombieGroup, this.onPlayerCollision);
     this.physics.add.collider(this.player, skeletonGroup, this.onPlayerCollision);
+    this.physics.add.collider(zombieGroup, skeletonGroup, null);
+    this.physics.add.collider(zombieGroup, zombieGroup, null);
+    this.physics.add.collider(skeletonGroup, skeletonGroup, null);
 
 
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -87,8 +99,8 @@ export default class GameScene extends Phaser.Scene {
       classType: Bullet,
       runChildUpdate: true,
     });
-    this.physics.add.collider(playerBullets, zombieGroup, this.onBulletCollision)
-    this.physics.add.collider(playerBullets, skeletonGroup, this.onBulletCollision)
+    this.physics.add.collider(playerBullets, zombieGroup, this.onBulletCollision, null, this)
+    this.physics.add.collider(playerBullets, skeletonGroup, this.onBulletCollision, null, this)
     this.reticle = this.physics.add.sprite(0, 0, assets.RETICLE_KEY);
     this.reticle.setDisplaySize(25, 25).setCollideWorldBounds(true);
 
@@ -109,6 +121,8 @@ export default class GameScene extends Phaser.Scene {
     );
 
     this.setupFollowupCameraOn(this.player);
+
+
 
     this.input.on(
       "pointermove",
@@ -181,6 +195,8 @@ export default class GameScene extends Phaser.Scene {
     );
   }
 
+
+
   createGameEvents() {
     EventEmitter.on("PLAYER_LOSE", () => {
       this.scene.restart({ gameStatus: "PLAYER_LOSE" });
@@ -194,10 +210,22 @@ export default class GameScene extends Phaser.Scene {
     // player.setBounce(0.5, 0.5);
   }
 
-  onBulletCollision(monster, bullet) {
-    //console.log('bullet hit')
-    //console.log(bullet)
-    bullet.hitsEnemy(monster)
+  onBulletCollision(bullet, monster) {
+    if (monster.health - bullet.damage <= 0) {
+      console.log(this.score)
+      this.score.addPoints(1)
+    }
 
+    bullet.hitsEnemy(monster)
+  }
+
+
+
+  createScoreLabel(x, y, score) {
+    const style = { fontSize: '32px', fill: '#ff0000', fontStyle: 'bold' }
+    const label = new Score(this, x, y, score, style)
+    label.setScrollFactor(0, 0).setScale(1);
+    this.add.existing(label)
+    return label;
   }
 }

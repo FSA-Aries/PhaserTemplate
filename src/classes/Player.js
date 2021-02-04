@@ -141,7 +141,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     if (this.hasBeenHit) {
       return;
     }
-    if (this.health <= 0) {
+    if (this.health - monster.damage <= 0) {
       EventEmmiter.emit("PLAYER_LOSE");
       return;
     }

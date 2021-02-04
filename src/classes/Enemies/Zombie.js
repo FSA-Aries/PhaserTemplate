@@ -13,7 +13,7 @@ export default class Zombie extends Phaser.Physics.Arcade.Sprite {
     this.scene.add.existing(this);
     this.player = player;
     this.health = 30;
-    this.damage = 27;
+    this.damage = 25;
 
     this.init();
     this.initEvents();
@@ -61,8 +61,13 @@ export default class Zombie extends Phaser.Physics.Arcade.Sprite {
   }
 
   takesHit(damage) {
-    if (this.health > 0) {
+    if (this.health - damage >= 1) {
       this.health -= damage;
+    } else {
+      this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.update, this);
+
+      this.destroy();
+
     }
   }
 
@@ -93,13 +98,11 @@ export default class Zombie extends Phaser.Physics.Arcade.Sprite {
       }
     }
 
-    if (this.health <= 0) {
+    /* if (this.health <= 0) {
 
       this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.update, this);
 
       this.destroy();
-
-
-    }
+    } */
   }
 }

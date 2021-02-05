@@ -64,9 +64,9 @@ export default class Skeleton extends Enemy {
       if (Math.abs(this.x - this.player.x) > Math.abs(this.y - this.player.y)) {
         if (this.player.x < this.x) {
           this.setVelocityX(-50);
-          // this.skeleton.anims.play("skeleton-left", true);
+          this.anims.play("skeleton-left", true);
           //Add skeletonhit for now for demo purposes but revert back to above after
-          this.anims.play("skeletonHit", true);
+          //this.anims.play("skeletonHit", true);
         } else {
           this.setVelocityX(50);
           this.anims.play("skeleton-right", true);

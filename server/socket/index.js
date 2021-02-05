@@ -24,6 +24,7 @@ module.exports = (io) => {
       };
       roomInfo.numPlayers = Object.keys(roomInfo.players).length;
       socket.emit("setState", roomInfo);
+      console.log("roomInfo ->", roomInfo);
       socket.emit("currentPlayers", {
         player: roomInfo.players,
         numPlayers: roomInfo.numPlayers,

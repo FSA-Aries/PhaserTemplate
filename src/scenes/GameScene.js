@@ -52,8 +52,7 @@ export default class GameScene extends Phaser.Scene {
     let tileSet = map.addTilesetImage("TiledSet", assets.TILESET_KEY);
     map.createLayer("Ground", tileSet, 0, 0);
     map.createLayer("Walls", tileSet, 0, 0);
-
-    this.player = this.createPlayer();
+    this.player = this.createPlayer(this, { x: 200, y: 300 });
     this.player.setTexture(assets.PLAYER_KEY, 1);
     this.skeleton = this.createSkeleton();
 
@@ -141,18 +140,22 @@ export default class GameScene extends Phaser.Scene {
       this
     );
 
+    //Sockets
     this.otherPlayers = this.physics.add.group();
 
     this.socket.on("setState", function (state) {
       const { roomKey, players, numPlayers } = state;
+      console.log("STATE ->", state);
       this.state.roomKey = roomKey;
       this.state.players = players;
       this.state.numPlayers = numPlayers;
     });
 
     this.socket.on("currentPlayers", function (playerInfo) {
+      console.log("Playerinfo ->", playerInfo);
       const { player, numPlayers } = playerInfo;
       this.state.numPlayers = numPlayers;
+      console.log("keys ->", Object.keys(player));
       Object.keys(player).forEach(function (id) {
         if (player[id].playerId === this.socket.id) {
           console.log("PLAYER -->", player);
@@ -162,6 +165,7 @@ export default class GameScene extends Phaser.Scene {
         }
       });
     });
+    console.log(this.player);
 
     this.socket.on("newPlayer", function (arg) {
       const { playerInfo, numPlayers } = arg;
@@ -186,7 +190,8 @@ export default class GameScene extends Phaser.Scene {
   createPlayer(player, playerInfo) {
     //maybe we can change player to this
     console.log(playerInfo);
-    return new Player(player, playerInfo.x, playerInfo.y);
+    this.player = new Player(player, playerInfo.x, playerInfo.y);
+    return this.player;
   }
 
   createOtherPlayer(player, playerInfo) {

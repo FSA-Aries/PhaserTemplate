@@ -20,7 +20,6 @@ export default class Zombie extends Phaser.Physics.Arcade.Sprite {
   }
 
   init() {
-
     this.setCollideWorldBounds(true);
     this.anims.create({
       key: "zombie-idleFront",
@@ -66,10 +65,7 @@ export default class Zombie extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
-
   update() {
-    //Use A* search algo or Pathfinder algo to find shortest distance
-
     if (!this.active) {
       return;
     }
@@ -94,12 +90,9 @@ export default class Zombie extends Phaser.Physics.Arcade.Sprite {
     }
 
     if (this.health <= 0) {
-
       this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.update, this);
 
       this.destroy();
-
-
     }
   }
 }

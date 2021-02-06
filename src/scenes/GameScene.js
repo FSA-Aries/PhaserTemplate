@@ -20,7 +20,7 @@ export default class GameScene extends Phaser.Scene {
     this.socket = socket;
     this.state = {};
     //maybe we don't need to do line 23
-    this.otherPlayers = undefined;
+    this.otherPlayer = undefined;
   }
 
   ///// PRELOAD /////
@@ -53,28 +53,22 @@ export default class GameScene extends Phaser.Scene {
     let tileSet = map.addTilesetImage("TiledSet", assets.TILESET_KEY);
     map.createLayer("Ground", tileSet, 0, 0);
     map.createLayer("Walls", tileSet, 0, 0);
-    // Set invisible
-    this.player = this.createPlayer(this, { x: 200, y: 300 });
 
-    //Problem: Sockets loading after we set colliders/create mobs
-    //Solution A: Create player before setting colliders and set visible to false
-    //Problem with Solution A: Assigns colliders/creates mobs around placeholder player ignores our new player with socket id
-    //Solution B: Move sockets to the top
-    //Problem SB: This doesn't work
-    //Solution C: async await
-    //Solution D:
+    //Create player and playerGroup
+    let playerGroup = this.add.group();
+    this.player = this.createPlayer(this, { x: 200, y: 300 });
+    playerGroup.add(this.player);
 
     //Sockets
-    this.socket.on("setState", function (state) {
+    scene.socket.on("setState", function (state) {
       const { roomKey, players, numPlayers } = state;
-      scene.physics.resume();
-      console.log("STATE ->", state);
+
       scene.state.roomKey = roomKey;
       scene.state.players = players;
       scene.state.numPlayers = numPlayers;
     });
 
-    this.socket.on("currentPlayers", function (playerInfo) {
+    scene.socket.on("currentPlayers", function (playerInfo) {
       console.log("Playerinfo ->", playerInfo);
       const { player, numPlayers } = playerInfo;
       scene.state.numPlayers = numPlayers;
@@ -82,7 +76,7 @@ export default class GameScene extends Phaser.Scene {
       Object.keys(player).forEach(function (id) {
         // if (player[id].playerId === socket.id) {
         //   console.log("PLAYER -->", player);
-        //   scene.createPlayer(scene, player[id]);
+        //   this.createPlayer(this, player[id]);
         // }
         if (player[id].playerId !== socket.id) {
           scene.createOtherPlayer(scene, player[id]);
@@ -90,7 +84,7 @@ export default class GameScene extends Phaser.Scene {
       });
     });
 
-    this.socket.on("newPlayer", function (arg) {
+    scene.socket.on("newPlayer", function (arg) {
       const { playerInfo, numPlayers } = arg;
       scene.createOtherPlayer(scene, playerInfo);
       scene.state.numPlayers = numPlayers;
@@ -98,7 +92,7 @@ export default class GameScene extends Phaser.Scene {
 
     // this.socket.on("playerMoved", function (playerInfo) {
     //   //Grab all members of the group
-    //   scene.otherPlayers.getChildren().forEach(function (otherPlayer) {
+    //   this.otherPlayers.getChildren().forEach(function (otherPlayer) {
     //     if (playerInfo.playerId === otherPlayer.playerId) {
     //       const oldX = this.otherPlayer.x;
     //       const oldY = this.otherPlayer.y;
@@ -109,8 +103,8 @@ export default class GameScene extends Phaser.Scene {
 
     // this.socket.on("disconnected", function (arg) {
     //   const { playerId, numPlayers } = arg;
-    //   scene.state.numPlayers = numPlayers;
-    //   scene.otherPlayers.getChildren().forEach(function (otherPlayer) {
+    //   this.state.numPlayers = numPlayers;
+    //   this.otherPlayers.getChildren().forEach(function (otherPlayer) {
     //     if (playerId === otherPlayer.playerId) {
     //       otherPlayer.destroy();
     //     }
@@ -119,7 +113,6 @@ export default class GameScene extends Phaser.Scene {
 
     this.socket.emit("joinRoom", input);
     //CREATE OTHER PLAYERS GROUP
-    this.otherPlayers = this.physics.add.group();
 
     //Zombie and Skeleton Groups
     let zombieGroup = this.add.group();
@@ -145,17 +138,17 @@ export default class GameScene extends Phaser.Scene {
         loop: true,
       });
     }
-
-    console.log(this.player);
+    console.log(playerGroup);
+    console.log(zombieGroup);
 
     //1) We need to create a player group and add it to colliders
     //2) We need to refactor how we create the enemy classes (specify which player zombie follows)
     ////Can add a method that takes in array of zombies and all of the players and for each monster --> checks distance and points towards player
     //Add method to each monster and velocity updates
 
-    this.physics.add.collider(this.player, zombieGroup, this.onPlayerCollision);
+    this.physics.add.collider(playerGroup, zombieGroup, this.onPlayerCollision);
     this.physics.add.collider(
-      this.player,
+      playerGroup,
       skeletonGroup,
       this.onPlayerCollision
     );
@@ -239,7 +232,6 @@ export default class GameScene extends Phaser.Scene {
     this.player = new Player(player, playerInfo.x, playerInfo.y);
     this.player.setTexture(assets.PLAYER_KEY, 1);
     // this.player.setVisible(false);
-    console.log(this.player);
     return this.player;
   }
 
@@ -247,7 +239,7 @@ export default class GameScene extends Phaser.Scene {
     console.log("createOtherPlayer -->", playerInfo);
     this.otherPlayer = new Player(player, playerInfo.x + 40, playerInfo.y + 40);
     this.otherPlayer.playerId = playerInfo.playerId;
-    this.otherPlayers.add(this.otherPlayer);
+    // this.playerGroup.add(this.otherPlayer);
   }
 
   setupFollowupCameraOn(player) {
@@ -292,7 +284,7 @@ export default class GameScene extends Phaser.Scene {
     });
   }
   onPlayerCollision(player, monster) {
-    console.log("HEALTH ->", player.health);
+    // console.log("HEALTH ->", player.health);
     //It should be the bullet's damage but we will just set a default value for now to test
     // monster.takesHit(player.damage);
     player.takesHit(monster);

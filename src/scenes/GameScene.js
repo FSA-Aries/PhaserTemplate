@@ -2,6 +2,7 @@ import Phaser, { Scene } from "phaser";
 import Zombie from "../classes/Enemies/Zombie.js";
 import Skeleton from "../classes/Enemies/Skeleton.js";
 import Player from "../classes/Player";
+import OtherPlayerSprite from "../classes/OtherPlayers";
 import Bullet from "../classes/Bullet";
 import assets from "../../public/assets";
 import socket from "../socket/index.js";
@@ -237,7 +238,11 @@ export default class GameScene extends Phaser.Scene {
 
   createOtherPlayer(player, playerInfo) {
     console.log("createOtherPlayer -->", playerInfo);
-    this.otherPlayer = new Player(player, playerInfo.x + 40, playerInfo.y + 40);
+    this.otherPlayer = new OtherPlayerSprite(
+      player,
+      playerInfo.x + 40,
+      playerInfo.y + 40
+    );
     this.otherPlayer.playerId = playerInfo.playerId;
     // this.playerGroup.add(this.otherPlayer);
   }

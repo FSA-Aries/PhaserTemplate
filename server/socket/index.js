@@ -11,11 +11,12 @@ module.exports = (io) => {
     console.log(
       `A socket connection to the server has been made: ${socket.id}`
     );
+
     socket.on("joinRoom", (roomKey) => {
       console.log("Joined room -->", roomKey);
       socket.join(roomKey);
       const roomInfo = gameRooms[roomKey];
-      console.log("roomInfo -->", roomInfo);
+      console.log("roomInfo before -->", roomInfo);
       roomInfo.players[socket.id] = {
         rotation: 0,
         x: 400,
@@ -24,7 +25,7 @@ module.exports = (io) => {
       };
       roomInfo.numPlayers = Object.keys(roomInfo.players).length;
       socket.emit("setState", roomInfo);
-      console.log("roomInfo ->", roomInfo);
+      console.log("roomInfo after ->", roomInfo);
       socket.emit("currentPlayers", {
         player: roomInfo.players,
         numPlayers: roomInfo.numPlayers,
@@ -51,6 +52,38 @@ module.exports = (io) => {
       };
       socket.emit("roomCreated", key);
     });
+
+    // socket.on("playerMovement", function (data) {
+    //   const { x, y, roomKey } = data;
+    //   gameRooms[roomKey].players[socket.id].x = x;
+    //   gameRooms[roomKey].players[socket.id].y = y;
+    //   socket
+    //     .to(roomKey)
+    //     .emit("playerMoved", gameRooms[roomKey].players[socket.id]);
+    // });
+
+    // socket.on("disconnect", function () {
+    //   let roomKey = "";
+    //   for (let keys1 in gameRooms) {
+    //     for (let keys2 in gameRooms[keys1]) {
+    //       Object.keys(gameRooms[keys1][keys2]).map((el) => {
+    //         if (el === socket.id) {
+    //           roomKey = keys1;
+    //         }
+    //       });
+    //     }
+    //   }
+    //   const roomInfo = gameRooms[roomKey];
+    //   if (roomInfo) {
+    //     console.log(`User ${socket.id} disconnected!`);
+    //     delete roomInfo.players[socket.id];
+    //     roomInfo.numPlayers = Object.keys(roomInfo.players).length;
+    //     io.to(roomKey).emit("disconnected", {
+    //       playerId: socket.id,
+    //       numPlayers: roomInfo.numPlayers,
+    //     });
+    //   }
+    // });
   });
 };
 

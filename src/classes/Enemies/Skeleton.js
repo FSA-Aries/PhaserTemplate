@@ -107,6 +107,5 @@ export default class Skeleton extends Phaser.Physics.Arcade.Sprite {
       this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.update, this);
       this.destroy();
     }
-
   }
 }

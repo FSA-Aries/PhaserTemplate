@@ -47,14 +47,79 @@ export default class GameScene extends Phaser.Scene {
   }
 
   ///// CREATE /////
-  create({ gameStatus }) {
+  create({ input, gameStatus }) {
+    const scene = this;
     let map = this.make.tilemap({ key: assets.TILEMAP_KEY });
     let tileSet = map.addTilesetImage("TiledSet", assets.TILESET_KEY);
     map.createLayer("Ground", tileSet, 0, 0);
     map.createLayer("Walls", tileSet, 0, 0);
+    // Set invisible
     this.player = this.createPlayer(this, { x: 200, y: 300 });
-    this.player.setTexture(assets.PLAYER_KEY, 1);
-    this.skeleton = this.createSkeleton();
+
+    //Problem: Sockets loading after we set colliders/create mobs
+    //Solution A: Create player before setting colliders and set visible to false
+    //Problem with Solution A: Assigns colliders/creates mobs around placeholder player ignores our new player with socket id
+    //Solution B: Move sockets to the top
+    //Problem SB: This doesn't work
+    //Solution C: async await
+    //Solution D:
+
+    //Sockets
+    this.socket.on("setState", function (state) {
+      const { roomKey, players, numPlayers } = state;
+      scene.physics.resume();
+      console.log("STATE ->", state);
+      scene.state.roomKey = roomKey;
+      scene.state.players = players;
+      scene.state.numPlayers = numPlayers;
+    });
+
+    this.socket.on("currentPlayers", function (playerInfo) {
+      console.log("Playerinfo ->", playerInfo);
+      const { player, numPlayers } = playerInfo;
+      scene.state.numPlayers = numPlayers;
+      console.log("keys ->", Object.keys(player));
+      Object.keys(player).forEach(function (id) {
+        // if (player[id].playerId === socket.id) {
+        //   console.log("PLAYER -->", player);
+        //   scene.createPlayer(scene, player[id]);
+        // }
+        if (player[id].playerId !== socket.id) {
+          scene.createOtherPlayer(scene, player[id]);
+        }
+      });
+    });
+
+    this.socket.on("newPlayer", function (arg) {
+      const { playerInfo, numPlayers } = arg;
+      scene.createOtherPlayer(scene, playerInfo);
+      scene.state.numPlayers = numPlayers;
+    });
+
+    // this.socket.on("playerMoved", function (playerInfo) {
+    //   //Grab all members of the group
+    //   scene.otherPlayers.getChildren().forEach(function (otherPlayer) {
+    //     if (playerInfo.playerId === otherPlayer.playerId) {
+    //       const oldX = this.otherPlayer.x;
+    //       const oldY = this.otherPlayer.y;
+    //       otherPlayer.setPosition(playerInfo.x, playerInfo.y);
+    //     }
+    //   });
+    // });
+
+    // this.socket.on("disconnected", function (arg) {
+    //   const { playerId, numPlayers } = arg;
+    //   scene.state.numPlayers = numPlayers;
+    //   scene.otherPlayers.getChildren().forEach(function (otherPlayer) {
+    //     if (playerId === otherPlayer.playerId) {
+    //       otherPlayer.destroy();
+    //     }
+    //   });
+    // });
+
+    this.socket.emit("joinRoom", input);
+    //CREATE OTHER PLAYERS GROUP
+    this.otherPlayers = this.physics.add.group();
 
     //Zombie and Skeleton Groups
     let zombieGroup = this.add.group();
@@ -76,9 +141,17 @@ export default class GameScene extends Phaser.Scene {
         callback: () => {
           skeletonGroup.add(this.createSkeleton());
         },
+
         loop: true,
       });
     }
+
+    console.log(this.player);
+
+    //1) We need to create a player group and add it to colliders
+    //2) We need to refactor how we create the enemy classes (specify which player zombie follows)
+    ////Can add a method that takes in array of zombies and all of the players and for each monster --> checks distance and points towards player
+    //Add method to each monster and velocity updates
 
     this.physics.add.collider(this.player, zombieGroup, this.onPlayerCollision);
     this.physics.add.collider(
@@ -140,39 +213,6 @@ export default class GameScene extends Phaser.Scene {
       this
     );
 
-    //Sockets
-    this.otherPlayers = this.physics.add.group();
-
-    this.socket.on("setState", function (state) {
-      const { roomKey, players, numPlayers } = state;
-      console.log("STATE ->", state);
-      this.state.roomKey = roomKey;
-      this.state.players = players;
-      this.state.numPlayers = numPlayers;
-    });
-
-    this.socket.on("currentPlayers", function (playerInfo) {
-      console.log("Playerinfo ->", playerInfo);
-      const { player, numPlayers } = playerInfo;
-      this.state.numPlayers = numPlayers;
-      console.log("keys ->", Object.keys(player));
-      Object.keys(player).forEach(function (id) {
-        if (player[id].playerId === this.socket.id) {
-          console.log("PLAYER -->", player);
-          this.createPlayer(this, player[id]);
-        } else {
-          this.createOtherPlayers(this, player[id]);
-        }
-      });
-    });
-    console.log(this.player);
-
-    this.socket.on("newPlayer", function (arg) {
-      const { playerInfo, numPlayers } = arg;
-      this.addOtherPlayers(this, playerInfo);
-      this.state.numPlayers = numPlayers;
-    });
-
     if (gameStatus === "PLAYER_LOSE") {
       return;
     }
@@ -187,21 +227,27 @@ export default class GameScene extends Phaser.Scene {
   ///// HELPER FUNCTIONS /////
 
   // PLAYER ANIMATION
+  // createDefaultPlayer(player, playerInfo){
+  //   this.player = new Player(player, playerInfo.x, playerInfo.y);
+  //   this.player.setTexture(assets.PLAYER_KEY, 1);
+  //   return this.player;
+  // }
+
   createPlayer(player, playerInfo) {
     //maybe we can change player to this
-    console.log(playerInfo);
+    console.log("createPlayer -->", playerInfo);
     this.player = new Player(player, playerInfo.x, playerInfo.y);
+    this.player.setTexture(assets.PLAYER_KEY, 1);
+    // this.player.setVisible(false);
+    console.log(this.player);
     return this.player;
   }
 
   createOtherPlayer(player, playerInfo) {
-    const otherPlayer = new Player(
-      player,
-      playerInfo.x + 40,
-      playerInfo.y + 40
-    );
-    otherPlayer.playerId = playerInfo.playerId;
-    player.otherPlayers.add(otherPlayer);
+    console.log("createOtherPlayer -->", playerInfo);
+    this.otherPlayer = new Player(player, playerInfo.x + 40, playerInfo.y + 40);
+    this.otherPlayer.playerId = playerInfo.playerId;
+    this.otherPlayers.add(this.otherPlayer);
   }
 
   setupFollowupCameraOn(player) {

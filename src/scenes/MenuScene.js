@@ -23,15 +23,15 @@ class MenuScene extends BaseScene {
 
     this.createMenu(this.menu, this.setupMenuEvents.bind(this));
 
-    this.add.text(570, 579, 'Move', {
-      fontSize: '37px',
+    this.add.text(52, 50, 'Move', {
+      fontSize: '40px',
     });
-    this.add.image(600, 700, 'arrow-keys');
+    this.add.image(100, 150, 'arrow-keys').setDisplaySize(100, 100);
 
-    this.add.text(150, 500, 'Shoot', {
-      fontSize: '37px',
+    this.add.text(190, 50, 'Shoot', {
+      fontSize: '40px',
     });
-    this.add.image(200, 700, 'left-mouse-click');
+    this.add.image(250, 150, 'left-mouse-click').setDisplaySize(100, 100);
   }
 
   setupMenuEvents(menuItem) {

@@ -19,9 +19,8 @@ class BaseScene extends Phaser.Scene {
     this.load.image(
       'arrow-keys',
       // "https://thumbs.dreamstime.com/t/arrow-keys-black-3784132.jpg"
-      'https://lh3.googleusercontent.com/proxy/YB7uhUV2F5C8FQtg3Jk8VxTe_fGiYSObSz7sIDAtRUIyQRIE2DO-2hdR1USe9TMSGrLvv2-KDjsM0AjOQRHNuxghHA'
+      assets.WASD_URL
     );
-
     this.load.image(
       'left-mouse-click',
       'https://support.biodigital.com/hc/article_attachments/360038101893/mouse_click-left.jpg'

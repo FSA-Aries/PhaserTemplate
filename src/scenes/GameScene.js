@@ -1,20 +1,20 @@
-import Phaser from "phaser";
-import Zombie from "../classes/Enemies/Zombie.js";
-import Skeleton from "../classes/Enemies/Skeleton.js";
-import Player from "../classes/Player";
-import Bullet from "../classes/Bullet";
-import assets from "../../public/assets";
-import socket from "../socket/index.js";
-import Score from '../hud/score'
+import Phaser from 'phaser';
+import Zombie from '../classes/Enemies/Zombie.js';
+import Skeleton from '../classes/Enemies/Skeleton.js';
+import Player from '../classes/Player';
+import Bullet from '../classes/Bullet';
+import assets from '../../public/assets';
+import socket from '../socket/index.js';
+import Score from '../hud/score';
 
-import EventEmitter from "../events/Emitter";
-import { config } from "../main";
+import EventEmitter from '../events/Emitter';
+import { config } from '../main';
 
 // import { getEnemyTypes } from "../types";
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
-    super("game-scene");
+    super('game-scene');
     this.player = undefined;
     this.cursors = undefined;
     this.game = undefined;
@@ -40,8 +40,8 @@ export default class GameScene extends Phaser.Scene {
     });
 
     this.load.audio(
-      "zombie-attack",
-      "assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3"
+      'zombie-attack',
+      'assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3'
     );
 
     //Enemies
@@ -54,21 +54,23 @@ export default class GameScene extends Phaser.Scene {
       frameHeight: 64,
     });
     // this.physics.add.sprite(400, 375, assets.PLAYER_KEY);
-
-
   }
 
   ///// CREATE /////
   create({ gameStatus }) {
     let map = this.make.tilemap({ key: assets.TILEMAP_KEY });
-    let tileSet = map.addTilesetImage("TiledSet", assets.TILESET_KEY);
-    map.createLayer("Ground", tileSet, 0, 0);
-    map.createLayer("Walls", tileSet, 0, 0);
+    let tileSet = map.addTilesetImage('TiledSet', assets.TILESET_KEY);
+    map.createLayer('Ground', tileSet, 0, 0);
+    map.createLayer('Walls', tileSet, 0, 0);
 
     this.player = this.createPlayer();
     this.player.setTexture(assets.PLAYER_KEY, 1);
 
-    this.score = this.createScoreLabel(config.rightTopCorner.x + 5, config.rightTopCorner.y, 0)
+    this.score = this.createScoreLabel(
+      config.rightTopCorner.x + 5,
+      config.rightTopCorner.y,
+      0
+    );
     //this.score = new Score(this, config.leftTopCorner.x + 5, config.rightTopCorner.y, 0)
 
     //Zombie and Skeleton Groups
@@ -98,12 +100,14 @@ export default class GameScene extends Phaser.Scene {
 
     this.physics.add.collider(this.player, zombieGroup, this.onPlayerCollision);
 
-    this.physics.add.collider(this.player, skeletonGroup, this.onPlayerCollision);
+    this.physics.add.collider(
+      this.player,
+      skeletonGroup,
+      this.onPlayerCollision
+    );
     this.physics.add.collider(zombieGroup, skeletonGroup, null);
     this.physics.add.collider(zombieGroup, zombieGroup, null);
     this.physics.add.collider(skeletonGroup, skeletonGroup, null);
-
-
 
     this.cursors = this.input.keyboard.createCursorKeys();
     let playerBullets = this.physics.add.group({
@@ -111,14 +115,26 @@ export default class GameScene extends Phaser.Scene {
       runChildUpdate: true,
     });
 
-    this.physics.add.collider(playerBullets, zombieGroup, this.onBulletCollision, null, this)
-    this.physics.add.collider(playerBullets, skeletonGroup, this.onBulletCollision, null, this)
+    this.physics.add.collider(
+      playerBullets,
+      zombieGroup,
+      this.onBulletCollision,
+      null,
+      this
+    );
+    this.physics.add.collider(
+      playerBullets,
+      skeletonGroup,
+      this.onBulletCollision,
+      null,
+      this
+    );
 
     this.reticle = this.physics.add.sprite(0, 0, assets.RETICLE_KEY);
     this.reticle.setDisplaySize(25, 25).setCollideWorldBounds(true);
 
     this.input.on(
-      "pointerdown",
+      'pointerdown',
       function () {
         if (this.player.active === false) return;
 
@@ -135,10 +151,8 @@ export default class GameScene extends Phaser.Scene {
 
     this.setupFollowupCameraOn(this.player);
 
-
-
     this.input.on(
-      "pointermove",
+      'pointermove',
       function (pointer) {
         //console.log(this.input.mousePointer.x)
         const transformedPoint = this.cameras.main.getWorldPoint(
@@ -154,7 +168,7 @@ export default class GameScene extends Phaser.Scene {
       this
     );
 
-    if (gameStatus === "PLAYER_LOSE") {
+    if (gameStatus === 'PLAYER_LOSE') {
       return;
     }
     this.createGameEvents();
@@ -173,15 +187,10 @@ export default class GameScene extends Phaser.Scene {
   }
 
   setupFollowupCameraOn(player) {
-    this.physics.world.setBounds(
-      0,
-      0,
-      config.width + config.mapOffset,
-      config.height
-    );
+    this.physics.world.setBounds(0, 0, config.width, config.height);
 
     this.cameras.main
-      .setBounds(0, 0, config.width + config.mapOffset, config.height)
+      .setBounds(0, 0, config.width, config.height)
       .setZoom(config.zoomFactor);
     this.cameras.main.startFollow(player);
   }
@@ -222,15 +231,13 @@ export default class GameScene extends Phaser.Scene {
     );
   }
 
-
-
   createGameEvents() {
-    EventEmitter.on("PLAYER_LOSE", () => {
-      this.scene.start("game-over", { gameStatus: "PLAYER_LOSE" });
+    EventEmitter.on('PLAYER_LOSE', () => {
+      this.scene.start('game-over', { gameStatus: 'PLAYER_LOSE' });
     });
   }
   onPlayerCollision(player, monster) {
-    console.log("HEALTH ->", player.health);
+    console.log('HEALTH ->', player.health);
     //It should be the bullet's damage but we will just set a default value for now to test
     // monster.takesHit(player.damage);
     console.log(monster);
@@ -239,24 +246,20 @@ export default class GameScene extends Phaser.Scene {
     // player.setBounce(0.5, 0.5);
   }
 
-
   onBulletCollision(bullet, monster) {
     if (monster.health - bullet.damage <= 0) {
-      console.log(this.score)
-      this.score.addPoints(1)
+      console.log(this.score);
+      this.score.addPoints(1);
     }
 
-    bullet.hitsEnemy(monster)
+    bullet.hitsEnemy(monster);
   }
 
-
-
   createScoreLabel(x, y, score) {
-    const style = { fontSize: '32px', fill: '#ff0000', fontStyle: 'bold' }
-    const label = new Score(this, x, y, score, style)
+    const style = { fontSize: '32px', fill: '#ff0000', fontStyle: 'bold' };
+    const label = new Score(this, x, y, score, style);
     label.setScrollFactor(0, 0).setScale(1);
-    this.add.existing(label)
+    this.add.existing(label);
     return label;
-
   }
 }

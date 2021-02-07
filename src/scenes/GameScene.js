@@ -79,18 +79,18 @@ export default class GameScene extends Phaser.Scene {
 
     // Enemy Creation
 
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < 4; i++) {
       this.time.addEvent({
-        delay: 1000,
+        delay: 2000,
         callback: () => {
           zombieGroup.add(this.createZombie());
         },
-        repeat: 15,
+        repeat: 25,
       });
     }
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < 2; i++) {
       this.time.addEvent({
-        delay: 10000,
+        delay: 5000,
         callback: () => {
           skeletonGroup.add(this.createSkeleton());
         },

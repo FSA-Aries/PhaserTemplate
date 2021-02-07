@@ -70,7 +70,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     if (!this.active) {
       return;
     }
-    if (Phaser.Math.Distance.BetweenPoints(this.player, this) < 2000) {
+    if (Phaser.Math.Distance.BetweenPoints(this.player, this) < 800) {
       if (Math.abs(this.x - this.player.x) > Math.abs(this.y - this.player.y)) {
         if (this.player.x < this.x) {
           this.setVelocityX(-50);

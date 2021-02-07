@@ -15,6 +15,9 @@ const ZOOM_FACTOR = 1.5;
 export const config = {
   type: Phaser.AUTO,
   mapOffset: MAP_WIDTH > WIDTH ? MAP_WIDTH - WIDTH : 0,
+  scale: {
+    parent: 'mygame',
+  },
   width: WIDTH,
   height: HEIGHT,
   zoomFactor: ZOOM_FACTOR,

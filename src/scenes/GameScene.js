@@ -159,6 +159,7 @@ export default class GameScene extends Phaser.Scene {
           pointer.x,
           pointer.y
         );
+        console.log('THIS IS THE PLAYER ', this.player);
 
         this.reticle.x = transformedPoint.x;
         this.reticle.y = transformedPoint.y;
@@ -194,18 +195,66 @@ export default class GameScene extends Phaser.Scene {
       .setZoom(config.zoomFactor);
     this.cameras.main.startFollow(player);
   }
+
+  enemyXSpawn() {
+    if (this.player.x > 400) {
+      if (this.player.x > 700) {
+        return this.player.x / 2 - Math.floor(Math.random() * 301 + 200);
+      }
+      return this.player.x / 2 - Math.floor(Math.random() * 201 + 100);
+    }
+
+    if (this.player.x < 400) {
+      if (this.player.x < 100)
+        return this.player.x * 2 + Math.floor(Math.random() * 301 + 200);
+    }
+    return this.player.x * 2 + Math.floor(Math.random() * 201 + 100);
+  }
+
+  enemyYSpawn() {
+    if (this.player.y > 375) {
+      if (this.player.y > 700) {
+        return this.player.y / 2 - Math.floor(Math.random() * 301 + 200);
+      }
+      return this.player.y / 2 - Math.floor(Math.random() * 201 + 100);
+    }
+
+    if (this.player.y < 375) {
+      if (this.player.y < 100)
+        return this.player.y * 2 + Math.floor(Math.random() * 301 + 200);
+    }
+    return this.player.y * 2 + Math.floor(Math.random() * 201 + 100);
+  }
+
   createZombie() {
-    const randomizedPosition = Math.random() * 800;
+    const randomizedPositionx = this.enemyXSpawn();
+    const randomizedPositiony = this.enemyYSpawn();
+    // const randomizedPositionx = Math.random() * 800 + this.player.x;
+    // const randomizedPositiony = Math.random() * 800 + this.player.y;
     return new Zombie(
       this,
-      randomizedPosition,
-      randomizedPosition,
+      randomizedPositionx,
+      randomizedPositiony,
       assets.ZOMBIE_KEY,
       assets.ZOMBIE_URL,
       this.player
     );
   }
 
+  createSkeleton() {
+    const randomizedPositionx = this.enemyXSpawn();
+    const randomizedPositiony = this.enemyYSpawn();
+    // const randomizedPositionx = Math.random() * 800 + this.player.x;
+    // const randomizedPositiony = Math.random() * 800 + this.player.y;
+    return new Skeleton(
+      this,
+      randomizedPositionx,
+      randomizedPositiony,
+      assets.SKELETON_KEY,
+      assets.SKELETON_URL,
+      this.player
+    );
+  }
   // createEnemies(monster) {
   //   const enemyTypes = getEnemyTypes();
   //   const randomizedPosition = Math.random() * 800;
@@ -219,17 +268,6 @@ export default class GameScene extends Phaser.Scene {
   //     this.player
   //   );
   // }
-  createSkeleton() {
-    const randomizedPosition = Math.random() * 800;
-    return new Skeleton(
-      this,
-      randomizedPosition,
-      randomizedPosition,
-      assets.SKELETON_KEY,
-      assets.SKELETON_URL,
-      this.player
-    );
-  }
 
   createGameEvents() {
     EventEmitter.on('PLAYER_LOSE', () => {

@@ -12,9 +12,9 @@ import { config } from "../main";
 
 // import { getEnemyTypes } from "../types";
 
-export default class GameScene extends Phaser.Scene {
+export default class LevelTwo extends Phaser.Scene {
   constructor() {
-    super("game-scene");
+    super("level-two");
     this.player = undefined;
     this.cursors = undefined;
     this.game = undefined;
@@ -33,7 +33,9 @@ export default class GameScene extends Phaser.Scene {
     this.load.image(assets.BULLET_KEY, assets.BULLET_URL);
     this.load.image(assets.RETICLE_KEY, assets.RETICLE_URL);
     this.load.image(assets.TILESET_KEY, assets.TILESET_URL);
-    this.load.tilemapTiledJSON(assets.TILEMAP_KEY, assets.TILEMAP_URL);
+
+    this.load.tilemapTiledJSON("mapTwo", "assets/tilesets/New-Map.json");
+    
     this.load.spritesheet(assets.PLAYER_KEY, assets.PLAYER_URL, {
       frameWidth: 50,
       frameHeight: 69,
@@ -58,10 +60,21 @@ export default class GameScene extends Phaser.Scene {
 
   ///// CREATE /////
   create({ gameStatus }) {
-    let map = this.make.tilemap({ key: assets.TILEMAP_KEY });
-    let tileSet = map.addTilesetImage("TiledSet", assets.TILESET_KEY);
-    map.createLayer("Ground", tileSet, 0, 0);
-    map.createLayer("Walls", tileSet, 0, 0);
+    // this.physics.world.setFPS(400);
+
+    let map = this.make.tilemap({ key: "mapTwo" });
+    let tileSet = map.addTilesetImage("mainlevbuild", assets.TILESET_KEY);
+    let ground = map.createLayer("Tile Layer 1", tileSet, 0, 0);
+    this.walls = map.createLayer("Walls", tileSet, 0, 0);
+
+    this.walls.setCollisionByProperty({ collides: true });
+
+    // const debugGraphics = this.add.graphics().setAlpha(0.75);
+    // this.walls.renderDebug(debugGraphics, {
+    //   tileColor: null, // Color of non-colliding tiles
+    //   collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+    //   faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
+    // });
 
     this.player = this.createPlayer();
     this.player.setTexture(assets.PLAYER_KEY, 1);
@@ -79,28 +92,32 @@ export default class GameScene extends Phaser.Scene {
 
     // Enemy Creation
 
-    for (let i = 0; i < 10; i++) {
-      this.time.addEvent({
-        delay: 2000,
-        callback: () => {
-          zombieGroup.add(this.createZombie());
-        },
-        loop: true,
-      });
-      //DON'T DELETE- TO HAVE SET AMOUNT OF ENEMIES INSTEAD OF ENDLESS
-      //repeat: 15
-    }
-    for (let i = 0; i < 2; i++) {
-      this.time.addEvent({
-        delay: 7000,
-        callback: () => {
-          skeletonGroup.add(this.createSkeleton());
-        },
-        loop: true,
-      });
-    }
+    // for (let i = 0; i < 2; i++) {
+    //   this.time.addEvent({
+    //     delay: 2000,
+    //     callback: () => {
+    //       zombieGroup.add(this.createZombie());
+    //     },
+    //     loop: true,
+    //   });
+    //   //DON'T DELETE- TO HAVE SET AMOUNT OF ENEMIES INSTEAD OF ENDLESS
+    //   //repeat: 15
+    // }
+    // for (let i = 0; i < 1; i++) {
+    //   this.time.addEvent({
+    //     delay: 7000,
+    //     callback: () => {
+    //       skeletonGroup.add(this.createSkeleton());
+    //     },
+    //     loop: true,
+    //   });
+    // }
 
     this.physics.add.collider(this.player, zombieGroup, this.onPlayerCollision);
+
+    this.physics.add.collider(this.player, this.walls);
+    this.physics.add.collider(zombieGroup, this.walls);
+    this.physics.add.collider(skeletonGroup, this.walls);
 
     this.physics.add.collider(
       this.player,
@@ -185,7 +202,7 @@ export default class GameScene extends Phaser.Scene {
 
   // PLAYER ANIMATION
   createPlayer() {
-    return new Player(this, 400, 375);
+    return new Player(this, 200000, 300750);
   }
 
   setupFollowupCameraOn(player) {

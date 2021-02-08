@@ -6,7 +6,7 @@ class MenuScene extends BaseScene {
 
     this.menu = [
       { scene: "PlayScene", text: "Play" },
-      { scene: "LevelScene", text: "Levels" },
+      { scene: "LevelScene", text: "Level Two" },
       { scene: null, text: "Exit" },
     ];
   }
@@ -23,15 +23,16 @@ class MenuScene extends BaseScene {
 
     this.createMenu(this.menu, this.setupMenuEvents.bind(this));
 
-    this.add.text(570, 579, "Move", {
-      fontSize: "37px",
+    this.add.text(570, 605, "Move", {
+      fontSize: "22px",
     });
-    this.add.image(600, 700, "arrow-keys");
+    this.add.image(600, 685, "arrow-keys").setScale(0.6);
 
-    this.add.text(150, 500, "Shoot", {
-      fontSize: "37px",
+    this.add.text(170, 610, "Shoot", {
+      fontSize: "22px",
     });
-    this.add.image(200, 700, "left-mouse-click");
+
+    this.add.image(200, 700, "left-mouse-click").setScale(0.4);
   }
 
   setupMenuEvents(menuItem) {
@@ -47,10 +48,12 @@ class MenuScene extends BaseScene {
     });
 
     textGO.on("pointerup", () => {
-      menuItem.scene && this.scene.start("game-scene");
+      if (menuItem.text === "Play") {
+        menuItem.scene && this.scene.start("game-scene");
+      }
 
-      if (menuItem.text === "Exit") {
-        this.game.destroy(true);
+      if (menuItem.text === "Level Two") {
+        menuItem.scene && this.scene.start("level-two");
       }
     });
   }

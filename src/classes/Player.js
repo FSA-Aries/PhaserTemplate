@@ -3,9 +3,10 @@ import assets from "../../public/assets";
 import HealthBar from "../hud/healthbar";
 import { config } from "../main";
 import EventEmmiter from "../events/Emitter";
+import socket from "../socket/index.js";
 
 class Player extends Phaser.Physics.Arcade.Sprite {
-  constructor(scene, x, y) {
+  constructor(scene, x, y, roomKey) {
     super(scene, x, y, "player");
     scene.add.existing(this);
     scene.physics.add.existing(this);
@@ -15,9 +16,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     //Mixins
     this.damage = 50;
+    this.x = x;
+    this.y = y;
 
     this.init();
     this.initEvents();
+    this.oldPosition = { x: this.x, y: this.y, rotation: this.rotation };
   }
 
   init() {

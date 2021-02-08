@@ -49,19 +49,15 @@ export default class GameScene extends Phaser.Scene {
 
   ///// CREATE /////
   create({ input, gameStatus }) {
+    this.playerGroup = this.add.group();
     const scene = this;
     let map = this.make.tilemap({ key: assets.TILEMAP_KEY });
     let tileSet = map.addTilesetImage("TiledSet", assets.TILESET_KEY);
     map.createLayer("Ground", tileSet, 0, 0);
     map.createLayer("Walls", tileSet, 0, 0);
 
-    //Create player and playerGroup
-    let playerGroup = this.add.group();
-    this.player = this.createPlayer(this, { x: 200, y: 300 });
-    playerGroup.add(this.player);
-
     //Sockets
-    scene.socket.on("setState", function (state) {
+    socket.on("setState", function (state) {
       const { roomKey, players, numPlayers } = state;
 
       scene.state.roomKey = roomKey;
@@ -69,38 +65,45 @@ export default class GameScene extends Phaser.Scene {
       scene.state.numPlayers = numPlayers;
     });
 
-    scene.socket.on("currentPlayers", function (playerInfo) {
+    socket.on("currentPlayers", function (playerInfo) {
       console.log("Playerinfo ->", playerInfo);
       const { player, numPlayers } = playerInfo;
       scene.state.numPlayers = numPlayers;
       console.log("keys ->", Object.keys(player));
       Object.keys(player).forEach(function (id) {
-        // if (player[id].playerId === socket.id) {
-        //   console.log("PLAYER -->", player);
-        //   this.createPlayer(this, player[id]);
-        // }
-        if (player[id].playerId !== socket.id) {
+        if (player[id].playerId === socket.id) {
+          console.log("PLAYER -->", player);
+          scene.player.roomKey = scene.state.roomKey;
+        }
+        // if (player[id].playerId !== socket.id) {
+        else {
           scene.createOtherPlayer(scene, player[id]);
         }
       });
     });
 
-    scene.socket.on("newPlayer", function (arg) {
+    socket.on("newPlayer", function (arg) {
       const { playerInfo, numPlayers } = arg;
       scene.createOtherPlayer(scene, playerInfo);
       scene.state.numPlayers = numPlayers;
     });
 
-    // this.socket.on("playerMoved", function (playerInfo) {
-    //   //Grab all members of the group
-    //   this.otherPlayers.getChildren().forEach(function (otherPlayer) {
-    //     if (playerInfo.playerId === otherPlayer.playerId) {
-    //       const oldX = this.otherPlayer.x;
-    //       const oldY = this.otherPlayer.y;
-    //       otherPlayer.setPosition(playerInfo.x, playerInfo.y);
-    //     }
-    //   });
-    // });
+    socket.on("playerMoved", function (playerInfo) {
+      //Grab all members of the group
+      console.log("PLAYERMOVED ->", playerInfo);
+      scene.playerGroup.getChildren().forEach(function (otherPlayer) {
+        console.log(
+          "PLAYERIDS",
+          playerInfo.playerId,
+          scene.otherPlayer.playerId
+        );
+        if (playerInfo.playerId === scene.otherPlayer.playerId) {
+          // const oldX = this.otherPlayer.x;
+          // const oldY = this.otherPlayer.y;
+          scene.otherPlayer.setPosition(playerInfo.x, playerInfo.y);
+        }
+      });
+    });
 
     // this.socket.on("disconnected", function (arg) {
     //   const { playerId, numPlayers } = arg;
@@ -112,7 +115,11 @@ export default class GameScene extends Phaser.Scene {
     //   });
     // });
 
-    this.socket.emit("joinRoom", input);
+    socket.emit("joinRoom", input);
+    //Create player and playerGroup
+    this.player = this.createPlayer(this, { x: 200, y: 300 });
+    console.log(this.player);
+    this.playerGroup.add(this.player);
     //CREATE OTHER PLAYERS GROUP
 
     //Zombie and Skeleton Groups
@@ -139,17 +146,18 @@ export default class GameScene extends Phaser.Scene {
         loop: true,
       });
     }
-    console.log(playerGroup);
-    console.log(zombieGroup);
-
     //1) We need to create a player group and add it to colliders
     //2) We need to refactor how we create the enemy classes (specify which player zombie follows)
     ////Can add a method that takes in array of zombies and all of the players and for each monster --> checks distance and points towards player
     //Add method to each monster and velocity updates
 
-    this.physics.add.collider(playerGroup, zombieGroup, this.onPlayerCollision);
     this.physics.add.collider(
-      playerGroup,
+      this.playerGroup,
+      zombieGroup,
+      this.onPlayerCollision
+    );
+    this.physics.add.collider(
+      this.playerGroup,
       skeletonGroup,
       this.onPlayerCollision
     );
@@ -216,23 +224,32 @@ export default class GameScene extends Phaser.Scene {
   //       this
   //     );
   //   }
-  update() {}
+  update() {
+    const scene = this;
+    var x = scene.player.x;
+    var y = scene.player.y;
+    if (x !== scene.player.oldPosition.x || y !== scene.player.oldPosition.y) {
+      scene.player.moving = true;
+      socket.emit("playerMovement", {
+        x: scene.player.x,
+        y: scene.player.y,
+        roomKey: scene.state.roomKey,
+      });
+    }
+    scene.player.oldPosition = {
+      x: scene.player.x,
+      y: scene.player.y,
+    };
+  }
 
   ///// HELPER FUNCTIONS /////
 
   // PLAYER ANIMATION
-  // createDefaultPlayer(player, playerInfo){
-  //   this.player = new Player(player, playerInfo.x, playerInfo.y);
-  //   this.player.setTexture(assets.PLAYER_KEY, 1);
-  //   return this.player;
-  // }
 
   createPlayer(player, playerInfo) {
-    //maybe we can change player to this
     console.log("createPlayer -->", playerInfo);
     this.player = new Player(player, playerInfo.x, playerInfo.y);
     this.player.setTexture(assets.PLAYER_KEY, 1);
-    // this.player.setVisible(false);
     return this.player;
   }
 
@@ -244,7 +261,7 @@ export default class GameScene extends Phaser.Scene {
       playerInfo.y + 40
     );
     this.otherPlayer.playerId = playerInfo.playerId;
-    // this.playerGroup.add(this.otherPlayer);
+    // playerGroup.add(this.otherPlayer)
   }
 
   setupFollowupCameraOn(player) {

@@ -14,9 +14,12 @@ class OtherPlayerSprite extends Phaser.Physics.Arcade.Sprite {
 
     //Mixins
     this.damage = 50;
+    this.x = x;
+    this.y = y;
 
     this.init();
     this.initEvents();
+    this.oldPosition = { x: this.x, y: this.y };
   }
 
   init() {
@@ -79,7 +82,20 @@ class OtherPlayerSprite extends Phaser.Physics.Arcade.Sprite {
     if (this.hasBeenHit || !this.body) {
       return;
     }
-    this.setVelocity(0);
+    // var x = this.x;
+    // var y = this.y;
+    // if (x !== this.oldPosition.x || y !== this.oldPosition.y)
+    //   this.moving = true;
+    // socket.emit("playerMovement", {
+    //   x: this.x,
+    //   y: this.y,
+    // });
+
+    // this.oldPosition = {
+    //   x: this.x,
+    //   y: this.y,
+    //   rotation: this.rotation,
+    // };
   }
 
   playDamageTween() {
@@ -166,10 +182,6 @@ class OtherPlayerSprite extends Phaser.Physics.Arcade.Sprite {
   //     // this.anims.play("up", true);
   //     this.setVelocityY(600);
   //   }
-  // }
-
-  // hasHit(player) {
-  //   console.log("I have hit,", player);
   // }
 }
 

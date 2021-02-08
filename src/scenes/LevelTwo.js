@@ -35,7 +35,7 @@ export default class LevelTwo extends Phaser.Scene {
     this.load.image(assets.TILESET_KEY, assets.TILESET_URL);
 
     this.load.tilemapTiledJSON("mapTwo", "assets/tilesets/New-Map.json");
-    
+
     this.load.spritesheet(assets.PLAYER_KEY, assets.PLAYER_URL, {
       frameWidth: 50,
       frameHeight: 69,
@@ -64,13 +64,13 @@ export default class LevelTwo extends Phaser.Scene {
 
     let map = this.make.tilemap({ key: "mapTwo" });
     let tileSet = map.addTilesetImage("mainlevbuild", assets.TILESET_KEY);
-    let ground = map.createLayer("Tile Layer 1", tileSet, 0, 0);
-    this.walls = map.createLayer("Walls", tileSet, 0, 0);
+    this.ground = map.createLayer("Tile Layer 1", tileSet, 0, 0);
+    // this.walls = map.createLayer("Walls", tileSet, 0, 0);
 
-    this.walls.setCollisionByProperty({ collides: true });
+    this.ground.setCollisionByProperty({ collides: true });
 
     // const debugGraphics = this.add.graphics().setAlpha(0.75);
-    // this.walls.renderDebug(debugGraphics, {
+    // this.ground.renderDebug(debugGraphics, {
     //   tileColor: null, // Color of non-colliding tiles
     //   collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
     //   faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
@@ -115,9 +115,9 @@ export default class LevelTwo extends Phaser.Scene {
 
     this.physics.add.collider(this.player, zombieGroup, this.onPlayerCollision);
 
-    this.physics.add.collider(this.player, this.walls);
-    this.physics.add.collider(zombieGroup, this.walls);
-    this.physics.add.collider(skeletonGroup, this.walls);
+    this.physics.add.collider(this.player, this.ground);
+    this.physics.add.collider(zombieGroup, this.ground);
+    this.physics.add.collider(skeletonGroup, this.ground);
 
     this.physics.add.collider(
       this.player,

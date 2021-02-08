@@ -11,7 +11,7 @@ const WIDTH = 800;
 // const MAP_WIDTH = document.body.offsetWidth;
 const MAP_WIDTH = document.body.offsetWidth;
 const HEIGHT = 800;
-const ZOOM_FACTOR = 1.75;
+const ZOOM_FACTOR = 1.5;
 export const config = {
   type: Phaser.AUTO,
   mapOffset: MAP_WIDTH > WIDTH ? MAP_WIDTH - WIDTH : 0,

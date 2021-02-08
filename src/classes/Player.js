@@ -3,10 +3,9 @@ import assets from "../../public/assets";
 import HealthBar from "../hud/healthbar";
 import { config } from "../main";
 import EventEmmiter from "../events/Emitter";
-import socket from "../socket/index.js";
 
 class Player extends Phaser.Physics.Arcade.Sprite {
-  constructor(scene, x, y, roomKey) {
+  constructor(scene, x, y) {
     super(scene, x, y, "player");
     scene.add.existing(this);
     scene.physics.add.existing(this);
@@ -28,13 +27,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.bounceVelocity = 250;
     this.setCollideWorldBounds(true);
     this.cursors = this.scene.input.keyboard.createCursorKeys();
-    this.cursors = this.scene.input.keyboard.addKeys(
-      {
-        up: Phaser.Input.Keyboard.KeyCodes.W,
-        down: Phaser.Input.Keyboard.KeyCodes.S,
-        left: Phaser.Input.Keyboard.KeyCodes.A,
-        right: Phaser.Input.Keyboard.KeyCodes.D
-      });
+    this.cursors = this.scene.input.keyboard.addKeys({
+      up: Phaser.Input.Keyboard.KeyCodes.W,
+      down: Phaser.Input.Keyboard.KeyCodes.S,
+      left: Phaser.Input.Keyboard.KeyCodes.A,
+      right: Phaser.Input.Keyboard.KeyCodes.D,
+    });
     this.health = 100;
 
     this.hp = new HealthBar(

@@ -6,11 +6,10 @@ import OtherPlayerSprite from "../classes/OtherPlayers";
 import Bullet from "../classes/Bullet";
 import assets from "../../public/assets";
 import socket from "../socket/index.js";
-import Score from '../hud/score'
+import Score from "../hud/score";
 
 import EventEmitter from "../events/Emitter";
 import { config } from "../main";
-
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -54,9 +53,6 @@ export default class GameScene extends Phaser.Scene {
       frameWidth: 30,
       frameHeight: 64,
     });
-
-
-
   }
 
   ///// CREATE /////
@@ -85,8 +81,7 @@ export default class GameScene extends Phaser.Scene {
       Object.keys(player).forEach(function (id) {
         if (player[id].playerId === socket.id) {
           scene.player.roomKey = scene.state.roomKey;
-        }
-        else {
+        } else {
           scene.createOtherPlayer(scene, player[id]);
         }
       });
@@ -129,10 +124,13 @@ export default class GameScene extends Phaser.Scene {
     console.log(this.player);
     this.playerGroup.add(this.player);
     //CREATE OTHER PLAYERS GROUP
-    this.player = this.createPlayer();
     this.player.setTexture(assets.PLAYER_KEY, 1);
 
-    this.score = this.createScoreLabel(config.rightTopCorner.x + 5, config.rightTopCorner.y, 0)
+    this.score = this.createScoreLabel(
+      config.rightTopCorner.x + 5,
+      config.rightTopCorner.y,
+      0
+    );
     //this.score = new Score(this, config.leftTopCorner.x + 5, config.rightTopCorner.y, 0)
 
     //Zombie and Skeleton Groups
@@ -175,11 +173,10 @@ export default class GameScene extends Phaser.Scene {
       skeletonGroup,
       this.onPlayerCollision
     );
-    
+
     this.physics.add.collider(zombieGroup, skeletonGroup, null);
     this.physics.add.collider(zombieGroup, zombieGroup, null);
     this.physics.add.collider(skeletonGroup, skeletonGroup, null);
-
 
     this.cursors = this.input.keyboard.createCursorKeys();
     let playerBullets = this.physics.add.group({
@@ -187,9 +184,20 @@ export default class GameScene extends Phaser.Scene {
       runChildUpdate: true,
     });
 
-
-    this.physics.add.collider(playerBullets, zombieGroup, this.onBulletCollision, null, this)
-    this.physics.add.collider(playerBullets, skeletonGroup, this.onBulletCollision, null, this)
+    this.physics.add.collider(
+      playerBullets,
+      zombieGroup,
+      this.onBulletCollision,
+      null,
+      this
+    );
+    this.physics.add.collider(
+      playerBullets,
+      skeletonGroup,
+      this.onBulletCollision,
+      null,
+      this
+    );
 
     this.reticle = this.physics.add.sprite(0, 0, assets.RETICLE_KEY);
     this.reticle.setDisplaySize(25, 25).setCollideWorldBounds(true);
@@ -211,8 +219,6 @@ export default class GameScene extends Phaser.Scene {
     );
 
     this.setupFollowupCameraOn(this.player);
-
-
 
     this.input.on(
       "pointermove",
@@ -263,7 +269,6 @@ export default class GameScene extends Phaser.Scene {
   // PLAYER ANIMATION
 
   createPlayer(player, playerInfo) {
-    console.log("createPlayer -->", playerInfo);
     this.player = new Player(player, playerInfo.x, playerInfo.y);
     this.player.setTexture(assets.PLAYER_KEY, 1);
     return this.player;
@@ -330,8 +335,6 @@ export default class GameScene extends Phaser.Scene {
     );
   }
 
-
-
   createGameEvents() {
     EventEmitter.on("PLAYER_LOSE", () => {
       this.scene.start("game-over", { gameStatus: "PLAYER_LOSE" });
@@ -349,21 +352,18 @@ export default class GameScene extends Phaser.Scene {
 
   onBulletCollision(bullet, monster) {
     if (monster.health - bullet.damage <= 0) {
-      console.log(this.score)
-      this.score.addPoints(1)
+      console.log(this.score);
+      this.score.addPoints(1);
     }
 
-    bullet.hitsEnemy(monster)
+    bullet.hitsEnemy(monster);
   }
 
-
-
   createScoreLabel(x, y, score) {
-    const style = { fontSize: '32px', fill: '#ff0000', fontStyle: 'bold' }
-    const label = new Score(this, x, y, score, style)
+    const style = { fontSize: "32px", fill: "#ff0000", fontStyle: "bold" };
+    const label = new Score(this, x, y, score, style);
     label.setScrollFactor(0, 0).setScale(1);
-    this.add.existing(label)
+    this.add.existing(label);
     return label;
-
   }
 }

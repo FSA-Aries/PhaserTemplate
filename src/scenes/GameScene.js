@@ -96,7 +96,7 @@ export default class GameScene extends Phaser.Scene {
 
     socket.on("playerMoved", function (playerInfo) {
       //Grab all members of the group
-      scene.playerGroup.getChildren().forEach(function (otherPlayer) {
+      scene.playerGroup.getChildren().forEach(function () {
         if (playerInfo.playerId === scene.otherPlayer.playerId) {
           scene.otherPlayer.setPosition(playerInfo.x, playerInfo.y);
         }
@@ -109,15 +109,15 @@ export default class GameScene extends Phaser.Scene {
       });
     });
 
-    // this.socket.on("disconnected", function (arg) {
-    //   const { playerId, numPlayers } = arg;
-    //   this.state.numPlayers = numPlayers;
-    //   this.otherPlayers.getChildren().forEach(function (otherPlayer) {
-    //     if (playerId === otherPlayer.playerId) {
-    //       otherPlayer.destroy();
-    //     }
-    //   });
-    // });
+    socket.on("disconnected", function (arg) {
+      const { playerId, numPlayers } = arg;
+      scene.state.numPlayers = numPlayers;
+      scene.playerGroup.getChildren().forEach(function () {
+        if (playerId === scene.otherPlayer.playerId) {
+          scene.otherPlayer.destroy();
+        }
+      });
+    });
 
     socket.emit("joinRoom", input);
     //Create player and playerGroup
@@ -138,24 +138,34 @@ export default class GameScene extends Phaser.Scene {
     let skeletonGroup = this.physics.add.group();
 
     // Enemy Creation
-    console.log(scene.playerGroup.getChildren().length);
-    if (scene.playerGroup.getChildren().length === 1) {
-      for (let i = 0; i < 4; i++) {
-        this.time.addEvent({
-          delay: 2000,
-          callback: () => {
-            zombieGroup.add(this.createZombie(scene.playerGroup));
-          },
-          repeat: 25,
-        });
-      }
-    } else {
-      console.log("ELSE STATEMENT -->", this.playerGroup.getChildren().length);
-      socket.emit("hostZombies", {
-        zombieGroup: zombieGroup,
-        roomKey: scene.state.roomKey,
+    // console.log(scene.playerGroup.getChildren().length);
+    // if (scene.playerGroup.getChildren().length === 1) {
+    //   for (let i = 0; i < 4; i++) {
+    //     this.time.addEvent({
+    //       delay: 2000,
+    //       callback: () => {
+    //         zombieGroup.add(this.createZombie(scene.playerGroup));
+    //       },
+    //       repeat: 25,
+    //     });
+    //   }
+    // } else {
+    //   console.log("ELSE STATEMENT -->", this.playerGroup.getChildren().length);
+    //   socket.emit("hostZombies", {
+    //     zombieGroup: zombieGroup,
+    //     roomKey: scene.state.roomKey,
+    //   });
+    // }
+    for (let i = 0; i < 4; i++) {
+      this.time.addEvent({
+        delay: 2000,
+        callback: () => {
+          zombieGroup.add(this.createZombie(scene.playerGroup));
+        },
+        repeat: 25,
       });
     }
+
     for (let i = 0; i < 2; i++) {
       this.time.addEvent({
         delay: 5000,
@@ -165,10 +175,6 @@ export default class GameScene extends Phaser.Scene {
         loop: true,
       });
     }
-    //1) We need to create a player group and add it to colliders
-    //2) We need to refactor how we create the enemy classes (specify which player zombie follows)
-    ////Can add a method that takes in array of zombies and all of the players and for each monster --> checks distance and points towards player
-    //Add method to each monster and velocity updates
 
     this.physics.add.collider(
       this.playerGroup,

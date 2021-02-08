@@ -63,33 +63,33 @@ module.exports = (io) => {
         .emit("playerMoved", gameRooms[roomKey].players[socket.id]);
     });
 
-    socket.on("hostZombies", function (data) {
-      const { zombieGroup, roomKey } = data;
-      socket.to(roomKey).emit("zombieReceived", zombieGroup);
-    });
-
-    // socket.on("disconnect", function () {
-    //   let roomKey = "";
-    //   for (let keys1 in gameRooms) {
-    //     for (let keys2 in gameRooms[keys1]) {
-    //       Object.keys(gameRooms[keys1][keys2]).map((el) => {
-    //         if (el === socket.id) {
-    //           roomKey = keys1;
-    //         }
-    //       });
-    //     }
-    //   }
-    //   const roomInfo = gameRooms[roomKey];
-    //   if (roomInfo) {
-    //     console.log(`User ${socket.id} disconnected!`);
-    //     delete roomInfo.players[socket.id];
-    //     roomInfo.numPlayers = Object.keys(roomInfo.players).length;
-    //     io.to(roomKey).emit("disconnected", {
-    //       playerId: socket.id,
-    //       numPlayers: roomInfo.numPlayers,
-    //     });
-    //   }
+    // socket.on("hostZombies", function (data) {
+    //   const { zombieGroup, roomKey } = data;
+    //   socket.to(roomKey).emit("zombieReceived", zombieGroup);
     // });
+
+    socket.on("disconnect", function () {
+      let roomKey = "";
+      for (let keys1 in gameRooms) {
+        for (let keys2 in gameRooms[keys1]) {
+          Object.keys(gameRooms[keys1][keys2]).map((el) => {
+            if (el === socket.id) {
+              roomKey = keys1;
+            }
+          });
+        }
+      }
+      const roomInfo = gameRooms[roomKey];
+      if (roomInfo) {
+        console.log(`User ${socket.id} disconnected!`);
+        delete roomInfo.players[socket.id];
+        roomInfo.numPlayers = Object.keys(roomInfo.players).length;
+        io.to(roomKey).emit("disconnected", {
+          playerId: socket.id,
+          numPlayers: roomInfo.numPlayers,
+        });
+      }
+    });
   });
 };
 

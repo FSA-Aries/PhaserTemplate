@@ -1,9 +1,9 @@
-import Phaser from "phaser";
-import GameOver from "./scenes/GameOver";
+import Phaser from 'phaser';
 
-import GameScene from "./scenes/GameScene";
-import WaitingRoom from "./scenes/WaitingRoom";
-import MenuScene from "./scenes/MenuScene";
+import MenuScene from './scenes/MenuScene';
+import WaitingRoom from './scenes/WaitingRoom';
+import GameScene from './scenes/GameScene';
+import GameOver from './scenes/GameOver';
 
 const WIDTH = 800;
 
@@ -15,6 +15,9 @@ const ZOOM_FACTOR = 1.5;
 export const config = {
   type: Phaser.AUTO,
   mapOffset: MAP_WIDTH > WIDTH ? MAP_WIDTH - WIDTH : 0,
+  scale: {
+    parent: 'mygame',
+  },
   width: WIDTH,
   height: HEIGHT,
   zoomFactor: ZOOM_FACTOR,
@@ -23,22 +26,24 @@ export const config = {
     y: (HEIGHT - HEIGHT / ZOOM_FACTOR) / 2,
   },
   rightTopCorner: {
-    x: (((WIDTH / ZOOM_FACTOR) + (WIDTH - WIDTH / ZOOM_FACTOR)) / 2) + 45,
+    x: (WIDTH / ZOOM_FACTOR + (WIDTH - WIDTH / ZOOM_FACTOR)) / 2 + 45,
     y: (HEIGHT - HEIGHT / ZOOM_FACTOR) / 2,
   },
   physics: {
-    default: "arcade",
+    default: 'arcade',
     arcade: {
       debug: false,
 
       gravity: { y: 0 },
     },
   },
+
   parent: "mygame",
   dom: {
     createContainer: true,
   },
-  scene: [MenuScene, WaitingRoom, GameScene],
+  scene: [MenuScene, WaitingRoom, GameScene, GameOver],
+
 };
 
 export default new Phaser.Game(config);

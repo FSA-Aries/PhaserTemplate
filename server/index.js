@@ -1,20 +1,20 @@
-const path = require("path");
-const express = require("express");
-const morgan = require("morgan");
+const path = require('path');
+const express = require('express');
+const morgan = require('morgan');
 //const compression = require('compression')
 //const session = require('express-session')
 //const passport = require('passport')
 //const SequelizeStore = require('connect-session-sequelize')(session.Store)
 //const db = require('./db')
 //const sessionStore = new SequelizeStore({db})
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8000;
 const app = express();
-const socketio = require("socket.io");
+const socketio = require('socket.io');
 module.exports = app;
 
 const createApp = () => {
   // logging middleware
-  app.use(morgan("dev"));
+  app.use(morgan('dev'));
 
   // body parsing middleware
   app.use(express.json());
@@ -40,7 +40,7 @@ const createApp = () => {
   //app.use('/api', require('./api'))
 
   // static file-serving middleware
-  app.use(express.static(path.join(__dirname, "..", "dist")));
+  app.use(express.static(path.join(__dirname, '..', 'dist')));
 
   // // any remaining requests with an extension (.js, .css, etc.) send 404
   // app.use((req, res, next) => {
@@ -54,15 +54,15 @@ const createApp = () => {
   // });
 
   // sends index.html
-  app.use("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "src/index.html"));
+  app.use('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'src/index.html'));
   });
 
   // error handling endware
   app.use((err, req, res, next) => {
     console.error(err);
     console.error(err.stack);
-    res.status(err.status || 500).send(err.message || "Internal server error.");
+    res.status(err.status || 500).send(err.message || 'Internal server error.');
   });
   // app.get("/", (req, res) => {
   //   const fileLocation = path.normalize(__dirname + "dist/index.html");
@@ -89,7 +89,9 @@ const startListening = () => {
 
   // set up our socket control center
   const io = socketio(server);
+
   require("./socket/index")(io);
+
 };
 
 //const syncDb = () => db.sync()

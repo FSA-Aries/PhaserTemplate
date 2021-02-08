@@ -1,3 +1,4 @@
+
 import Phaser, { Scene } from "phaser";
 import Zombie from "../classes/Enemies/Zombie.js";
 import Skeleton from "../classes/Enemies/Skeleton.js";
@@ -11,9 +12,10 @@ import Score from "../hud/score";
 import EventEmitter from "../events/Emitter";
 import { config } from "../main";
 
+
 export default class GameScene extends Phaser.Scene {
   constructor() {
-    super("game-scene");
+    super('game-scene');
     this.player = undefined;
     this.cursors = undefined;
     this.game = undefined;
@@ -40,8 +42,8 @@ export default class GameScene extends Phaser.Scene {
     });
 
     this.load.audio(
-      "zombie-attack",
-      "assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3"
+      'zombie-attack',
+      'assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3'
     );
 
     //Enemies
@@ -53,6 +55,9 @@ export default class GameScene extends Phaser.Scene {
       frameWidth: 30,
       frameHeight: 64,
     });
+
+    // this.physics.add.sprite(400, 375, assets.PLAYER_KEY);
+
   }
 
   ///// CREATE /////
@@ -60,9 +65,9 @@ export default class GameScene extends Phaser.Scene {
     this.playerGroup = this.add.group();
     const scene = this;
     let map = this.make.tilemap({ key: assets.TILEMAP_KEY });
-    let tileSet = map.addTilesetImage("TiledSet", assets.TILESET_KEY);
-    map.createLayer("Ground", tileSet, 0, 0);
-    map.createLayer("Walls", tileSet, 0, 0);
+    let tileSet = map.addTilesetImage('TiledSet', assets.TILESET_KEY);
+    map.createLayer('Ground', tileSet, 0, 0);
+    map.createLayer('Walls', tileSet, 0, 0);
 
     //Sockets
     socket.on("setState", function (state) {
@@ -139,18 +144,18 @@ export default class GameScene extends Phaser.Scene {
 
     // Enemy Creation
 
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < 4; i++) {
       this.time.addEvent({
-        delay: 1000,
+        delay: 2000,
         callback: () => {
           zombieGroup.add(this.createZombie());
         },
-        repeat: 15,
+        repeat: 25,
       });
     }
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < 2; i++) {
       this.time.addEvent({
-        delay: 10000,
+        delay: 5000,
         callback: () => {
           skeletonGroup.add(this.createSkeleton());
         },
@@ -170,6 +175,15 @@ export default class GameScene extends Phaser.Scene {
     );
     this.physics.add.collider(
       this.playerGroup,
+      skeletonGroup,
+      this.onPlayerCollision
+    );
+
+
+    this.physics.add.collider(this.player, zombieGroup, this.onPlayerCollision);
+
+    this.physics.add.collider(
+      this.player,
       skeletonGroup,
       this.onPlayerCollision
     );
@@ -203,7 +217,7 @@ export default class GameScene extends Phaser.Scene {
     this.reticle.setDisplaySize(25, 25).setCollideWorldBounds(true);
 
     this.input.on(
-      "pointerdown",
+      'pointerdown',
       function () {
         if (this.player.active === false) return;
 
@@ -221,13 +235,14 @@ export default class GameScene extends Phaser.Scene {
     this.setupFollowupCameraOn(this.player);
 
     this.input.on(
-      "pointermove",
+      'pointermove',
       function (pointer) {
         //console.log(this.input.mousePointer.x)
         const transformedPoint = this.cameras.main.getWorldPoint(
           pointer.x,
           pointer.y
         );
+        console.log('THIS IS THE PLAYER ', this.player);
 
         this.reticle.x = transformedPoint.x;
         this.reticle.y = transformedPoint.y;
@@ -237,7 +252,7 @@ export default class GameScene extends Phaser.Scene {
       this
     );
 
-    if (gameStatus === "PLAYER_LOSE") {
+    if (gameStatus === 'PLAYER_LOSE') {
       return;
     }
     this.createGameEvents();
@@ -286,30 +301,73 @@ export default class GameScene extends Phaser.Scene {
   }
 
   setupFollowupCameraOn(player) {
-    this.physics.world.setBounds(
-      0,
-      0,
-      config.width + config.mapOffset,
-      config.height
-    );
+    this.physics.world.setBounds(0, 0, config.width, config.height);
 
     this.cameras.main
-      .setBounds(0, 0, config.width + config.mapOffset, config.height)
+      .setBounds(0, 0, config.width, config.height)
       .setZoom(config.zoomFactor);
     this.cameras.main.startFollow(player);
   }
+
+  enemyXSpawn() {
+    if (this.player.x > 400) {
+      if (this.player.x > 700) {
+        return this.player.x / 2 - Math.floor(Math.random() * 301 + 200);
+      }
+      return this.player.x / 2 - Math.floor(Math.random() * 201 + 100);
+    }
+
+    if (this.player.x < 400) {
+      if (this.player.x < 100)
+        return this.player.x * 2 + Math.floor(Math.random() * 301 + 200);
+    }
+    return this.player.x * 2 + Math.floor(Math.random() * 201 + 100);
+  }
+
+  enemyYSpawn() {
+    if (this.player.y > 375) {
+      if (this.player.y > 700) {
+        return this.player.y / 2 - Math.floor(Math.random() * 301 + 200);
+      }
+      return this.player.y / 2 - Math.floor(Math.random() * 201 + 100);
+    }
+
+    if (this.player.y < 375) {
+      if (this.player.y < 100)
+        return this.player.y * 2 + Math.floor(Math.random() * 301 + 200);
+    }
+    return this.player.y * 2 + Math.floor(Math.random() * 201 + 100);
+  }
+
   createZombie() {
-    const randomizedPosition = Math.random() * 800;
+    const randomizedPositionx = this.enemyXSpawn();
+    const randomizedPositiony = this.enemyYSpawn();
+    // const randomizedPositionx = Math.random() * 800 + this.player.x;
+    // const randomizedPositiony = Math.random() * 800 + this.player.y;
     return new Zombie(
       this,
-      randomizedPosition,
-      randomizedPosition,
+      randomizedPositionx,
+      randomizedPositiony,
       assets.ZOMBIE_KEY,
       assets.ZOMBIE_URL,
       this.player
     );
   }
 
+  createSkeleton() {
+    const randomizedPositionx = this.enemyXSpawn();
+    const randomizedPositiony = this.enemyYSpawn();
+    // const randomizedPositionx = Math.random() * 800 + this.player.x;
+    // const randomizedPositiony = Math.random() * 800 + this.player.y;
+    return new Skeleton(
+      this,
+      randomizedPositionx,
+      randomizedPositiony,
+      assets.SKELETON_KEY,
+      assets.SKELETON_URL,
+      this.player
+    );
+  }
   // createEnemies(monster) {
   //   const enemyTypes = getEnemyTypes();
   //   const randomizedPosition = Math.random() * 800;
@@ -323,6 +381,7 @@ export default class GameScene extends Phaser.Scene {
   //     this.player
   //   );
   // }
+
   createSkeleton() {
     const randomizedPosition = Math.random() * 800;
     return new Skeleton(
@@ -335,13 +394,14 @@ export default class GameScene extends Phaser.Scene {
     );
   }
 
+
   createGameEvents() {
-    EventEmitter.on("PLAYER_LOSE", () => {
-      this.scene.start("game-over", { gameStatus: "PLAYER_LOSE" });
+    EventEmitter.on('PLAYER_LOSE', () => {
+      this.scene.start('game-over', { gameStatus: 'PLAYER_LOSE' });
     });
   }
   onPlayerCollision(player, monster) {
-    // console.log("HEALTH ->", player.health);
+
     //It should be the bullet's damage but we will just set a default value for now to test
     // monster.takesHit(player.damage);
     console.log(monster);
@@ -360,7 +420,9 @@ export default class GameScene extends Phaser.Scene {
   }
 
   createScoreLabel(x, y, score) {
+
     const style = { fontSize: "32px", fill: "#ff0000", fontStyle: "bold" };
+
     const label = new Score(this, x, y, score, style);
     label.setScrollFactor(0, 0).setScale(1);
     this.add.existing(label);

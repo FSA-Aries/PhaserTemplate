@@ -46,6 +46,7 @@ class MenuScene extends BaseScene {
       textGO.setStyle({ fill: '#fff' });
     });
 
+
     textGO.on('pointerup', () => {
       if (menuItem.text === 'Play') {
         this.scene.start('game-scene');
@@ -54,6 +55,7 @@ class MenuScene extends BaseScene {
         this.scene.start('WaitingRoom');
       }
       if (menuItem.text === 'Exit') {
+
         this.game.destroy(true);
       }
     });

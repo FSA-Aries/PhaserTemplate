@@ -1,17 +1,15 @@
+import Phaser, { Scene } from 'phaser';
+import Zombie from '../classes/Enemies/Zombie.js';
+import Skeleton from '../classes/Enemies/Skeleton.js';
+import Player from '../classes/Player';
+import OtherPlayerSprite from '../classes/OtherPlayers';
+import Bullet from '../classes/Bullet';
+import assets from '../../public/assets';
+import socket from '../socket/index.js';
+import Score from '../hud/score';
 
-import Phaser, { Scene } from "phaser";
-import Zombie from "../classes/Enemies/Zombie.js";
-import Skeleton from "../classes/Enemies/Skeleton.js";
-import Player from "../classes/Player";
-import OtherPlayerSprite from "../classes/OtherPlayers";
-import Bullet from "../classes/Bullet";
-import assets from "../../public/assets";
-import socket from "../socket/index.js";
-import Score from "../hud/score";
-
-import EventEmitter from "../events/Emitter";
-import { config } from "../main";
-
+import EventEmitter from '../events/Emitter';
+import { config } from '../main';
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -57,7 +55,6 @@ export default class GameScene extends Phaser.Scene {
     });
 
     // this.physics.add.sprite(400, 375, assets.PLAYER_KEY);
-
   }
 
   ///// CREATE /////
@@ -70,7 +67,7 @@ export default class GameScene extends Phaser.Scene {
     map.createLayer('Walls', tileSet, 0, 0);
 
     //Sockets
-    socket.on("setState", function (state) {
+    socket.on('setState', function (state) {
       const { roomKey, players, numPlayers } = state;
 
       scene.state.roomKey = roomKey;
@@ -78,11 +75,11 @@ export default class GameScene extends Phaser.Scene {
       scene.state.numPlayers = numPlayers;
     });
 
-    socket.on("currentPlayers", function (playerInfo) {
-      console.log("Playerinfo ->", playerInfo);
+    socket.on('currentPlayers', function (playerInfo) {
+      console.log('Playerinfo ->', playerInfo);
       const { player, numPlayers } = playerInfo;
       scene.state.numPlayers = numPlayers;
-      console.log("keys ->", Object.keys(player));
+      console.log('keys ->', Object.keys(player));
       Object.keys(player).forEach(function (id) {
         if (player[id].playerId === socket.id) {
           scene.player.roomKey = scene.state.roomKey;
@@ -92,18 +89,18 @@ export default class GameScene extends Phaser.Scene {
       });
     });
 
-    socket.on("newPlayer", function (arg) {
+    socket.on('newPlayer', function (arg) {
       const { playerInfo, numPlayers } = arg;
       scene.createOtherPlayer(scene, playerInfo);
       scene.state.numPlayers = numPlayers;
     });
 
-    socket.on("playerMoved", function (playerInfo) {
+    socket.on('playerMoved', function (playerInfo) {
       //Grab all members of the group
-      console.log("PLAYERMOVED ->", playerInfo);
+      console.log('PLAYERMOVED ->', playerInfo);
       scene.playerGroup.getChildren().forEach(function (otherPlayer) {
         console.log(
-          "PLAYERIDS",
+          'PLAYERIDS',
           playerInfo.playerId,
           scene.otherPlayer.playerId
         );
@@ -123,7 +120,7 @@ export default class GameScene extends Phaser.Scene {
     //   });
     // });
 
-    socket.emit("joinRoom", input);
+    socket.emit('joinRoom', input);
     //Create player and playerGroup
     this.player = this.createPlayer(this, { x: 200, y: 300 });
     console.log(this.player);
@@ -178,7 +175,6 @@ export default class GameScene extends Phaser.Scene {
       skeletonGroup,
       this.onPlayerCollision
     );
-
 
     this.physics.add.collider(this.player, zombieGroup, this.onPlayerCollision);
 
@@ -242,7 +238,6 @@ export default class GameScene extends Phaser.Scene {
           pointer.x,
           pointer.y
         );
-        console.log('THIS IS THE PLAYER ', this.player);
 
         this.reticle.x = transformedPoint.x;
         this.reticle.y = transformedPoint.y;
@@ -267,7 +262,7 @@ export default class GameScene extends Phaser.Scene {
     var y = scene.player.y;
     if (x !== scene.player.oldPosition.x || y !== scene.player.oldPosition.y) {
       scene.player.moving = true;
-      socket.emit("playerMovement", {
+      socket.emit('playerMovement', {
         x: scene.player.x,
         y: scene.player.y,
         roomKey: scene.state.roomKey,
@@ -290,7 +285,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   createOtherPlayer(player, playerInfo) {
-    console.log("createOtherPlayer -->", playerInfo);
+    console.log('createOtherPlayer -->', playerInfo);
     this.otherPlayer = new OtherPlayerSprite(
       player,
       playerInfo.x + 40,
@@ -382,26 +377,12 @@ export default class GameScene extends Phaser.Scene {
   //   );
   // }
 
-  createSkeleton() {
-    const randomizedPosition = Math.random() * 800;
-    return new Skeleton(
-      this,
-      randomizedPosition,
-      randomizedPosition,
-      assets.SKELETON_KEY,
-      assets.SKELETON_URL,
-      this.player
-    );
-  }
-
-
   createGameEvents() {
     EventEmitter.on('PLAYER_LOSE', () => {
       this.scene.start('game-over', { gameStatus: 'PLAYER_LOSE' });
     });
   }
   onPlayerCollision(player, monster) {
-
     //It should be the bullet's damage but we will just set a default value for now to test
     // monster.takesHit(player.damage);
     console.log(monster);
@@ -420,8 +401,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   createScoreLabel(x, y, score) {
-
-    const style = { fontSize: "32px", fill: "#ff0000", fontStyle: "bold" };
+    const style = { fontSize: '32px', fill: '#ff0000', fontStyle: 'bold' };
 
     const label = new Score(this, x, y, score, style);
     label.setScrollFactor(0, 0).setScale(1);

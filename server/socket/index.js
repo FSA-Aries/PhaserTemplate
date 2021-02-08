@@ -63,6 +63,11 @@ module.exports = (io) => {
         .emit("playerMoved", gameRooms[roomKey].players[socket.id]);
     });
 
+    socket.on("hostZombies", function (data) {
+      const { zombieGroup, roomKey } = data;
+      socket.to(roomKey).emit("zombieReceived", zombieGroup);
+    });
+
     // socket.on("disconnect", function () {
     //   let roomKey = "";
     //   for (let keys1 in gameRooms) {

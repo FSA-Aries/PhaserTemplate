@@ -7,7 +7,6 @@ export default class WaitingRoom extends Phaser.Scene {
     this.state = {};
     this.hasBeenSet = false;
     this.roomKey = "";
-    this.socket = socket;
   }
 
   preload() {
@@ -54,16 +53,16 @@ export default class WaitingRoom extends Phaser.Scene {
     scene.inputElement = scene.add.dom(562.5, 250).createFromCache("codeform");
     scene.inputElement.addListener("click");
     scene.inputElement.on("click", function (event) {
+      console.log("Enter room -->", event.target.name);
       if (event.target.name === "enterRoom") {
         const input = scene.inputElement.getChildByName("code-form");
-
-        scene.socket.emit("isKeyValid", input.value);
+        socket.emit("isKeyValid", input.value);
       }
     });
 
     scene.requestButton.setInteractive();
     scene.requestButton.on("pointerdown", () => {
-      scene.socket.emit("getRoomCode");
+      socket.emit("getRoomCode");
     });
 
     scene.notValidText = scene.add.text(670, 295, "", {
@@ -76,17 +75,17 @@ export default class WaitingRoom extends Phaser.Scene {
       fontStyle: "bold",
     });
 
-    scene.socket.on("roomCreated", function (roomKey) {
+    socket.on("roomCreated", function (roomKey) {
+      console.log("WaitingRoom key --> ", roomKey);
       scene.roomKey = roomKey;
       scene.roomKeyText.setText(scene.roomKey);
     });
 
-    scene.socket.on("keyNotValid", function () {
+    socket.on("keyNotValid", function () {
       scene.notValidText.setText("Invalid Room Key");
     });
-    scene.socket.on("keyIsValid", function (input) {
-      scene.socket.emit("joinRoom", input);
-      scene.scene.stop("WaitingRoom");
+    socket.on("keyIsValid", function (input) {
+      scene.scene.start("game-scene", { input: input });
     });
   }
   update() {}

@@ -19,6 +19,7 @@ export default class Zombie extends Enemy {
   }
 
   init() {
+    this.setCollideWorldBounds(true);
     this.zombieAttackSound = this.scene.sound.add("zombie-attack", {
       volume: 0.2,
     });
@@ -69,10 +70,7 @@ export default class Zombie extends Enemy {
     }
   }
 
-
   update() {
-    //Use A* search algo or Pathfinder algo to find shortest distance
-
     if (!this.active) {
       return;
     }
@@ -96,5 +94,10 @@ export default class Zombie extends Enemy {
       }
     }
 
+    if (this.health <= 0) {
+      this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.update, this);
+
+      this.destroy();
+    }
   }
 }

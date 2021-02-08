@@ -47,7 +47,7 @@ class MenuScene extends BaseScene {
     });
 
     textGO.on("pointerup", () => {
-      menuItem.scene && this.scene.start("game-scene");
+      menuItem.scene && this.scene.start("WaitingRoom");
 
       if (menuItem.text === "Exit") {
         this.game.destroy(true);

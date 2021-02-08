@@ -1,29 +1,19 @@
 import Phaser from "phaser";
+import Enemy from "./Enemy";
 
 const SKELETON_KEY = "skeleton";
 
 //set this to just skeleton
 
-export default class Skeleton extends Phaser.Physics.Arcade.Sprite {
+export default class Skeleton extends Enemy {
   constructor(scene, x, y, key, type, player) {
-    super(scene, x, y, key, type);
-    this.x = x;
-    this.y = y;
-    this.scene = scene;
-    this.scene.physics.world.enable(this);
-    this.scene.add.existing(this);
-    // this.skeleton = this.scene.physics.add.sprite(x, y, key);
-    this.player = player;
-    //Mixins
-    this.damage = 10;
+    super(scene, x, y, key, type, player);
+    this.damage = 100;
     this.health = 50;
     this.init();
-    this.initEvents();
   }
-  //Have to add setCollideWorldBounds + add existing sprite
 
   init() {
-    this.setCollideWorldBounds(true);
     this.anims.create({
       key: "skeleton-idleFront",
       frames: this.anims.generateFrameNumbers(SKELETON_KEY, {
@@ -64,20 +54,9 @@ export default class Skeleton extends Phaser.Physics.Arcade.Sprite {
       }),
       frameRate: 10,
     });
-    this.setImmovable(true);
-  }
-  initEvents() {
-    this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
-  }
-  takesHit(damage) {
-    if (this.health > 0) {
-      this.health -= damage;
-    }
   }
 
   update() {
-    //Use A* search algo or Pathfinder algo to find shortest distance
-
     if (!this.active) {
       return;
     }
@@ -85,9 +64,9 @@ export default class Skeleton extends Phaser.Physics.Arcade.Sprite {
       if (Math.abs(this.x - this.player.x) > Math.abs(this.y - this.player.y)) {
         if (this.player.x < this.x) {
           this.setVelocityX(-50);
-          // this.skeleton.anims.play("skeleton-left", true);
+          this.anims.play("skeleton-left", true);
           //Add skeletonhit for now for demo purposes but revert back to above after
-          this.anims.play("skeletonHit", true);
+          //this.anims.play("skeletonHit", true);
         } else {
           this.setVelocityX(50);
           this.anims.play("skeleton-right", true);

@@ -1,28 +1,25 @@
 import Phaser from "phaser";
-import { getEnemyTypes } from "../../types";
-import Enemy from "./Enemy";
+
 const ZOMBIE_KEY = "zombie";
 
-export default class Zombie extends Enemy {
+export default class Enemy extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y, key, type, player) {
-    super(scene, x, y, key, type, player);
-
+    super(scene, x, y, key, type);
+    this.x = x;
+    this.y = y;
+    this.scene = scene;
+    this.scene.physics.world.enable(this);
+    this.scene.add.existing(this);
+    this.player = player;
     this.health = 30;
-    this.damage = 25;
+    this.damage = 27;
 
     this.init();
-  }
-
-  ENEMY_KEY(monster) {
-    let x = getEnemyTypes()[monster].toLowerCase();
-    return x;
+    this.initEvents();
   }
 
   init() {
     this.setCollideWorldBounds(true);
-    this.zombieAttackSound = this.scene.sound.add("zombie-attack", {
-      volume: 0.2,
-    });
 
     this.anims.create({
       key: "zombie-idleFront",
@@ -56,17 +53,16 @@ export default class Zombie extends Enemy {
         }),
         frameRate: 10,
       });
+    this.setImmovable(true);
   }
 
+  initEvents() {
+    this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
+  }
 
   takesHit(damage) {
-    if (this.health - damage >= 1) {
+    if (this.health > 0) {
       this.health -= damage;
-    } else {
-      this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.update, this);
-
-      this.destroy();
-
     }
   }
 
@@ -93,10 +89,8 @@ export default class Zombie extends Enemy {
         }
       }
     }
-
     if (this.health <= 0) {
       this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.update, this);
-
       this.destroy();
     }
   }

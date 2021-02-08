@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { config } from "../main";
+import assets from "../../public/assets";
 
 class BaseScene extends Phaser.Scene {
   constructor(key) {
@@ -11,14 +12,28 @@ class BaseScene extends Phaser.Scene {
   }
 
   preload() {
+    this.load.image("menu-bg", assets.MENU_URL);
+
+    this.load.audio("theme", "assets/audio/City-of-the-Disturbed_Looping.mp3");
+
     this.load.image(
-      "menu-bg",
-      "public/assets/backgrounds/Hello_World_Menu_Background.jpg"
+      "arrow-keys",
+      "https://thumbs.dreamstime.com/t/arrow-keys-black-3784132.jpg"
+    );
+
+    this.load.image(
+      "left-mouse-click",
+      "https://support.biodigital.com/hc/article_attachments/360038101893/mouse_click-left.jpg"
     );
   }
 
   create() {
-    this.add.image(0, 0, "menu-bg").setOrigin(0);
+    this.playBgMusic();
+
+    this.background = this.add.image(0, 0, "menu-bg").setOrigin(0, 0);
+    // Based on your game size, it may "stretch" and distort.
+    this.background.displayWidth = this.sys.canvas.width;
+    this.background.displayHeight = this.sys.canvas.height;
 
     if (config.canGoBack) {
       const backButton = this.add
@@ -31,6 +46,13 @@ class BaseScene extends Phaser.Scene {
         this.scene.start("MenuScene");
       });
     }
+  }
+
+  playBgMusic() {
+    if (this.sound.get("theme")) {
+      return;
+    }
+    this.sound.add("theme", { loop: true, volume: 0.13 }).play();
   }
 
   createMenu(menu, setupMenuEvents) {

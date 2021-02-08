@@ -1,9 +1,8 @@
 import BaseScene from "./BaseScene";
-import GameScene from "./GameScene";
 
 class MenuScene extends BaseScene {
   constructor() {
-    super("MenuScene");
+    super("menu-scene");
 
     this.menu = [
       { scene: "PlayScene", text: "Play" },
@@ -12,10 +11,27 @@ class MenuScene extends BaseScene {
     ];
   }
 
+  // preload() {
+  //   this.load.image(
+  //     "arrow-keys",
+  //     "https://thumbs.dreamstime.com/t/arrow-keys-black-3784132.jpg"
+  //   );
+  // }
+
   create() {
     super.create();
 
     this.createMenu(this.menu, this.setupMenuEvents.bind(this));
+
+    this.add.text(570, 579, "Move", {
+      fontSize: "37px",
+    });
+    this.add.image(600, 700, "arrow-keys");
+
+    this.add.text(150, 500, "Shoot", {
+      fontSize: "37px",
+    });
+    this.add.image(200, 700, "left-mouse-click");
   }
 
   setupMenuEvents(menuItem) {

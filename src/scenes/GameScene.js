@@ -1,17 +1,15 @@
-import Phaser, { Scene } from "phaser";
-import Zombie from "../classes/Enemies/Zombie.js";
-import Skeleton from "../classes/Enemies/Skeleton.js";
-import Player from "../classes/Player";
-import OtherPlayerSprite from "../classes/OtherPlayers";
-import Bullet from "../classes/Bullet";
-import assets from "../../public/assets";
-import socket from "../socket/index.js";
-import Score from "../hud/score";
-import VictoryScene from "./VictoryScene";
-import LosingScene from "./LosingScene";
+import Phaser, { Scene } from 'phaser';
+import Zombie from '../classes/Enemies/Zombie.js';
+import Skeleton from '../classes/Enemies/Skeleton.js';
+import Player from '../classes/Player';
+import OtherPlayerSprite from '../classes/OtherPlayers';
+import Bullet from '../classes/Bullet';
+import assets from '../../public/assets';
+import socket from '../socket/index.js';
+import Score from '../hud/score';
 
-import EventEmitter from "../events/Emitter";
-import { config } from "../main";
+import EventEmitter from '../events/Emitter';
+import { config } from '../main';
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -69,7 +67,7 @@ export default class GameScene extends Phaser.Scene {
     map.createLayer("Walls", tileSet, 0, 0);
 
     //Sockets
-    socket.on("setState", function (state) {
+    socket.on('setState', function (state) {
       const { roomKey, players, numPlayers } = state;
 
       scene.state.roomKey = roomKey;
@@ -77,11 +75,11 @@ export default class GameScene extends Phaser.Scene {
       scene.state.numPlayers = numPlayers;
     });
 
-    socket.on("currentPlayers", function (playerInfo) {
-      console.log("Playerinfo ->", playerInfo);
+    socket.on('currentPlayers', function (playerInfo) {
+      console.log('Playerinfo ->', playerInfo);
       const { player, numPlayers } = playerInfo;
       scene.state.numPlayers = numPlayers;
-      console.log("keys ->", Object.keys(player));
+      console.log('keys ->', Object.keys(player));
       Object.keys(player).forEach(function (id) {
         if (player[id].playerId === socket.id) {
           scene.player.roomKey = scene.state.roomKey;
@@ -91,13 +89,13 @@ export default class GameScene extends Phaser.Scene {
       });
     });
 
-    socket.on("newPlayer", function (arg) {
+    socket.on('newPlayer', function (arg) {
       const { playerInfo, numPlayers } = arg;
       scene.createOtherPlayer(scene, playerInfo);
       scene.state.numPlayers = numPlayers;
     });
 
-    socket.on("playerMoved", function (playerInfo) {
+    socket.on('playerMoved', function (playerInfo) {
       //Grab all members of the group
       if (scene.playerGroup.getChildren().length > 1) {
         scene.playerGroup.getChildren().forEach(function () {
@@ -110,6 +108,13 @@ export default class GameScene extends Phaser.Scene {
 
     socket.on("bulletFired", function (playerInfo) {
       scene.playerGroup.getChildren().forEach(function () {
+//       console.log('PLAYERMOVED ->', playerInfo);
+//       scene.playerGroup.getChildren().forEach(function (otherPlayer) {
+//         console.log(
+//           'PLAYERIDS',
+//           playerInfo.playerId,
+//           scene.otherPlayer.playerId
+//         );
         if (playerInfo.playerId === scene.otherPlayer.playerId) {
           let bullet = playerBullets.get().setActive(true).setVisible(true);
           bullet.fire(scene.otherPlayer, scene.reticle);
@@ -164,7 +169,7 @@ export default class GameScene extends Phaser.Scene {
       });
     });
 
-    socket.emit("joinRoom", input);
+    socket.emit('joinRoom', input);
     //Create player and playerGroup
     this.player = this.createPlayer(this, { x: 200, y: 300 });
     this.playerGroup.add(this.player);
@@ -304,7 +309,7 @@ export default class GameScene extends Phaser.Scene {
     var y = scene.player.y;
     if (x !== scene.player.oldPosition.x || y !== scene.player.oldPosition.y) {
       scene.player.moving = true;
-      socket.emit("playerMovement", {
+      socket.emit('playerMovement', {
         x: scene.player.x,
         y: scene.player.y,
         roomKey: scene.state.roomKey,
@@ -327,7 +332,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   createOtherPlayer(player, playerInfo) {
-    console.log("createOtherPlayer -->", playerInfo);
+    console.log('createOtherPlayer -->', playerInfo);
     this.otherPlayer = new OtherPlayerSprite(
       player,
       playerInfo.x + 40,

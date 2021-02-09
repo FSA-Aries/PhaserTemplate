@@ -30,6 +30,15 @@ assets.TILEMAP_KEY = "tileMap";
 assets.TILEMAP_URL = "assets/tilesets/TiledMap.json";
 assets.TILESET_KEY = "tileSet";
 assets.TILESET_URL = "assets/tilesets/TileSet.png";
+assets.FIREMAP_KEY = "firemap";
+assets.FIREMAP_URL = "assets/tilesets/New-Map.json";
+assets.FIRESET_KEY = "fireSet";
+assets.FIRESET_URL = "assets/tilesets/terrain.png";
+
+assets.DARKMAP_KEY = "darkmap";
+assets.DARKMAP_URL = "assets/tilesets/Darkness.json";
+assets.DARKSET_KEY = "darkness";
+assets.DARKSET_URL = "assets/tilesets/mainlevbuild.png";
 
 //BACKGROUND
 assets.MENU_URL = "assets/backgrounds/Hello_World_Menu_Background.png";

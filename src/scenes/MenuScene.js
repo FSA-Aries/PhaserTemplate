@@ -6,7 +6,8 @@ class MenuScene extends BaseScene {
 
     this.menu = [
       { scene: "PlayScene", text: "Play" },
-      { scene: "LevelScene", text: "Level Two" },
+      { scene: "LevelTwo", text: "Fire Level" },
+      { scene: "LevelThree", text: "Darkness Level" },
       { scene: null, text: "Exit" },
     ];
   }
@@ -52,8 +53,11 @@ class MenuScene extends BaseScene {
         menuItem.scene && this.scene.start("game-scene");
       }
 
-      if (menuItem.text === "Level Two") {
-        menuItem.scene && this.scene.start("level-two");
+      if (menuItem.text === "Darkness Level") {
+        menuItem.scene && this.scene.start("darkness-level");
+      }
+      if (menuItem.text === "Fire Level") {
+        menuItem.scene && this.scene.start("fire-level");
       }
     });
   }

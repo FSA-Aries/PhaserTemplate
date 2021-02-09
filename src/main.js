@@ -4,7 +4,11 @@ import GameOver from "./scenes/GameOver";
 import GameScene from "./scenes/GameScene";
 import WaitingRoom from "./scenes/WaitingRoom";
 import MenuScene from "./scenes/MenuScene";
-import LevelTwo from "./scenes/LevelTwo";
+import LevelTwo from "./scenes/BadLevelTwo";
+import LevelThree from "./scenes/FireLevel";
+import LevelFour from "./scenes/DarknessLevel";
+import FireLevel from "./scenes/FireLevel";
+import DarknessLevel from "./scenes/DarknessLevel";
 
 const WIDTH = 800;
 
@@ -34,7 +38,7 @@ export const config = {
       gravity: { y: 0 },
     },
   },
-  scene: [MenuScene, LevelTwo, GameScene, GameOver],
+  scene: [MenuScene, FireLevel, DarknessLevel, GameScene, GameOver],
 };
 
 export default new Phaser.Game(config);

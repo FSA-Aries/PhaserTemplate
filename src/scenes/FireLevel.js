@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import Zombie from "../classes/Enemies/Zombie.js";
 import Skeleton from "../classes/Enemies/Skeleton.js";
+import Boss from "../classes/Enemies/Boss";
 import Player from "../classes/Player";
 import Bullet from "../classes/Bullet";
 import assets from "../../public/assets";
@@ -12,9 +13,9 @@ import { config } from "../main";
 
 // import { getEnemyTypes } from "../types";
 
-export default class LevelTwo extends Phaser.Scene {
+export default class FireLevel extends Phaser.Scene {
   constructor() {
-    super("level-two");
+    super("fire-level");
     this.player = undefined;
     this.cursors = undefined;
     this.game = undefined;
@@ -26,16 +27,16 @@ export default class LevelTwo extends Phaser.Scene {
 
   ///// PRELOAD /////
   preload() {
+    this.load.audio("intro", "assets/audio/Intro.mp3");
+
     this.game.scale.pageAlignHorizontally = true;
     this.game.scale.pageAlignVertically = true;
     this.game.scale.refresh();
 
     this.load.image(assets.BULLET_KEY, assets.BULLET_URL);
     this.load.image(assets.RETICLE_KEY, assets.RETICLE_URL);
-    this.load.image(assets.TILESET_KEY, assets.TILESET_URL);
-
-    this.load.tilemapTiledJSON("mapTwo", "assets/tilesets/New-Map.json");
-
+    this.load.image(assets.FIRESET_KEY, assets.FIRESET_URL);
+    this.load.tilemapTiledJSON(assets.FIREMAP_KEY, assets.FIREMAP_URL);
     this.load.spritesheet(assets.PLAYER_KEY, assets.PLAYER_URL, {
       frameWidth: 50,
       frameHeight: 69,
@@ -55,29 +56,34 @@ export default class LevelTwo extends Phaser.Scene {
       frameWidth: 30,
       frameHeight: 64,
     });
+    this.load.spritesheet(assets.BOSS_KEY, assets.BOSS_URL, {
+      frameWidth: 30,
+      frameHeight: 60,
+    });
+    this.load.spritesheet(assets.BOSS_RIGHT_KEY, assets.BOSS_RIGHT_URL, {
+      frameWidth: 30,
+      frameHeight: 60,
+    });
+    this.load.spritesheet(assets.BOSS_DOWN_KEY, assets.BOSS_DOWN_URL, {
+      frameWidth: 30,
+      frameHeight: 60,
+    });
     // this.physics.add.sprite(400, 375, assets.PLAYER_KEY);
   }
 
   ///// CREATE /////
   create({ gameStatus }) {
-    // this.physics.world.setFPS(400);
-
-    let map = this.make.tilemap({ key: "mapTwo" });
-    let tileSet = map.addTilesetImage("mainlevbuild", assets.TILESET_KEY);
-    this.ground = map.createLayer("Tile Layer 1", tileSet, 0, 0);
-    // this.walls = map.createLayer("Walls", tileSet, 0, 0);
-
-    this.ground.setCollisionByProperty({ collides: true });
-
-    // const debugGraphics = this.add.graphics().setAlpha(0.75);
-    // this.ground.renderDebug(debugGraphics, {
-    //   tileColor: null, // Color of non-colliding tiles
-    //   collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-    //   faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
-    // });
+    let map = this.make.tilemap({ key: assets.FIREMAP_KEY });
+    let tileSet = map.addTilesetImage("Fireset", assets.FIRESET_KEY);
+    // map.createLayer("Underneath", tileSet, 0, 0);
+    map.createLayer("Floor", tileSet, 0, 0);
+    let lava = map.createLayer("Collision", tileSet, 0, 0);
+    lava.setCollisionByExclusion([-1]);
 
     this.player = this.createPlayer();
     this.player.setTexture(assets.PLAYER_KEY, 1);
+
+    this.physics.add.collider(this.player, lava);
 
     this.score = this.createScoreLabel(
       config.rightTopCorner.x + 5,
@@ -90,34 +96,32 @@ export default class LevelTwo extends Phaser.Scene {
     let zombieGroup = this.physics.add.group();
     let skeletonGroup = this.physics.add.group();
 
+    this.zombieGroup = zombieGroup;
+
     // Enemy Creation
 
-    // for (let i = 0; i < 2; i++) {
-    //   this.time.addEvent({
-    //     delay: 2000,
-    //     callback: () => {
-    //       zombieGroup.add(this.createZombie());
-    //     },
-    //     loop: true,
-    //   });
-    //   //DON'T DELETE- TO HAVE SET AMOUNT OF ENEMIES INSTEAD OF ENDLESS
-    //   //repeat: 15
-    // }
-    // for (let i = 0; i < 1; i++) {
-    //   this.time.addEvent({
-    //     delay: 7000,
-    //     callback: () => {
-    //       skeletonGroup.add(this.createSkeleton());
-    //     },
-    //     loop: true,
-    //   });
-    // }
+    for (let i = 0; i < 4; i++) {
+      this.time.addEvent({
+        delay: 5000,
+        callback: () => {
+          zombieGroup.add(this.createZombie());
+        },
+        repeat: 3,
+      });
+      //DON'T DELETE- TO HAVE SET AMOUNT OF ENEMIES INSTEAD OF ENDLESS
+      //repeat: 15
+    }
+    for (let i = 0; i < 1; i++) {
+      this.time.addEvent({
+        delay: 20000,
+        callback: () => {
+          skeletonGroup.add(this.createSkeleton());
+        },
+        repeat: 3,
+      });
+    }
 
     this.physics.add.collider(this.player, zombieGroup, this.onPlayerCollision);
-
-    this.physics.add.collider(this.player, this.ground);
-    this.physics.add.collider(zombieGroup, this.ground);
-    this.physics.add.collider(skeletonGroup, this.ground);
 
     this.physics.add.collider(
       this.player,
@@ -186,6 +190,7 @@ export default class LevelTwo extends Phaser.Scene {
       },
       this
     );
+    // this.introText();
 
     if (gameStatus === "PLAYER_LOSE") {
       return;
@@ -202,7 +207,8 @@ export default class LevelTwo extends Phaser.Scene {
 
   // PLAYER ANIMATION
   createPlayer() {
-    return new Player(this, 200000, 300750);
+    // this.sound.add("intro", { loop: false, volume: 0.53 }).play();
+    return new Player(this, 350, 400);
   }
 
   setupFollowupCameraOn(player) {
@@ -250,6 +256,114 @@ export default class LevelTwo extends Phaser.Scene {
     } else {
       this.randomizedPosition();
     }
+  }
+
+  introText() {
+    // let zombieGroup = this.physics.add.group();
+    // this.physics.add.collider(this.player, zombieGroup, this.onPlayerCollision);
+    /* 
+    Welcome to
+    Then
+
+    Senior Phaser
+    then
+    Left Click to Shoot
+    then 
+    WASD to move
+
+
+    add text
+    delay event-destroy text, add text 
+    delay event-destroy text, add text
+    delay event-destroy
+
+    
+    */
+
+    this.time.addEvent({
+      delay: 3000,
+      callback: () => {
+        let text1 = this.add.text(328, 365, "Welcome To", {
+          fontSize: "25px",
+          color: "red",
+        });
+        this.time.addEvent({
+          delay: 3000,
+          callback: () => {
+            text1.destroy();
+            let text2 = this.add.text(310, 370, "Senior Phaser", {
+              fontSize: "25px",
+              color: "red",
+            });
+            this.time.addEvent({
+              delay: 3000,
+              callback: () => {
+                text2.destroy();
+                let text3 = this.add.text(350, 290, "WASD to Move", {
+                  fontSize: "25px",
+                  color: "red",
+                });
+                let arrowImage = this.add
+                  .image(450, 400, "arrow-keys")
+                  .setScale(0.6);
+                this.time.addEvent({
+                  delay: 2500,
+                  callback: () => {
+                    text3.destroy();
+                    arrowImage.destroy();
+                    let mouseImage = this.add
+                      .image(430, 400, "left-mouse-click")
+                      .setScale(0.4);
+                    let text4 = this.add.text(400, 280, "Shoot", {
+                      fontSize: "25px",
+                      color: "red",
+                    });
+                    this.zombieGroup.add(this.createZombie());
+                    this.time.addEvent({
+                      delay: 5000,
+                      callback: () => {
+                        let createdBy = this.add.text(310, 370, "Created By", {
+                          fontSize: "40px",
+                          color: "red",
+                        });
+                        let morgan = this.add.text(40, 40, "Morgan Hu", {
+                          fontSize: "35px",
+                          color: "red",
+                        });
+                        let juan = this.add.text(40, 600, "Juan Velazquez", {
+                          fontSize: "35px",
+                          color: "red",
+                        });
+                        let kelvin = this.add.text(520, 40, "Kelvin Lin", {
+                          fontSize: "35px",
+                          color: "red",
+                        });
+                        let brandon = this.add.text(520, 600, "Brandon Fox", {
+                          fontSize: "35px",
+                          color: "red",
+                        });
+                        text4.destroy();
+                        mouseImage.destroy();
+                        this.time.addEvent({
+                          delay: 5000,
+                          callback: () => {
+                            createdBy.destroy();
+                            kelvin.destroy();
+                            juan.destroy();
+                            brandon.destroy();
+                            morgan.destroy();
+                          },
+                        });
+                      },
+                    });
+                  },
+                });
+              },
+            });
+          },
+        });
+      },
+    });
   }
 
   createSkeleton() {

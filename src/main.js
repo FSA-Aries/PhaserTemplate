@@ -4,6 +4,7 @@ import MenuScene from './scenes/MenuScene';
 import WaitingRoom from './scenes/WaitingRoom';
 import GameScene from './scenes/GameScene';
 import GameOver from './scenes/GameOver';
+import GrassScene from './scenes/GrassScene'
 
 const WIDTH = 800;
 
@@ -42,7 +43,7 @@ export const config = {
   dom: {
     createContainer: true,
   },
-  scene: [MenuScene, WaitingRoom, GameScene, GameOver],
+  scene: [MenuScene, WaitingRoom, GameScene, GameOver, GrassScene],
 
 };
 

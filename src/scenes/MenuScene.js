@@ -49,7 +49,7 @@ class MenuScene extends BaseScene {
 
     textGO.on('pointerup', () => {
       if (menuItem.text === 'Play') {
-        this.scene.start('game-scene');
+        this.scene.start('grassScene');
       }
       if (menuItem.text === 'Multiplayer') {
         this.scene.start('WaitingRoom');

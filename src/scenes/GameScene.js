@@ -242,7 +242,7 @@ export default class GameScene extends Phaser.Scene {
           pointer.x,
           pointer.y
         );
-        console.log('THIS IS THE PLAYER ', this.player);
+
 
         this.reticle.x = transformedPoint.x;
         this.reticle.y = transformedPoint.y;
@@ -382,17 +382,6 @@ export default class GameScene extends Phaser.Scene {
   //   );
   // }
 
-  createSkeleton() {
-    const randomizedPosition = Math.random() * 800;
-    return new Skeleton(
-      this,
-      randomizedPosition,
-      randomizedPosition,
-      assets.SKELETON_KEY,
-      assets.SKELETON_URL,
-      this.player
-    );
-  }
 
 
   createGameEvents() {

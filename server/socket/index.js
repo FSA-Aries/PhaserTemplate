@@ -63,9 +63,30 @@ module.exports = (io) => {
         .emit("playerMoved", gameRooms[roomKey].players[socket.id]);
     });
 
-    // socket.on("hostZombies", function (data) {
-    //   const { zombieGroup, roomKey } = data;
-    //   socket.to(roomKey).emit("zombieReceived", zombieGroup);
+    socket.on("bulletFire", function (data) {
+      const { roomKey } = data;
+      gameRooms[roomKey].players[socket.id];
+      socket
+        .to(roomKey)
+        .emit("bulletFired", gameRooms[roomKey].players[socket.id]);
+    });
+
+    socket.on("scoreChanged", function (data) {
+      const { roomKey, score } = data;
+      gameRooms[roomKey].players[socket.id];
+      socket.to(roomKey).emit("scoreChanges", {
+        playerInfo: gameRooms[roomKey].players[socket.id],
+        score: score,
+      });
+    });
+
+    // socket.on("playerDied", function (data) {
+    //   const { roomKey } = data;
+    //   gameRooms[roomKey].players[socket.id];
+    //   console.log("THIS FIRES CHECKING");
+    //   socket.to(roomKey).emit("declareVictor", {
+    //     playerInfo: gameRooms[roomKey].players[socket.id],
+    //   });
     // });
 
     socket.on("disconnect", function () {

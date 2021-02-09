@@ -9,7 +9,7 @@ export default class Skeleton extends Enemy {
   constructor(scene, x, y, key, type, player) {
     super(scene, x, y, key, type, player);
     //100
-    this.damage = 0;
+    this.damage = 100;
     this.health = 50;
     this.init();
   }

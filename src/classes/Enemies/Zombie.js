@@ -8,8 +8,7 @@ export default class Zombie extends Enemy {
     super(scene, x, y, key, type, playerGroup);
 
     this.health = 30;
-    //25
-    this.damage = 0;
+    this.damage = 25;
     this.init();
     this.player = player;
     this.playerGroup = playerGroup;

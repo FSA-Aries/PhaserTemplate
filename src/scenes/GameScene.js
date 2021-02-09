@@ -7,6 +7,8 @@ import Bullet from "../classes/Bullet";
 import assets from "../../public/assets";
 import socket from "../socket/index.js";
 import Score from "../hud/score";
+import VictoryScene from "./VictoryScene";
+import LosingScene from "./LosingScene";
 
 import EventEmitter from "../events/Emitter";
 import { config } from "../main";
@@ -23,6 +25,7 @@ export default class GameScene extends Phaser.Scene {
     this.playerGroup = undefined;
     this.player = undefined;
     this.otherPlayer = undefined;
+    this.secondScore = undefined;
   }
 
   ///// PRELOAD /////
@@ -96,16 +99,58 @@ export default class GameScene extends Phaser.Scene {
 
     socket.on("playerMoved", function (playerInfo) {
       //Grab all members of the group
+      if (scene.playerGroup.getChildren().length > 1) {
+        scene.playerGroup.getChildren().forEach(function () {
+          if (playerInfo.playerId === scene.otherPlayer.playerId) {
+            scene.otherPlayer.setPosition(playerInfo.x, playerInfo.y);
+          }
+        });
+      }
+    });
+
+    socket.on("bulletFired", function (playerInfo) {
       scene.playerGroup.getChildren().forEach(function () {
         if (playerInfo.playerId === scene.otherPlayer.playerId) {
-          scene.otherPlayer.setPosition(playerInfo.x, playerInfo.y);
+          let bullet = playerBullets.get().setActive(true).setVisible(true);
+          bullet.fire(scene.otherPlayer, scene.reticle);
         }
       });
     });
 
-    socket.on("zombieReceived", function (zombieGroup) {
-      zombieGroup.getChildren().forEach((zombie) => {
-        this.recreateHostZombie(zombie.x, zombie.y, scene.playerGroup);
+    socket.on("scoreChanges", function ({ playerInfo, score }) {
+      scene.playerGroup.getChildren().forEach(function () {
+        if (playerInfo.playerId === scene.otherPlayer.playerId) {
+          if (scene.secondScore === undefined) {
+            scene.secondScore = scene.createScoreLabel(
+              config.rightTopCorner.x + 5,
+              config.rightTopCorner.y + 50,
+              score
+            );
+          } else {
+            scene.secondScore.setScore(score);
+          }
+        }
+      });
+    });
+    socket.on("declareVictor", function ({ playerInfo }) {
+      scene.playerGroup.getChildren().forEach(function () {
+        if (playerInfo.playerId === scene.otherPlayer.playerId) {
+          if (scene.score > scene.secondScore) {
+            scene.createVictoryScreen(
+              config.leftTopCorner.x + 5,
+              config.leftTopCorner.y + 20,
+              scene.score,
+              scene.secondScore
+            );
+          } else {
+            scene.createLosingScreen(
+              config.leftTopCorner.x + 5,
+              config.leftTopCorner.y + 20,
+              scene.score,
+              scene.secondScore
+            );
+          }
+        }
       });
     });
 
@@ -128,7 +173,7 @@ export default class GameScene extends Phaser.Scene {
 
     this.score = this.createScoreLabel(
       config.rightTopCorner.x + 5,
-      config.rightTopCorner.y,
+      config.rightTopCorner.y + 20,
       0
     );
     //this.score = new Score(this, config.leftTopCorner.x + 5, config.rightTopCorner.y, 0)
@@ -137,25 +182,6 @@ export default class GameScene extends Phaser.Scene {
     let zombieGroup = this.physics.add.group();
     let skeletonGroup = this.physics.add.group();
 
-    // Enemy Creation
-    // console.log(scene.playerGroup.getChildren().length);
-    // if (scene.playerGroup.getChildren().length === 1) {
-    //   for (let i = 0; i < 4; i++) {
-    //     this.time.addEvent({
-    //       delay: 2000,
-    //       callback: () => {
-    //         zombieGroup.add(this.createZombie(scene.playerGroup));
-    //       },
-    //       repeat: 25,
-    //     });
-    //   }
-    // } else {
-    //   console.log("ELSE STATEMENT -->", this.playerGroup.getChildren().length);
-    //   socket.emit("hostZombies", {
-    //     zombieGroup: zombieGroup,
-    //     roomKey: scene.state.roomKey,
-    //   });
-    // }
     for (let i = 0; i < 4; i++) {
       this.time.addEvent({
         delay: 2000,
@@ -220,6 +246,8 @@ export default class GameScene extends Phaser.Scene {
       this
     );
 
+    this.physics.add.collider(this.playerGroup, this.playerGroup);
+
     this.reticle = this.physics.add.sprite(0, 0, assets.RETICLE_KEY);
     this.reticle.setDisplaySize(25, 25).setCollideWorldBounds(true);
 
@@ -233,6 +261,9 @@ export default class GameScene extends Phaser.Scene {
 
         if (bullet) {
           bullet.fire(this.player, this.reticle);
+          socket.emit("bulletFire", {
+            roomKey: this.state.roomKey,
+          });
           //this.physics.add.collider(enemy, bullet, enemyHitCallback);
         }
       },
@@ -259,14 +290,14 @@ export default class GameScene extends Phaser.Scene {
     );
 
     if (gameStatus === "PLAYER_LOSE") {
+      // console.log("SOCKET BELOW SHOULD FIRE");
+      // socket.emit("playerDied", { roomKey: scene.state.roomKey });
+      // console.log("PLAYERLOSE ROOMKEY ->", scene.state.roomKey);
       return;
     }
+    // SetCollisionByExclusion([-1])
     this.createGameEvents();
   }
-
-  //       this
-  //     );
-  //   }
   update() {
     const scene = this;
     var x = scene.player.x;
@@ -416,8 +447,11 @@ export default class GameScene extends Phaser.Scene {
 
   onBulletCollision(bullet, monster) {
     if (monster.health - bullet.damage <= 0) {
-      console.log(this.score);
       this.score.addPoints(1);
+      socket.emit("scoreChanged", {
+        roomKey: this.state.roomKey,
+        score: this.score.score,
+      });
     }
 
     bullet.hitsEnemy(monster);
@@ -431,4 +465,12 @@ export default class GameScene extends Phaser.Scene {
     this.add.existing(label);
     return label;
   }
+  // createVictoryScreen(x, y, score, secondScore) {
+  //   const style = { fontSize: "40px", fill: "#ff0000", fontStyle: "bold" };
+  //   return new VictoryScene(this, x, y, score, secondScore, style);
+  // }
+  // createLosingScreen(x, y, score, secondScore) {
+  //   const style = { fontSize: "40px", fill: "#ff0000", fontStyle: "bold" };
+  //   return new LosingScene(this, x, y, score, secondScore, style);
+  // }
 }

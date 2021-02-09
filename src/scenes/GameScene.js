@@ -73,7 +73,6 @@ export default class GameScene extends Phaser.Scene {
 
   ///// CREATE /////
   create({ gameStatus }) {
-    this.introText();
     let map = this.make.tilemap({ key: assets.TILEMAP_KEY });
     let tileSet = map.addTilesetImage("TiledSet", assets.TILESET_KEY);
     map.createLayer("Ground", tileSet, 0, 0);
@@ -92,6 +91,8 @@ export default class GameScene extends Phaser.Scene {
     //Zombie and Skeleton Groups
     let zombieGroup = this.physics.add.group();
     let skeletonGroup = this.physics.add.group();
+
+    this.zombieGroup = zombieGroup;
 
     // Enemy Creation
 
@@ -185,6 +186,7 @@ export default class GameScene extends Phaser.Scene {
       },
       this
     );
+    this.introText();
 
     if (gameStatus === "PLAYER_LOSE") {
       return;
@@ -253,6 +255,8 @@ export default class GameScene extends Phaser.Scene {
   }
 
   introText() {
+    // let zombieGroup = this.physics.add.group();
+    // this.physics.add.collider(this.player, zombieGroup, this.onPlayerCollision);
     /* 
     Welcome to
     Then
@@ -275,31 +279,79 @@ export default class GameScene extends Phaser.Scene {
     this.time.addEvent({
       delay: 3000,
       callback: () => {
-        let text1 = this.add.text(400, 400, "Welcome To", {
-          font: '"Press Start 2P"',
+        let text1 = this.add.text(328, 365, "Welcome To", {
+          fontSize: "25px",
+          color: "red",
         });
         this.time.addEvent({
-          delay: 5000,
+          delay: 3000,
           callback: () => {
             text1.destroy();
-            let text2 = this.add.text(400, 400, "Senior Phaser", {
-              font: '"Press Start 2P"',
+            let text2 = this.add.text(310, 370, "Senior Phaser", {
+              fontSize: "25px",
+              color: "red",
             });
             this.time.addEvent({
-              delay: 5000,
+              delay: 3000,
               callback: () => {
                 text2.destroy();
-                let text3 = this.add.text(400, 400, "WASD to Move", {
-                  fontSize: "5000px",
-                  font: '"Press Start 2P"',
+                let text3 = this.add.text(350, 290, "WASD to Move", {
+                  fontSize: "25px",
+                  color: "red",
                 });
+                let arrowImage = this.add
+                  .image(450, 400, "arrow-keys")
+                  .setScale(0.6);
                 this.time.addEvent({
-                  delay: 5000,
+                  delay: 2500,
                   callback: () => {
                     text3.destroy();
-                    // let rob = this.add.text(400, 400, "Senior Phaser", {
-                    //   font: '"Press Start 2P"',
-                    // });
+                    arrowImage.destroy();
+                    let mouseImage = this.add
+                      .image(430, 400, "left-mouse-click")
+                      .setScale(0.4);
+                    let text4 = this.add.text(400, 280, "Shoot", {
+                      fontSize: "25px",
+                      color: "red",
+                    });
+                    this.zombieGroup.add(this.createZombie());
+                    this.time.addEvent({
+                      delay: 5000,
+                      callback: () => {
+                        let createdBy = this.add.text(310, 370, "Created By", {
+                          fontSize: "40px",
+                          color: "red",
+                        });
+                        let morgan = this.add.text(40, 40, "Morgan Hu", {
+                          fontSize: "35px",
+                          color: "red",
+                        });
+                        let juan = this.add.text(40, 600, "Juan Velazquez", {
+                          fontSize: "35px",
+                          color: "red",
+                        });
+                        let kelvin = this.add.text(520, 40, "Kelvin Lin", {
+                          fontSize: "35px",
+                          color: "red",
+                        });
+                        let brandon = this.add.text(520, 600, "Brandon Fox", {
+                          fontSize: "35px",
+                          color: "red",
+                        });
+                        text4.destroy();
+                        mouseImage.destroy();
+                        this.time.addEvent({
+                          delay: 5000,
+                          callback: () => {
+                            createdBy.destroy();
+                            kelvin.destroy();
+                            juan.destroy();
+                            brandon.destroy();
+                            morgan.destroy();
+                          },
+                        });
+                      },
+                    });
                   },
                 });
               },

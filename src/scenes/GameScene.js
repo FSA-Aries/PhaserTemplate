@@ -7,8 +7,6 @@ import Bullet from "../classes/Bullet";
 import assets from "../../public/assets";
 import socket from "../socket/index.js";
 import Score from "../hud/score";
-import VictoryScene from "./VictoryScene";
-import LosingScene from "./LosingScene";
 
 import EventEmitter from "../events/Emitter";
 import { config } from "../main";

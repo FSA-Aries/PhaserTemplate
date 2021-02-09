@@ -13,9 +13,9 @@ import { config } from "../main";
 
 // import { getEnemyTypes } from "../types";
 
-export default class GameScene extends Phaser.Scene {
+export default class FireLevel extends Phaser.Scene {
   constructor() {
-    super("game-scene");
+    super("fire-level");
     this.player = undefined;
     this.cursors = undefined;
     this.game = undefined;
@@ -35,8 +35,8 @@ export default class GameScene extends Phaser.Scene {
 
     this.load.image(assets.BULLET_KEY, assets.BULLET_URL);
     this.load.image(assets.RETICLE_KEY, assets.RETICLE_URL);
-    this.load.image(assets.TILESET_KEY, assets.TILESET_URL);
-    this.load.tilemapTiledJSON(assets.TILEMAP_KEY, assets.TILEMAP_URL);
+    this.load.image(assets.FIRESET_KEY, assets.FIRESET_URL);
+    this.load.tilemapTiledJSON(assets.FIREMAP_KEY, assets.FIREMAP_URL);
     this.load.spritesheet(assets.PLAYER_KEY, assets.PLAYER_URL, {
       frameWidth: 50,
       frameHeight: 69,
@@ -73,13 +73,17 @@ export default class GameScene extends Phaser.Scene {
 
   ///// CREATE /////
   create({ gameStatus }) {
-    let map = this.make.tilemap({ key: assets.TILEMAP_KEY });
-    let tileSet = map.addTilesetImage("TiledSet", assets.TILESET_KEY);
-    map.createLayer("Ground", tileSet, 0, 0);
-    map.createLayer("Walls", tileSet, 0, 0);
+    let map = this.make.tilemap({ key: assets.FIREMAP_KEY });
+    let tileSet = map.addTilesetImage("Fireset", assets.FIRESET_KEY);
+    // map.createLayer("Underneath", tileSet, 0, 0);
+    map.createLayer("Floor", tileSet, 0, 0);
+    let lava = map.createLayer("Collision", tileSet, 0, 0);
+    lava.setCollisionByExclusion([-1]);
 
     this.player = this.createPlayer();
     this.player.setTexture(assets.PLAYER_KEY, 1);
+
+    this.physics.add.collider(this.player, lava);
 
     this.score = this.createScoreLabel(
       config.rightTopCorner.x + 5,
@@ -96,9 +100,9 @@ export default class GameScene extends Phaser.Scene {
 
     // Enemy Creation
 
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 4; i++) {
       this.time.addEvent({
-        delay: 24000,
+        delay: 5000,
         callback: () => {
           zombieGroup.add(this.createZombie());
         },
@@ -107,9 +111,9 @@ export default class GameScene extends Phaser.Scene {
       //DON'T DELETE- TO HAVE SET AMOUNT OF ENEMIES INSTEAD OF ENDLESS
       //repeat: 15
     }
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < 1; i++) {
       this.time.addEvent({
-        delay: 32000,
+        delay: 20000,
         callback: () => {
           skeletonGroup.add(this.createSkeleton());
         },
@@ -186,7 +190,7 @@ export default class GameScene extends Phaser.Scene {
       },
       this
     );
-    this.introText();
+    // this.introText();
 
     if (gameStatus === "PLAYER_LOSE") {
       return;
@@ -203,8 +207,8 @@ export default class GameScene extends Phaser.Scene {
 
   // PLAYER ANIMATION
   createPlayer() {
-    this.sound.add("intro", { loop: false, volume: 0.53 }).play();
-    return new Player(this, 400, 375);
+    // this.sound.add("intro", { loop: false, volume: 0.53 }).play();
+    return new Player(this, 350, 400);
   }
 
   setupFollowupCameraOn(player) {

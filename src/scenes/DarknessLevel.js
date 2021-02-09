@@ -13,9 +13,9 @@ import { config } from "../main";
 
 // import { getEnemyTypes } from "../types";
 
-export default class GameScene extends Phaser.Scene {
+export default class DarknessLevel extends Phaser.Scene {
   constructor() {
-    super("game-scene");
+    super("darkness-level");
     this.player = undefined;
     this.cursors = undefined;
     this.game = undefined;
@@ -35,8 +35,8 @@ export default class GameScene extends Phaser.Scene {
 
     this.load.image(assets.BULLET_KEY, assets.BULLET_URL);
     this.load.image(assets.RETICLE_KEY, assets.RETICLE_URL);
-    this.load.image(assets.TILESET_KEY, assets.TILESET_URL);
-    this.load.tilemapTiledJSON(assets.TILEMAP_KEY, assets.TILEMAP_URL);
+    this.load.image(assets.DARKSET_KEY, assets.DARKSET_URL);
+    this.load.tilemapTiledJSON(assets.DARKMAP_KEY, assets.DARKMAP_URL);
     this.load.spritesheet(assets.PLAYER_KEY, assets.PLAYER_URL, {
       frameWidth: 50,
       frameHeight: 69,
@@ -73,13 +73,17 @@ export default class GameScene extends Phaser.Scene {
 
   ///// CREATE /////
   create({ gameStatus }) {
-    let map = this.make.tilemap({ key: assets.TILEMAP_KEY });
-    let tileSet = map.addTilesetImage("TiledSet", assets.TILESET_KEY);
-    map.createLayer("Ground", tileSet, 0, 0);
-    map.createLayer("Walls", tileSet, 0, 0);
+    let map = this.make.tilemap({ key: assets.DARKMAP_KEY });
+    let tileSet = map.addTilesetImage("darkness", assets.DARKSET_KEY);
+    // map.createLayer("Underneath", tileSet, 0, 0);
+    map.createLayer("Floor", tileSet, 0, 0);
+    let darkness = map.createLayer("Collision", tileSet, 0, 0);
+    darkness.setCollisionByExclusion([-1]);
 
     this.player = this.createPlayer();
     this.player.setTexture(assets.PLAYER_KEY, 1);
+
+    this.physics.add.collider(this.player, darkness);
 
     this.score = this.createScoreLabel(
       config.rightTopCorner.x + 5,
@@ -96,24 +100,24 @@ export default class GameScene extends Phaser.Scene {
 
     // Enemy Creation
 
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 4; i++) {
       this.time.addEvent({
-        delay: 24000,
+        delay: 4000,
         callback: () => {
           zombieGroup.add(this.createZombie());
         },
-        repeat: 3,
+        loop: true,
       });
       //DON'T DELETE- TO HAVE SET AMOUNT OF ENEMIES INSTEAD OF ENDLESS
       //repeat: 15
     }
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < 3; i++) {
       this.time.addEvent({
-        delay: 32000,
+        delay: 15000,
         callback: () => {
           skeletonGroup.add(this.createSkeleton());
         },
-        repeat: 3,
+        loop: true,
       });
     }
 
@@ -127,6 +131,8 @@ export default class GameScene extends Phaser.Scene {
     this.physics.add.collider(zombieGroup, skeletonGroup, null);
     this.physics.add.collider(zombieGroup, zombieGroup, null);
     this.physics.add.collider(skeletonGroup, skeletonGroup, null);
+    this.physics.add.collider(zombieGroup, darkness);
+    this.physics.add.collider(skeletonGroup, darkness);
 
     this.cursors = this.input.keyboard.createCursorKeys();
     let playerBullets = this.physics.add.group({
@@ -186,7 +192,7 @@ export default class GameScene extends Phaser.Scene {
       },
       this
     );
-    this.introText();
+    // this.introText();
 
     if (gameStatus === "PLAYER_LOSE") {
       return;
@@ -203,8 +209,8 @@ export default class GameScene extends Phaser.Scene {
 
   // PLAYER ANIMATION
   createPlayer() {
-    this.sound.add("intro", { loop: false, volume: 0.53 }).play();
-    return new Player(this, 400, 375);
+    // this.sound.add("intro", { loop: false, volume: 0.53 }).play();
+    return new Player(this, 750, 750);
   }
 
   setupFollowupCameraOn(player) {

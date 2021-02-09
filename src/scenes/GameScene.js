@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import Zombie from "../classes/Enemies/Zombie.js";
 import Skeleton from "../classes/Enemies/Skeleton.js";
+import Boss from "../classes/Enemies/Boss";
 import Player from "../classes/Player";
 import Bullet from "../classes/Bullet";
 import assets from "../../public/assets";
@@ -26,6 +27,8 @@ export default class GameScene extends Phaser.Scene {
 
   ///// PRELOAD /////
   preload() {
+    this.load.audio("intro", "assets/audio/Intro.mp3");
+
     this.game.scale.pageAlignHorizontally = true;
     this.game.scale.pageAlignVertically = true;
     this.game.scale.refresh();
@@ -53,11 +56,24 @@ export default class GameScene extends Phaser.Scene {
       frameWidth: 30,
       frameHeight: 64,
     });
+    this.load.spritesheet(assets.BOSS_KEY, assets.BOSS_URL, {
+      frameWidth: 30,
+      frameHeight: 60,
+    });
+    this.load.spritesheet(assets.BOSS_RIGHT_KEY, assets.BOSS_RIGHT_URL, {
+      frameWidth: 30,
+      frameHeight: 60,
+    });
+    this.load.spritesheet(assets.BOSS_DOWN_KEY, assets.BOSS_DOWN_URL, {
+      frameWidth: 30,
+      frameHeight: 60,
+    });
     // this.physics.add.sprite(400, 375, assets.PLAYER_KEY);
   }
 
   ///// CREATE /////
   create({ gameStatus }) {
+    this.introText();
     let map = this.make.tilemap({ key: assets.TILEMAP_KEY });
     let tileSet = map.addTilesetImage("TiledSet", assets.TILESET_KEY);
     map.createLayer("Ground", tileSet, 0, 0);
@@ -79,24 +95,24 @@ export default class GameScene extends Phaser.Scene {
 
     // Enemy Creation
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 15; i++) {
       this.time.addEvent({
-        delay: 2000,
+        delay: 24000,
         callback: () => {
           zombieGroup.add(this.createZombie());
         },
-        loop: true,
+        repeat: 3,
       });
       //DON'T DELETE- TO HAVE SET AMOUNT OF ENEMIES INSTEAD OF ENDLESS
       //repeat: 15
     }
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 12; i++) {
       this.time.addEvent({
-        delay: 7000,
+        delay: 32000,
         callback: () => {
           skeletonGroup.add(this.createSkeleton());
         },
-        loop: true,
+        repeat: 3,
       });
     }
 
@@ -185,6 +201,7 @@ export default class GameScene extends Phaser.Scene {
 
   // PLAYER ANIMATION
   createPlayer() {
+    this.sound.add("intro", { loop: false, volume: 0.53 }).play();
     return new Player(this, 400, 375);
   }
 
@@ -233,6 +250,64 @@ export default class GameScene extends Phaser.Scene {
     } else {
       this.randomizedPosition();
     }
+  }
+
+  introText() {
+    /* 
+    Welcome to
+    Then
+
+    Senior Phaser
+    then
+    Left Click to Shoot
+    then 
+    WASD to move
+
+
+    add text
+    delay event-destroy text, add text 
+    delay event-destroy text, add text
+    delay event-destroy
+
+    
+    */
+
+    this.time.addEvent({
+      delay: 3000,
+      callback: () => {
+        let text1 = this.add.text(400, 400, "Welcome To", {
+          font: '"Press Start 2P"',
+        });
+        this.time.addEvent({
+          delay: 5000,
+          callback: () => {
+            text1.destroy();
+            let text2 = this.add.text(400, 400, "Senior Phaser", {
+              font: '"Press Start 2P"',
+            });
+            this.time.addEvent({
+              delay: 5000,
+              callback: () => {
+                text2.destroy();
+                let text3 = this.add.text(400, 400, "WASD to Move", {
+                  fontSize: "5000px",
+                  font: '"Press Start 2P"',
+                });
+                this.time.addEvent({
+                  delay: 5000,
+                  callback: () => {
+                    text3.destroy();
+                    // let rob = this.add.text(400, 400, "Senior Phaser", {
+                    //   font: '"Press Start 2P"',
+                    // });
+                  },
+                });
+              },
+            });
+          },
+        });
+      },
+    });
   }
 
   createSkeleton() {

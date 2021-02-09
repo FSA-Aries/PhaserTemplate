@@ -23,7 +23,12 @@ assets.TILESET_KEY = "tileSet";
 assets.TILESET_URL = "assets/tilesets/TileSet.png";
 
 //TILEMAZE
-// assets.TILEMAZE_KEY =
+assets.TILEMAZE_KEY = "tileMaze";
+assets.TILEMAP_URL = "assets/tilesets/TileMapMaze.json";
+assets.TILESET_KEY = "tileMazeBaseSet";
+assets.TILEMAP_URL = "assets/tilesets/TilemapMazeBase";
+assets.TILESET_KEY = "tileMazeWallsSet";
+assets.TILEMAP_URL = "assets/tilesets/TilemapMazeWalls";
 //BACKGROUND
 assets.MENU_URL = "assets/backgrounds/Hello_World_Menu_Background.png";
 assets.WASD_URL = "assets/backgrounds/WASD.png";

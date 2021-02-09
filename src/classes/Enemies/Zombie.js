@@ -1,16 +1,17 @@
 import Phaser from "phaser";
-import { getEnemyTypes } from "../../types";
+// import { getEnemyTypes } from "../../types";
 import Enemy from "./Enemy";
 const ZOMBIE_KEY = "zombie";
 
 export default class Zombie extends Enemy {
-  constructor(scene, x, y, key, type, player) {
-    super(scene, x, y, key, type, player);
+  constructor(scene, x, y, key, type, playerGroup, player) {
+    super(scene, x, y, key, type, playerGroup);
 
     this.health = 30;
     this.damage = 25;
-
     this.init();
+    this.player = player;
+    this.playerGroup = playerGroup;
   }
 
   ENEMY_KEY(monster) {
@@ -19,6 +20,7 @@ export default class Zombie extends Enemy {
   }
 
   init() {
+    this.setCollideWorldBounds(true);
     this.zombieAttackSound = this.scene.sound.add("zombie-attack", {
       volume: 0.2,
     });
@@ -57,7 +59,6 @@ export default class Zombie extends Enemy {
       });
   }
 
-
   takesHit(damage) {
     if (this.health - damage >= 1) {
       this.health -= damage;
@@ -65,36 +66,65 @@ export default class Zombie extends Enemy {
       this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.update, this);
 
       this.destroy();
-
     }
   }
 
-
   update() {
-    //Use A* search algo or Pathfinder algo to find shortest distance
-
     if (!this.active) {
       return;
     }
-    if (Phaser.Math.Distance.BetweenPoints(this.player, this) < 400) {
-      if (Math.abs(this.x - this.player.x) > Math.abs(this.y - this.player.y)) {
-        if (this.player.x < this.x) {
-          this.setVelocityX(-50);
-          this.anims.play("zombie-left", true);
-        } else {
-          this.setVelocityX(50);
-          this.anims.play("zombie-right", true);
+
+    if (this.playerGroup) {
+      this.playerGroup.getChildren().forEach((player) => {
+        if (Phaser.Math.Distance.BetweenPoints(player, this) < 2000) {
+          if (Math.abs(this.x - player.x) > Math.abs(this.y - player.y)) {
+            if (player.x < this.x) {
+              this.setVelocityX(-50);
+              this.anims.play("zombie-left", true);
+            } else {
+              this.setVelocityX(50);
+              this.anims.play("zombie-right", true);
+            }
+          } else {
+            if (player.y < this.y) {
+              this.setVelocityY(-50);
+              this.anims.play("zombie-idleBack", true);
+            } else {
+              this.setVelocityY(50);
+              this.anims.play("zombie-idleFront", true);
+            }
+          }
         }
-      } else {
-        if (this.player.y < this.y) {
-          this.setVelocityY(-50);
-          this.anims.play("zombie-idleBack", true);
+      });
+      // }
+    } else {
+      if (Phaser.Math.Distance.BetweenPoints(this.player, this) < 2000) {
+        if (
+          Math.abs(this.x - this.player.x) > Math.abs(this.y - this.player.y)
+        ) {
+          if (this.player.x < this.x) {
+            this.setVelocityX(-50);
+            this.anims.play("zombie-left", true);
+          } else {
+            this.setVelocityX(50);
+            this.anims.play("zombie-right", true);
+          }
         } else {
-          this.setVelocityY(50);
-          this.anims.play("zombie-idleFront", true);
+          if (this.player.y < this.y) {
+            this.setVelocityY(-50);
+            this.anims.play("zombie-idleBack", true);
+          } else {
+            this.setVelocityY(50);
+            this.anims.play("zombie-idleFront", true);
+          }
         }
       }
     }
 
+    if (this.health <= 0) {
+      this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.update, this);
+
+      this.destroy();
+    }
   }
 }

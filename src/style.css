@@ -18,9 +18,16 @@ body {
 /* https://c4.wallpaperflare.com/wallpaper/843/200/882/creature-creatures-creepy-dark-wallpaper-preview.jpg */
 
 
-canvas {
+/* canvas {
   display: block;
   margin-left: 10vw;
   /* margin-right: 20vw; */
 
+/* }  */ 
+
+
+#mygame {
+  display: flex;
+  justify-content: center;
+  align-content: center;
 }

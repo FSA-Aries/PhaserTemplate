@@ -5,7 +5,7 @@
 	"scripts": {
 		"start": "node server/index.js",
 		"build": "parcel build src/index.html --out-dir dist",
-		"test": "echo \"Error: no test specified\" && exit 1",
+		"test": "parcel build src/index.html --out-dir dist && node server/index.js",
 		"start-dev": "parcel build src/index.html --out-dir dist && parcel src/index.html -p 8000"
 	},
 	"author": "supertommy",

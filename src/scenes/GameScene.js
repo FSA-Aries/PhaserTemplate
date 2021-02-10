@@ -391,9 +391,29 @@ export default class GameScene extends Phaser.Scene {
       this,
       randomizedPositionx,
       randomizedPositiony,
+    return new Zombie(
+      this,
+      randomizedPositionx,
+      randomizedPositiony,
       assets.ZOMBIE_KEY,
       assets.ZOMBIE_URL,
       playerGroup,
+      this.player
+    );
+  }
+ 
+  
+  createSkeleton() {
+    const randomizedPositionx = this.enemyXSpawn();
+    const randomizedPositiony = this.enemyYSpawn();
+    // const randomizedPositionx = Math.random() * 800 + this.player.x;
+    // const randomizedPositiony = Math.random() * 800 + this.player.y;
+    return new Skeleton(
+      this,
+      randomizedPositionx,
+      randomizedPositiony,
+      assets.SKELETON_KEY,
+      assets.SKELETON_URL,
       this.player
     );
   }
@@ -410,28 +430,6 @@ export default class GameScene extends Phaser.Scene {
   //     this.player
   //   );
   // }
-
-  introText() {
-    // let zombieGroup = this.physics.add.group();
-    // this.physics.add.collider(this.player, zombieGroup, this.onPlayerCollision);
-    /*
-    Welcome to
-    Then
-
-    Senior Phaser
-    then
-    Left Click to Shoot
-    then
-    WASD to move
-
-
-    add text
-    delay event-destroy text, add text
-    delay event-destroy text, add text
-    delay event-destroy
-
-
-    */
 
     this.time.addEvent({
       delay: 3000,

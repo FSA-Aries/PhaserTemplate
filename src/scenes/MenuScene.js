@@ -7,6 +7,7 @@ class MenuScene extends BaseScene {
     this.menu = [
       { scene: 'PlayScene', text: 'Play' },
       { scene: 'WaitingRoom', text: 'Multiplayer' },
+      { scene: 'LevelOne', text: 'Level One' },
       { scene: null, text: 'Exit' },
     ];
   }
@@ -46,16 +47,17 @@ class MenuScene extends BaseScene {
       textGO.setStyle({ fill: '#fff' });
     });
 
-
     textGO.on('pointerup', () => {
       if (menuItem.text === 'Play') {
         this.scene.start('game-scene');
+      }
+      if (menuItem.text === 'Level One') {
+        this.scene.start('LevelOne');
       }
       if (menuItem.text === 'Multiplayer') {
         this.scene.start('WaitingRoom');
       }
       if (menuItem.text === 'Exit') {
-
         this.game.destroy(true);
       }
     });

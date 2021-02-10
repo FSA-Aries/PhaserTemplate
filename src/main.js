@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 
 import MenuScene from './scenes/MenuScene';
 import WaitingRoom from './scenes/WaitingRoom';
+import LevelOne from './scenes/LevelOne';
 import GameScene from './scenes/GameScene';
 import GameOver from './scenes/GameOver';
 
@@ -38,12 +39,11 @@ export const config = {
     },
   },
 
-  parent: "mygame",
+  parent: 'mygame',
   dom: {
     createContainer: true,
   },
-  scene: [MenuScene, WaitingRoom, GameScene, GameOver],
-
+  scene: [MenuScene, WaitingRoom, LevelOne, GameScene, GameOver],
 };
 
 export default new Phaser.Game(config);

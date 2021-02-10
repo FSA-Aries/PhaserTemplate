@@ -11,9 +11,9 @@ import Score from '../hud/score';
 import EventEmitter from '../events/Emitter';
 import { config } from '../main';
 
-export default class GameScene extends Phaser.Scene {
+export default class LevelOne extends Phaser.Scene {
   constructor() {
-    super('game-scene');
+    super('LevelOne');
     this.player = undefined;
     this.cursors = undefined;
     this.game = undefined;
@@ -32,8 +32,8 @@ export default class GameScene extends Phaser.Scene {
 
     this.load.image(assets.BULLET_KEY, assets.BULLET_URL);
     this.load.image(assets.RETICLE_KEY, assets.RETICLE_URL);
-    this.load.image(assets.TILESET_KEY, assets.TILESET_URL);
-    this.load.tilemapTiledJSON(assets.TILEMAP_KEY, assets.TILEMAP_URL);
+    this.load.image(assets.TILESET2_KEY, assets.TILESET2_URL);
+    this.load.tilemapTiledJSON(assets.TILEMAP2_KEY, assets.TILEMAP2_URL);
     this.load.spritesheet(assets.PLAYER_KEY, assets.PLAYER_URL, {
       frameWidth: 50,
       frameHeight: 69,
@@ -61,8 +61,8 @@ export default class GameScene extends Phaser.Scene {
   create({ input, gameStatus }) {
     this.playerGroup = this.add.group();
     const scene = this;
-    let map = this.make.tilemap({ key: assets.TILEMAP_KEY });
-    let tileSet = map.addTilesetImage('TiledSet', assets.TILESET_KEY);
+    let map = this.make.tilemap({ key: assets.TILEMAP2_KEY });
+    let tileSet = map.addTilesetImage('TiledSet2', assets.TILESET2_KEY);
     map.createLayer('Ground', tileSet, 0, 0);
     let walls = map.createLayer('Walls', tileSet, 0, 0);
     walls.setCollisionByExclusion([-1]);

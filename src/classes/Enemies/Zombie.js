@@ -74,10 +74,35 @@ export default class Zombie extends Enemy {
       return;
     }
 
-    this.playerGroup.getChildren().forEach((player) => {
-      if (Phaser.Math.Distance.BetweenPoints(player, this) < 2000) {
-        if (Math.abs(this.x - player.x) > Math.abs(this.y - player.y)) {
-          if (player.x < this.x) {
+    if (this.playerGroup) {
+      this.playerGroup.getChildren().forEach((player) => {
+        if (Phaser.Math.Distance.BetweenPoints(player, this) < 2000) {
+          if (Math.abs(this.x - player.x) > Math.abs(this.y - player.y)) {
+            if (player.x < this.x) {
+              this.setVelocityX(-50);
+              this.anims.play("zombie-left", true);
+            } else {
+              this.setVelocityX(50);
+              this.anims.play("zombie-right", true);
+            }
+          } else {
+            if (player.y < this.y) {
+              this.setVelocityY(-50);
+              this.anims.play("zombie-idleBack", true);
+            } else {
+              this.setVelocityY(50);
+              this.anims.play("zombie-idleFront", true);
+            }
+          }
+        }
+      });
+      // }
+    } else {
+      if (Phaser.Math.Distance.BetweenPoints(this.player, this) < 2000) {
+        if (
+          Math.abs(this.x - this.player.x) > Math.abs(this.y - this.player.y)
+        ) {
+          if (this.player.x < this.x) {
             this.setVelocityX(-50);
             this.anims.play("zombie-left", true);
           } else {
@@ -85,7 +110,7 @@ export default class Zombie extends Enemy {
             this.anims.play("zombie-right", true);
           }
         } else {
-          if (player.y < this.y) {
+          if (this.player.y < this.y) {
             this.setVelocityY(-50);
             this.anims.play("zombie-idleBack", true);
           } else {

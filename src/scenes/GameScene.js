@@ -79,9 +79,12 @@ export default class GameScene extends Phaser.Scene {
     const scene = this;
     this.playerGroup = this.add.group();
     let map = this.make.tilemap({ key: assets.TILEMAP_KEY });
-    let tileSet = map.addTilesetImage("TiledSet", assets.TILESET_KEY);
-    map.createLayer("Ground", tileSet, 0, 0);
-    map.createLayer("Walls", tileSet, 0, 0);
+
+    let tileSet = map.addTilesetImage('TiledSet', assets.TILESET_KEY);
+    map.createLayer('Ground', tileSet, 0, 0);
+    let walls = map.createLayer('Walls', tileSet, 0, 0);
+    walls.setCollisionByExclusion([-1]);
+
 
     //Sockets
     socket.on("setState", function (state) {
@@ -219,6 +222,7 @@ export default class GameScene extends Phaser.Scene {
     this.playerGroup.add(this.player);
     //CREATE OTHER PLAYERS GROUP
     this.player.setTexture(assets.PLAYER_KEY, 1);
+    this.physics.add.collider(this.player, walls);
 
     this.score = this.createScoreLabel(
       config.rightTopCorner.x + 5,

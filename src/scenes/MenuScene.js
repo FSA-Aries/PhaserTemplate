@@ -5,14 +5,12 @@ class MenuScene extends BaseScene {
     super("menu-scene");
 
     this.menu = [
-
       { scene: "PlayScene", text: "Play" },
-      { scene: 'LevelOne', text: 'Level One' },
+      { scene: "LevelOne", text: "Level One" },
       { scene: "LevelTwo", text: "Fire Level" },
       { scene: "LevelThree", text: "Darkness Level" },
       { scene: "WaitingRoom", text: "Multiplayer" },
       { scene: "grassScene", text: "Grass Level" },
-
     ];
   }
 
@@ -51,7 +49,6 @@ class MenuScene extends BaseScene {
       textGO.setStyle({ fill: "#fff" });
     });
 
-
     textGO.on("pointerup", () => {
       if (menuItem.text === "Play") {
         menuItem.scene && this.scene.start("game-scene");
@@ -68,10 +65,9 @@ class MenuScene extends BaseScene {
       }
       if (menuItem.text === "Grass Level") {
         menuItem.scene && this.scene.start("grassScene");
-        if (menuItem.text === 'Level One') {
-        this.scene.start('LevelOne');
       }
-
+      if (menuItem.text === "Level One") {
+        this.scene.start("LevelOne");
       }
     });
   }

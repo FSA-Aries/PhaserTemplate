@@ -79,12 +79,9 @@ export default class GameScene extends Phaser.Scene {
     const scene = this;
     this.playerGroup = this.add.group();
     let map = this.make.tilemap({ key: assets.TILEMAP_KEY });
-
-    let tileSet = map.addTilesetImage('TiledSet', assets.TILESET_KEY);
-    map.createLayer('Ground', tileSet, 0, 0);
-    let walls = map.createLayer('Walls', tileSet, 0, 0);
-    walls.setCollisionByExclusion([-1]);
-
+    let tileSet = map.addTilesetImage("TiledSet", assets.TILESET_KEY);
+    map.createLayer("Ground", tileSet, 0, 0);
+    map.createLayer("Walls", tileSet, 0, 0);
 
     //Sockets
     socket.on("setState", function (state) {
@@ -158,7 +155,6 @@ export default class GameScene extends Phaser.Scene {
         //           playerInfo.playerId,
         //           scene.otherPlayer.playerId
         //         );
-<<<<<<< HEAD
         if (playerInfo.playerId === scene.otherPlayer.playerId) {
           let bullet = playerBullets.get().setActive(true).setVisible(true);
           bullet.fire(scene.otherPlayer, scene.reticle);
@@ -178,34 +174,10 @@ export default class GameScene extends Phaser.Scene {
           } else {
             scene.secondScore.setScore(score);
           }
-=======
-        if (playerInfo.playerId === scene.otherPlayer.playerId) {
-          let bullet = playerBullets.get().setActive(true).setVisible(true);
-          bullet.fire(scene.otherPlayer, scene.reticle);
->>>>>>> b3e752ca951176fe160715673382011f23361667
         }
       });
     });
 
-<<<<<<< HEAD
-=======
-    socket.on("scoreChanges", function ({ playerInfo, score }) {
-      scene.playerGroup.getChildren().forEach(function () {
-        if (playerInfo.playerId === scene.otherPlayer.playerId) {
-          if (scene.secondScore === undefined) {
-            scene.secondScore = scene.createScoreLabel(
-              config.rightTopCorner.x + 5,
-              config.rightTopCorner.y + 50,
-              score
-            );
-          } else {
-            scene.secondScore.setScore(score);
-          }
-        }
-      });
-    });
-
->>>>>>> b3e752ca951176fe160715673382011f23361667
     socket.on("disconnected", function (arg) {
       const { playerId, numPlayers } = arg;
       scene.state.numPlayers = numPlayers;
@@ -222,7 +194,6 @@ export default class GameScene extends Phaser.Scene {
     this.playerGroup.add(this.player);
     //CREATE OTHER PLAYERS GROUP
     this.player.setTexture(assets.PLAYER_KEY, 1);
-    this.physics.add.collider(this.player, walls);
 
     this.score = this.createScoreLabel(
       config.rightTopCorner.x + 5,
@@ -239,11 +210,7 @@ export default class GameScene extends Phaser.Scene {
       this.time.addEvent({
         delay: 2000,
         callback: () => {
-<<<<<<< HEAD
-          zombieGroup.add(this.createZombie(scene.playerGroup));
-=======
           zombieGroup.add(this.createZombie(this.playerGroup));
->>>>>>> b3e752ca951176fe160715673382011f23361667
         },
         repeat: 25,
       });
@@ -272,21 +239,6 @@ export default class GameScene extends Phaser.Scene {
       this.onPlayerCollision
     );
 
-<<<<<<< HEAD
-
-    this.physics.add.collider(
-      this.playerGroup,
-      zombieGroup,
-      this.onPlayerCollision
-    );
-    this.physics.add.collider(
-      this.playerGroup,
-      skeletonGroup,
-      this.onPlayerCollision
-    );
-
-=======
->>>>>>> b3e752ca951176fe160715673382011f23361667
     this.physics.add.collider(this.player, zombieGroup, this.onPlayerCollision);
 
     this.physics.add.collider(
@@ -354,10 +306,6 @@ export default class GameScene extends Phaser.Scene {
           pointer.x,
           pointer.y
         );
-<<<<<<< HEAD
-
-=======
->>>>>>> b3e752ca951176fe160715673382011f23361667
 
         this.reticle.x = transformedPoint.x;
         this.reticle.y = transformedPoint.y;
@@ -468,22 +416,7 @@ export default class GameScene extends Phaser.Scene {
       randomizedPositiony,
       assets.ZOMBIE_KEY,
       assets.ZOMBIE_URL,
-<<<<<<< HEAD
-      playerGroup,
-      this.player
-    );
-  }
-  recreateHostZombie(x, y, playerGroup) {
-    return new Zombie(
-      this,
-      x,
-      y,
-      assets.ZOMBIE_KEY,
-      assets.ZOMBIE_URL,
-      playerGroup,
-=======
       this.playerGroup,
->>>>>>> b3e752ca951176fe160715673382011f23361667
       this.player
     );
   }
@@ -516,115 +449,6 @@ export default class GameScene extends Phaser.Scene {
   //   );
   // }
 
-<<<<<<< HEAD
-  introText() {
-    // let zombieGroup = this.physics.add.group();
-    // this.physics.add.collider(this.player, zombieGroup, this.onPlayerCollision);
-    /* 
-    Welcome to
-    Then
-
-    Senior Phaser
-    then
-    Left Click to Shoot
-    then 
-    WASD to move
-
-
-    add text
-    delay event-destroy text, add text 
-    delay event-destroy text, add text
-    delay event-destroy
-
-    
-    */
-
-    this.time.addEvent({
-      delay: 3000,
-      callback: () => {
-        let text1 = this.add.text(328, 365, "Welcome To", {
-          fontSize: "25px",
-          color: "red",
-        });
-        this.time.addEvent({
-          delay: 3000,
-          callback: () => {
-            text1.destroy();
-            let text2 = this.add.text(310, 370, "Senior Phaser", {
-              fontSize: "25px",
-              color: "red",
-            });
-            this.time.addEvent({
-              delay: 3000,
-              callback: () => {
-                text2.destroy();
-                let text3 = this.add.text(350, 290, "WASD to Move", {
-                  fontSize: "25px",
-                  color: "red",
-                });
-                let arrowImage = this.add
-                  .image(450, 400, "arrow-keys")
-                  .setScale(0.6);
-                this.time.addEvent({
-                  delay: 2500,
-                  callback: () => {
-                    text3.destroy();
-                    arrowImage.destroy();
-                    let mouseImage = this.add
-                      .image(430, 400, "left-mouse-click")
-                      .setScale(0.4);
-                    let text4 = this.add.text(400, 280, "Shoot", {
-                      fontSize: "25px",
-                      color: "red",
-                    });
-                    this.zombieGroup.add(this.createZombie());
-                    this.time.addEvent({
-                      delay: 5000,
-                      callback: () => {
-                        let createdBy = this.add.text(310, 370, "Created By", {
-                          fontSize: "40px",
-                          color: "red",
-                        });
-                        let morgan = this.add.text(40, 40, "Morgan Hu", {
-                          fontSize: "35px",
-                          color: "red",
-                        });
-                        let juan = this.add.text(40, 600, "Juan Velazquez", {
-                          fontSize: "35px",
-                          color: "red",
-                        });
-                        let kelvin = this.add.text(520, 40, "Kelvin Lin", {
-                          fontSize: "35px",
-                          color: "red",
-                        });
-                        let brandon = this.add.text(520, 600, "Brandon Fox", {
-                          fontSize: "35px",
-                          color: "red",
-                        });
-                        text4.destroy();
-                        mouseImage.destroy();
-                        this.time.addEvent({
-                          delay: 5000,
-                          callback: () => {
-                            createdBy.destroy();
-                            kelvin.destroy();
-                            juan.destroy();
-                            brandon.destroy();
-                            morgan.destroy();
-                          },
-                        });
-                      },
-                    });
-                  },
-                });
-              },
-            });
-          },
-        });
-      },
-    });
-  }
-=======
   //   this.time.addEvent({
   //     delay: 3000,
   //     callback: () => {
@@ -710,7 +534,6 @@ export default class GameScene extends Phaser.Scene {
   //     },
   //   });
   // }
->>>>>>> b3e752ca951176fe160715673382011f23361667
 
   createGameEvents() {
     EventEmitter.on("PLAYER_LOSE", () => {

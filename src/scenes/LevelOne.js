@@ -68,48 +68,48 @@ export default class LevelOne extends Phaser.Scene {
     walls.setCollisionByExclusion([-1]);
 
     //Sockets
-    socket.on('setState', function (state) {
-      const { roomKey, players, numPlayers } = state;
+    // socket.on('setState', function (state) {
+    //   const { roomKey, players, numPlayers } = state;
 
-      scene.state.roomKey = roomKey;
-      scene.state.players = players;
-      scene.state.numPlayers = numPlayers;
-    });
+    //   scene.state.roomKey = roomKey;
+    //   scene.state.players = players;
+    //   scene.state.numPlayers = numPlayers;
+    // });
 
-    socket.on('currentPlayers', function (playerInfo) {
-      console.log('Playerinfo ->', playerInfo);
-      const { player, numPlayers } = playerInfo;
-      scene.state.numPlayers = numPlayers;
-      console.log('keys ->', Object.keys(player));
-      Object.keys(player).forEach(function (id) {
-        if (player[id].playerId === socket.id) {
-          scene.player.roomKey = scene.state.roomKey;
-        } else {
-          scene.createOtherPlayer(scene, player[id]);
-        }
-      });
-    });
+    // socket.on('currentPlayers', function (playerInfo) {
+    //   console.log('Playerinfo ->', playerInfo);
+    //   const { player, numPlayers } = playerInfo;
+    //   scene.state.numPlayers = numPlayers;
+    //   console.log('keys ->', Object.keys(player));
+    //   Object.keys(player).forEach(function (id) {
+    //     if (player[id].playerId === socket.id) {
+    //       scene.player.roomKey = scene.state.roomKey;
+    //     } else {
+    //       scene.createOtherPlayer(scene, player[id]);
+    //     }
+    //   });
+    // });
 
-    socket.on('newPlayer', function (arg) {
-      const { playerInfo, numPlayers } = arg;
-      scene.createOtherPlayer(scene, playerInfo);
-      scene.state.numPlayers = numPlayers;
-    });
+    // socket.on('newPlayer', function (arg) {
+    //   const { playerInfo, numPlayers } = arg;
+    //   scene.createOtherPlayer(scene, playerInfo);
+    //   scene.state.numPlayers = numPlayers;
+    // });
 
-    socket.on('playerMoved', function (playerInfo) {
-      //Grab all members of the group
-      console.log('PLAYERMOVED ->', playerInfo);
-      scene.playerGroup.getChildren().forEach(function (otherPlayer) {
-        console.log(
-          'PLAYERIDS',
-          playerInfo.playerId,
-          scene.otherPlayer.playerId
-        );
-        if (playerInfo.playerId === scene.otherPlayer.playerId) {
-          scene.otherPlayer.setPosition(playerInfo.x, playerInfo.y);
-        }
-      });
-    });
+    // socket.on('playerMoved', function (playerInfo) {
+    //   //Grab all members of the group
+    //   console.log('PLAYERMOVED ->', playerInfo);
+    //   scene.playerGroup.getChildren().forEach(function (otherPlayer) {
+    //     console.log(
+    //       'PLAYERIDS',
+    //       playerInfo.playerId,
+    //       scene.otherPlayer.playerId
+    //     );
+    //     if (playerInfo.playerId === scene.otherPlayer.playerId) {
+    //       scene.otherPlayer.setPosition(playerInfo.x, playerInfo.y);
+    //     }
+    //   });
+    // });
 
     // this.socket.on("disconnected", function (arg) {
     //   const { playerId, numPlayers } = arg;
@@ -121,7 +121,7 @@ export default class LevelOne extends Phaser.Scene {
     //   });
     // });
 
-    socket.emit('joinRoom', input);
+    // socket.emit('joinRoom', input);
     //Create player and playerGroup
     this.player = this.createPlayer(this, { x: 200, y: 300 });
     console.log(this.player);
@@ -259,21 +259,21 @@ export default class LevelOne extends Phaser.Scene {
   //     );
   //   }
   update() {
-    const scene = this;
-    var x = scene.player.x;
-    var y = scene.player.y;
-    if (x !== scene.player.oldPosition.x || y !== scene.player.oldPosition.y) {
-      scene.player.moving = true;
-      socket.emit('playerMovement', {
-        x: scene.player.x,
-        y: scene.player.y,
-        roomKey: scene.state.roomKey,
-      });
-    }
-    scene.player.oldPosition = {
-      x: scene.player.x,
-      y: scene.player.y,
-    };
+    // const scene = this;
+    // var x = scene.player.x;
+    // var y = scene.player.y;
+    // // if (x !== scene.player.oldPosition.x || y !== scene.player.oldPosition.y) {
+    // //   scene.player.moving = true;
+    // //   socket.emit('playerMovement', {
+    // //     x: scene.player.x,
+    // //     y: scene.player.y,
+    // //     roomKey: scene.state.roomKey,
+    // //   });
+    // // }
+    // scene.player.oldPosition = {
+    //   x: scene.player.x,
+    //   y: scene.player.y,
+    // };
   }
 
   ///// HELPER FUNCTIONS /////
@@ -347,6 +347,7 @@ export default class LevelOne extends Phaser.Scene {
       randomizedPositiony,
       assets.ZOMBIE_KEY,
       assets.ZOMBIE_URL,
+      undefined,
       this.player
     );
   }

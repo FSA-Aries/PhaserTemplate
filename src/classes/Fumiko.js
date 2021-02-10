@@ -20,25 +20,14 @@ class Fumiko extends Phaser.Physics.Arcade.Sprite {
         this.init();
         this.initEvents();
         this.oldPosition = { x: this.x, y: this.y, rotation: this.rotation };
+
+
     }
 
+
+
     init() {
-        /* this.scene.load.spritesheet(assets.FUMIKO_LEFT_KEY, assets.FUMIKO_LEFT_URL, {
-            frameWidth: 64,
-            frameHeight: 91,
-        });
-        this.scene.load.spritesheet(assets.FUMIKO_RIGHT_KEY, assets.FUMIKO_RIGHT_URL, {
-            frameWidth: 63.25,
-            frameHeight: 88,
-        });
-        this.scene.load.spritesheet(assets.FUMIKO_UP_KEY, assets.FUMIKO_UP_URL, {
-            frameWidth: 62.5,
-            frameHeight: 89,
-        });
-        this.scene.load.spritesheet(assets.FUMIKO_DOWN_KEY, assets.FUMIKO_DOWN_URL, {
-            frameWidth: 62.5,
-            frameHeight: 90,
-        }); */
+
 
 
         this.hasBeenHit = false;
@@ -51,7 +40,7 @@ class Fumiko extends Phaser.Physics.Arcade.Sprite {
             left: Phaser.Input.Keyboard.KeyCodes.A,
             right: Phaser.Input.Keyboard.KeyCodes.D,
         });
-        this.health = 100;
+        this.health = 75;
 
         this.hp = new HealthBar(
             this.scene,
@@ -104,17 +93,21 @@ class Fumiko extends Phaser.Physics.Arcade.Sprite {
             return;
         }
         this.setVelocity(0);
-        const prevVelocity = this.body.velocity.clone();
+        let prevVelocity = this.body.velocity.clone();
 
         if (this.cursors.left.isDown) {
             this.setVelocityX(-250);
+            prevVelocity = this.body.velocity.clone()
         } else if (this.cursors.right.isDown) {
             this.setVelocityX(250);
+            prevVelocity = this.body.velocity.clone()
         }
         if (this.cursors.up.isDown) {
             this.setVelocityY(-250);
+            prevVelocity = this.body.velocity.clone()
         } else if (this.cursors.down.isDown) {
             this.setVelocityY(250);
+            prevVelocity = this.body.velocity.clone()
         }
 
         if (this.cursors.left.isDown) {
@@ -128,10 +121,10 @@ class Fumiko extends Phaser.Physics.Arcade.Sprite {
         } else {
             this.anims.stop();
 
-            if (prevVelocity.x < 0) this.setTexture(assets.PLAYER_KEY, 0);
-            else if (prevVelocity.x > 0) this.setTexture(assets.PLAYER_KEY, 0);
-            else if (prevVelocity.y < 0) this.setTexture(assets.PLAYER_KEY, 0);
-            else if (prevVelocity.y > 0) this.setTexture(assets.PLAYER_KEY, 0);
+            if (prevVelocity.x < 0) this.setTexture(assets.FUMIKO_LEFT_KEY, 0);
+            else if (prevVelocity.x > 0) this.setTexture(assets.FUMIKO_RIGHT_KEY, 0);
+            else if (prevVelocity.y < 0) this.setTexture(assets.FUMIKO_UP_KEY, 0);
+            else if (prevVelocity.y > 0) this.setTexture(assets.FUMIKO_DOWN_KEY, 0);
         }
     }
 
@@ -180,6 +173,31 @@ class Fumiko extends Phaser.Physics.Arcade.Sprite {
             hitAnim.stop();
             this.clearTint();
         });
+    }
+
+    createTexture() {
+        this.setTexture(assets.FUMIKO_DOWN_KEY, 0);
+    }
+
+    static loadSprite(scene) {
+        scene.load.spritesheet(assets.FUMIKO_LEFT_KEY, assets.FUMIKO_LEFT_URL, {
+            frameWidth: 32.5,
+            frameHeight: 46,
+        });
+        scene.load.spritesheet(assets.FUMIKO_RIGHT_KEY, assets.FUMIKO_RIGHT_URL, {
+            frameWidth: 31.75,
+            frameHeight: 44,
+        });
+        scene.load.spritesheet(assets.FUMIKO_UP_KEY, assets.FUMIKO_UP_URL, {
+            frameWidth: 31.25,
+            frameHeight: 45,
+        });
+        scene.load.spritesheet(assets.FUMIKO_DOWN_KEY, assets.FUMIKO_DOWN_URL, {
+            frameWidth: 31.25,
+            frameHeight: 45,
+        });
+
+
     }
 }
 

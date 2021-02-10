@@ -26,6 +26,7 @@ export default class GameScene extends Phaser.Scene {
     this.player = undefined;
     this.otherPlayer = undefined;
     this.secondScore = undefined;
+    this.zombieGroup = undefined;
   }
 
   ///// PRELOAD /////
@@ -79,32 +80,12 @@ export default class GameScene extends Phaser.Scene {
     const scene = this;
     this.playerGroup = this.add.group();
     let map = this.make.tilemap({ key: assets.TILEMAP_KEY });
+
+
     let tileSet = map.addTilesetImage("TiledSet", assets.TILESET_KEY);
     map.createLayer("Ground", tileSet, 0, 0);
-    map.createLayer("Walls", tileSet, 0, 0);
-
-    //Sockets
-    socket.on("setState", function (state) {
-      const { roomKey, players, numPlayers } = state;
-
-      scene.state.roomKey = roomKey;
-      scene.state.players = players;
-      scene.state.numPlayers = numPlayers;
-    });
-
-    socket.on("currentPlayers", function (playerInfo) {
-      console.log("Playerinfo ->", playerInfo);
-      const { player, numPlayers } = playerInfo;
-      scene.state.numPlayers = numPlayers;
-      console.log("keys ->", Object.keys(player));
-      Object.keys(player).forEach(function (id) {
-        if (player[id].playerId === socket.id) {
-          scene.player.roomKey = scene.state.roomKey;
-        } else {
-          scene.createOtherPlayer(scene, player[id]);
-        }
-      });
-    });
+    let walls = map.createLayer("Walls", tileSet, 0, 0);
+    walls.setCollisionByExclusion([-1]);
 
     //Sockets
     socket.on("setState", function (state) {
@@ -205,6 +186,7 @@ export default class GameScene extends Phaser.Scene {
     //Zombie and Skeleton Groups
     let zombieGroup = this.physics.add.group();
     let skeletonGroup = this.physics.add.group();
+    this.zombieGroup = zombieGroup;
 
     for (let i = 0; i < 4; i++) {
       this.time.addEvent({
@@ -449,97 +431,99 @@ export default class GameScene extends Phaser.Scene {
   //   );
   // }
 
-  //   this.time.addEvent({
-  //     delay: 3000,
-  //     callback: () => {
-  //       let text1 = this.add.text(328, 365, "Welcome To", {
-  //         fontSize: "25px",
-  //         color: "red",
-  //       });
-  //       this.time.addEvent({
-  //         delay: 3000,
-  //         callback: () => {
-  //           text1.destroy();
-  //           let text2 = this.add.text(310, 370, "Senior Phaser", {
-  //             fontSize: "25px",
-  //             color: "red",
-  //           });
-  //           this.time.addEvent({
-  //             delay: 3000,
-  //             callback: () => {
-  //               text2.destroy();
-  //               let text3 = this.add.text(350, 290, "WASD to Move", {
-  //                 fontSize: "25px",
-  //                 color: "red",
-  //               });
-  //               let arrowImage = this.add
-  //                 .image(450, 400, "arrow-keys")
-  //                 .setScale(0.6);
-  //               this.time.addEvent({
-  //                 delay: 2500,
-  //                 callback: () => {
-  //                   text3.destroy();
-  //                   arrowImage.destroy();
-  //                   let mouseImage = this.add
-  //                     .image(430, 400, "left-mouse-click")
-  //                     .setScale(0.4);
-  //                   let text4 = this.add.text(400, 280, "Shoot", {
-  //                     fontSize: "25px",
-  //                     color: "red",
-  //                   });
-  //                   this.zombieGroup.add(this.createZombie());
-  //                   this.time.addEvent({
-  //                     delay: 5000,
-  //                     callback: () => {
-  //                       let createdBy = this.add.text(310, 370, "Created By", {
-  //                         fontSize: "40px",
-  //                         color: "red",
-  //                       });
-  //                       let morgan = this.add.text(40, 40, "Morgan Hu", {
-  //                         fontSize: "35px",
-  //                         color: "red",
-  //                       });
-  //                       let juan = this.add.text(40, 600, "Juan Velazquez", {
-  //                         fontSize: "35px",
-  //                         color: "red",
-  //                       });
-  //                       let kelvin = this.add.text(520, 40, "Kelvin Lin", {
-  //                         fontSize: "35px",
-  //                         color: "red",
-  //                       });
-  //                       let brandon = this.add.text(520, 600, "Brandon Fox", {
-  //                         fontSize: "35px",
-  //                         color: "red",
-  //                       });
-  //                       text4.destroy();
-  //                       mouseImage.destroy();
-  //                       this.time.addEvent({
-  //                         delay: 5000,
-  //                         callback: () => {
-  //                           createdBy.destroy();
-  //                           kelvin.destroy();
-  //                           juan.destroy();
-  //                           brandon.destroy();
-  //                           morgan.destroy();
-  //                         },
-  //                       });
-  //                     },
-  //                   });
-  //                 },
-  //               });
-  //             },
-  //           });
-  //         },
-  //       });
-  //     },
-  //   });
-  // }
+  introText() {
+    this.time.addEvent({
+      delay: 3000,
+      callback: () => {
+        let text1 = this.add.text(328, 365, "Welcome To", {
+          fontSize: "25px",
+          color: "red",
+        });
+        this.time.addEvent({
+          delay: 3000,
+          callback: () => {
+            text1.destroy();
+            let text2 = this.add.text(310, 370, "Senior Phaser", {
+              fontSize: "25px",
+              color: "red",
+            });
+            this.time.addEvent({
+              delay: 3000,
+              callback: () => {
+                text2.destroy();
+                let text3 = this.add.text(350, 290, "WASD to Move", {
+                  fontSize: "25px",
+                  color: "red",
+                });
+                let arrowImage = this.add
+                  .image(450, 400, "arrow-keys")
+                  .setScale(0.6);
+                this.time.addEvent({
+                  delay: 2500,
+                  callback: () => {
+                    text3.destroy();
+                    arrowImage.destroy();
+                    let mouseImage = this.add
+                      .image(430, 400, "left-mouse-click")
+                      .setScale(0.4);
+                    let text4 = this.add.text(400, 280, "Shoot", {
+                      fontSize: "25px",
+                      color: "red",
+                    });
+                    this.zombieGroup.add(this.createZombie());
+                    this.time.addEvent({
+                      delay: 5000,
+                      callback: () => {
+                        let createdBy = this.add.text(310, 370, "Created By", {
+                          fontSize: "40px",
+                          color: "red",
+                        });
+                        let morgan = this.add.text(40, 40, "Morgan Hu", {
+                          fontSize: "35px",
+                          color: "red",
+                        });
+                        let juan = this.add.text(40, 600, "Juan Velazquez", {
+                          fontSize: "35px",
+                          color: "red",
+                        });
+                        let kelvin = this.add.text(520, 40, "Kelvin Lin", {
+                          fontSize: "35px",
+                          color: "red",
+                        });
+                        let brandon = this.add.text(520, 600, "Brandon Fox", {
+                          fontSize: "35px",
+                          color: "red",
+                        });
+                        text4.destroy();
+                        mouseImage.destroy();
+                        this.time.addEvent({
+                          delay: 5000,
+                          callback: () => {
+                            createdBy.destroy();
+                            kelvin.destroy();
+                            juan.destroy();
+                            brandon.destroy();
+                            morgan.destroy();
+                          },
+                        });
+                      },
+                    });
+                  },
+                });
+              },
+            });
+          },
+        });
+      },
+    });
+  }
 
   createGameEvents() {
     EventEmitter.on("PLAYER_LOSE", () => {
       this.scene.start("game-over", { gameStatus: "PLAYER_LOSE" });
     });
   }
+
   onPlayerCollision(player, monster) {
     //It should be the bullet's damage but we will just set a default value for now to test
     // monster.takesHit(player.damage);

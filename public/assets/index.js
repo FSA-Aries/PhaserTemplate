@@ -19,24 +19,6 @@ assets.FUMIKO_UP_URL = "assets/characters/Fumiko/FumikoUp.png";
 assets.FUMIKO_DOWN_KEY = "fumikoDown";
 assets.FUMIKO_DOWN_URL = "assets/characters/Fumiko/FumikoDown.png";
 
-assets.FUMIKO_LEFT_KEY = 'fumikoLeft';
-assets.FUMIKO_LEFT_URL = 'assets/characters/Fumiko/FumikoLeft.png'
-assets.FUMIKO_RIGHT_KEY = 'fumikoRight';
-assets.FUMIKO_RIGHT_URL = 'assets/characters/Fumiko/FumikoRight.png'
-assets.FUMIKO_UP_KEY = 'fumikoUp';
-assets.FUMIKO_UP_URL = 'assets/characters/Fumiko/FumikoUp.png'
-assets.FUMIKO_DOWN_KEY = 'fumikoDown';
-assets.FUMIKO_DOWN_URL = 'assets/characters/Fumiko/FumikoDown.png'
-
-
-assets.FUMIKO_LEFT_KEY = "fumikoLeft";
-assets.FUMIKO_LEFT_URL = "assets/characters/Fumiko/FumikoLeft.png";
-assets.FUMIKO_RIGHT_KEY = "fumikoRight";
-assets.FUMIKO_RIGHT_URL = "assets/characters/Fumiko/FumikoRight.png";
-assets.FUMIKO_UP_KEY = "fumikoUp";
-assets.FUMIKO_UP_URL = "assets/characters/Fumiko/FumikoUp.png";
-assets.FUMIKO_DOWN_KEY = "fumikoDown";
-assets.FUMIKO_DOWN_URL = "assets/characters/Fumiko/FumikoDown.png";
 
 //ENEMIES
 assets.ZOMBIE_KEY = "zombie";
@@ -89,5 +71,11 @@ assets.TILESET2_URL = 'assets/tilesets/TileSet2.png';
 //BACKGROUND
 assets.MENU_URL = "assets/backgrounds/Hello_World_Menu_Background.png";
 assets.WASD_URL = "assets/backgrounds/WASD.png";
+
+//SELECT
+assets.FUMIKO_SELECT_KEY = 'Fumiko'
+assets.FUMIKO_SELECT_URL = "assets/characters/Select/FumikoSelect.png";
+assets.TANK_SELECT_KEY = 'Tank'
+assets.TANK_SELECT_URL = "assets/characters/Select/TankSelect.png";
 
 export default assets;

@@ -8,6 +8,7 @@ import Bullet from "../classes/Bullet";
 import assets from "../../public/assets";
 import socket from "../socket/index.js";
 import Score from "../hud/score";
+import CharacterSelect from './CharacterSelect'
 
 import EventEmitter from "../events/Emitter";
 import { config } from "../main";
@@ -15,6 +16,7 @@ import { config } from "../main";
 export default class GrassScene extends Phaser.Scene {
   constructor() {
     super("grassScene");
+    this.selectedCharacter = undefined;
     this.player = undefined;
     this.cursors = undefined;
     this.game = undefined;
@@ -23,6 +25,13 @@ export default class GrassScene extends Phaser.Scene {
     this.socket = socket;
     this.state = {};
     this.otherPlayer = undefined;
+
+  }
+
+  ///// INIT /////
+
+  init(data) {
+    this.selectedCharacter = data.character
   }
 
   ///// PRELOAD /////
@@ -35,28 +44,10 @@ export default class GrassScene extends Phaser.Scene {
     this.load.image(assets.RETICLE_KEY, assets.RETICLE_URL);
     this.load.image(assets.SCALEDSPSET_KEY, assets.SCALEDSPSET_URL);
     this.load.tilemapTiledJSON(assets.SCALEDSPMAP_KEY, assets.SCALEDSPMAP_URL);
-    ////////////////////////////////////////////////
-    /* this.load.spritesheet(assets.PLAYER_KEY, assets.PLAYER_URL, {
-            frameWidth: 50,
-            frameHeight: 69,
-        }); */
 
-    this.load.spritesheet(assets.FUMIKO_LEFT_KEY, assets.FUMIKO_LEFT_URL, {
-      frameWidth: 32.5,
-      frameHeight: 46,
-    });
-    this.load.spritesheet(assets.FUMIKO_RIGHT_KEY, assets.FUMIKO_RIGHT_URL, {
-      frameWidth: 31.75,
-      frameHeight: 44,
-    });
-    this.load.spritesheet(assets.FUMIKO_UP_KEY, assets.FUMIKO_UP_URL, {
-      frameWidth: 31.25,
-      frameHeight: 45,
-    });
-    this.load.spritesheet(assets.FUMIKO_DOWN_KEY, assets.FUMIKO_DOWN_URL, {
-      frameWidth: 31.25,
-      frameHeight: 45,
-    });
+
+    this.selectedCharacter.loadSprite(this);
+
 
     this.load.audio(
       "zombie-attack",
@@ -90,7 +81,6 @@ export default class GrassScene extends Phaser.Scene {
 
     this.player = this.createPlayer(this, { x: 200, y: 300 });
 
-    this.player.setTexture(assets.FUMIKO_DOWN_KEY, 0);
 
     collisionLayer.setCollisionByExclusion([-1]);
     this.physics.add.collider(this.player, collisionLayer);
@@ -247,8 +237,11 @@ export default class GrassScene extends Phaser.Scene {
   // PLAYER ANIMATION
 
   createPlayer(player, playerInfo) {
-    this.player = new Fumiko(player, playerInfo.x, playerInfo.y);
-    this.player.setTexture(assets.FUMIKO_DOWN_KEY, 0);
+    //this.player = new Fumiko(player, playerInfo.x, playerInfo.y);
+    //this.player.setTexture(assets.FUMIKO_DOWN_KEY, 0);
+    this.player = new this.selectedCharacter(player, playerInfo.x, playerInfo.y)
+    this.player.createTexture();
+
 
     return this.player;
   }

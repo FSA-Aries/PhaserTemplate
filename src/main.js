@@ -10,6 +10,7 @@ import DarknessLevel from "./scenes/DarknessLevel";
 import GrassScene from "./scenes/GrassScene";
 
 import GameOver from "./scenes/GameOver";
+import CharacterSelect from "./scenes/CharacterSelect";
 
 
 const WIDTH = 800;
@@ -57,7 +58,8 @@ export const config = {
     GrassScene,
     FireLevel,
     DarknessLevel,
-  LevelOne
+    LevelOne,
+    CharacterSelect
   ],
 
 };

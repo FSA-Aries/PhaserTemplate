@@ -70,6 +70,27 @@ class BaseScene extends Phaser.Scene {
       setupMenuEvents(menuItem);
     });
   }
+
+
+  createCharacterMenu(menu, setupMenuEvents) {
+    //let lastMenuPositionY = 0;
+    let lastMenuPositionX = 0;
+
+    menu.forEach((menuItem) => {
+      const menuPosition = [
+        this.screenCenter[0] + lastMenuPositionX,
+        this.screenCenter[1],
+      ];
+
+      menuItem.imageGO = this.add
+        .image(menuPosition[0], menuPosition[1], menuItem.key)
+
+
+      //lastMenuPositionY += this.lineHeight + 150;
+      lastMenuPositionX += this.lineHeight + 150;
+      setupMenuEvents(menuItem);
+    });
+  }
 }
 
 export default BaseScene;

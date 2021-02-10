@@ -63,28 +63,54 @@ module.exports = (io) => {
         .emit("playerMoved", gameRooms[roomKey].players[socket.id]);
     });
 
-    // socket.on("disconnect", function () {
-    //   let roomKey = "";
-    //   for (let keys1 in gameRooms) {
-    //     for (let keys2 in gameRooms[keys1]) {
-    //       Object.keys(gameRooms[keys1][keys2]).map((el) => {
-    //         if (el === socket.id) {
-    //           roomKey = keys1;
-    //         }
-    //       });
-    //     }
-    //   }
-    //   const roomInfo = gameRooms[roomKey];
-    //   if (roomInfo) {
-    //     console.log(`User ${socket.id} disconnected!`);
-    //     delete roomInfo.players[socket.id];
-    //     roomInfo.numPlayers = Object.keys(roomInfo.players).length;
-    //     io.to(roomKey).emit("disconnected", {
-    //       playerId: socket.id,
-    //       numPlayers: roomInfo.numPlayers,
-    //     });
-    //   }
+    socket.on("bulletFire", function (data) {
+      const { roomKey } = data;
+      gameRooms[roomKey].players[socket.id];
+      socket
+        .to(roomKey)
+        .emit("bulletFired", gameRooms[roomKey].players[socket.id]);
+    });
+
+    socket.on("scoreChanged", function (data) {
+      const { roomKey, score } = data;
+      gameRooms[roomKey].players[socket.id];
+      socket.to(roomKey).emit("scoreChanges", {
+        playerInfo: gameRooms[roomKey].players[socket.id],
+        score: score,
+      });
+    });
+
+    // socket.on("playerDied", function (data) {
+    //   const { roomKey } = data;
+    //   gameRooms[roomKey].players[socket.id];
+    //   console.log("THIS FIRES CHECKING");
+    //   socket.to(roomKey).emit("declareVictor", {
+    //     playerInfo: gameRooms[roomKey].players[socket.id],
+    //   });
     // });
+
+    socket.on("disconnect", function () {
+      let roomKey = "";
+      for (let keys1 in gameRooms) {
+        for (let keys2 in gameRooms[keys1]) {
+          Object.keys(gameRooms[keys1][keys2]).map((el) => {
+            if (el === socket.id) {
+              roomKey = keys1;
+            }
+          });
+        }
+      }
+      const roomInfo = gameRooms[roomKey];
+      if (roomInfo) {
+        console.log(`User ${socket.id} disconnected!`);
+        delete roomInfo.players[socket.id];
+        roomInfo.numPlayers = Object.keys(roomInfo.players).length;
+        io.to(roomKey).emit("disconnected", {
+          playerId: socket.id,
+          numPlayers: roomInfo.numPlayers,
+        });
+      }
+    });
   });
 };
 

@@ -119,7 +119,8 @@ export default class Zombie extends Enemy {
           }
         }
       }
-    }
+    });
+    // }
 
     if (this.health <= 0) {
       this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.update, this);

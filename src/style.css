@@ -2,8 +2,7 @@ body {
   max-width: 800px;
   max-height: 600px;
   height: 100vh;
-  background-image: url('https://www.wallpapertip.com/wmimgs/146-1468180_scary-dark-forest-desktop-wallpaper-red-and-black.jpg');
-
+  background-image: url("https://www.wallpapertip.com/wmimgs/146-1468180_scary-dark-forest-desktop-wallpaper-red-and-black.jpg");
 }
 /* Dark Green Forest Background: https://cloud.netlifyusercontent.com/assets/344dbf88-fdf9-42bb-adb4-46f01eedd629/ea5cfc09-4f21-41f2-98d8-9dcf51b85012/horror-wallpaper32.jpg */
 
@@ -17,14 +16,10 @@ body {
 
 /* https://c4.wallpaperflare.com/wallpaper/843/200/882/creature-creatures-creepy-dark-wallpaper-preview.jpg */
 
-
 /* canvas {
   display: block;
   margin-left: 10vw;
   /* margin-right: 20vw; */
-
-/* }  */ 
-
 
 #mygame {
   display: flex;

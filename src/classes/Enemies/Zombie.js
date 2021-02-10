@@ -73,8 +73,7 @@ export default class Zombie extends Enemy {
     if (!this.active) {
       return;
     }
-
-    if (this.playerGroup) {
+    if (this.playerGroup !== undefined) {
       this.playerGroup.getChildren().forEach((player) => {
         if (Phaser.Math.Distance.BetweenPoints(player, this) < 2000) {
           if (Math.abs(this.x - player.x) > Math.abs(this.y - player.y)) {
@@ -119,7 +118,7 @@ export default class Zombie extends Enemy {
           }
         }
       }
-    });
+    }
     // }
 
     if (this.health <= 0) {

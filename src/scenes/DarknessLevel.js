@@ -100,22 +100,22 @@ export default class DarknessLevel extends Phaser.Scene {
 
     // Enemy Creation
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 1; i++) {
       this.time.addEvent({
-        delay: 4000,
+        delay: 2000,
         callback: () => {
-          zombieGroup.add(this.createZombie());
+          zombieGroup.add(this.createZombie().setTint(0x9b7653));
         },
         loop: true,
       });
       //DON'T DELETE- TO HAVE SET AMOUNT OF ENEMIES INSTEAD OF ENDLESS
       //repeat: 15
     }
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 2; i++) {
       this.time.addEvent({
-        delay: 15000,
+        delay: 2000,
         callback: () => {
-          skeletonGroup.add(this.createSkeleton());
+          skeletonGroup.add(this.createSkeleton().setTint(0x9b7653));
         },
         loop: true,
       });

@@ -113,7 +113,7 @@ export default class GrassScene extends Phaser.Scene {
       this.time.addEvent({
         delay: 2000,
         callback: () => {
-          zombieGroup.add(this.createZombie());
+          zombieGroup.add(this.createZombie().setTint(0x3fbf3f));
         },
         repeat: 25,
       });
@@ -122,7 +122,7 @@ export default class GrassScene extends Phaser.Scene {
       this.time.addEvent({
         delay: 5000,
         callback: () => {
-          skeletonGroup.add(this.createSkeleton());
+          skeletonGroup.add(this.createSkeleton().setTint(0x3fbf3f));
         },
 
         loop: true,

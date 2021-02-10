@@ -24,6 +24,8 @@ assets.ZOMBIE_KEY = "zombie";
 assets.ZOMBIE_URL = "assets/characters/Enemy/zombies.png";
 assets.SKELETON_KEY = "skeleton";
 assets.SKELETON_URL = "assets/characters/Enemy/skeleton.png";
+assets.IMP_KEY = "imp";
+assets.IMP_URL = "assets/characters/Enemy/walk - pitchfork shield.png";
 
 assets.BOSS_KEY = "boss";
 assets.BOSS_URL = "assets/characters/Enemy/Enemy_Melee_All_Animations.png";
@@ -53,10 +55,10 @@ assets.SCALEDSPMAP_URL = "assets/tilesets/scaledSPLevel.json";
 assets.SCALEDSPSET_KEY = "scaledSpSet";
 assets.SCALEDSPSET_URL = "assets/tilesets/terrain.png";
 
-assets.TILEMAP2_KEY = 'tileMap2';
-assets.TILEMAP2_URL = 'assets/tilesets/TiledMap2.json';
-assets.TILESET2_KEY = 'tileSet2';
-assets.TILESET2_URL = 'assets/tilesets/TileSet2.png';
+assets.TILEMAP2_KEY = "tileMap2";
+assets.TILEMAP2_URL = "assets/tilesets/TiledMap2.json";
+assets.TILESET2_KEY = "tileSet2";
+assets.TILESET2_URL = "assets/tilesets/TileSet2.png";
 
 //BACKGROUND
 assets.MENU_URL = "assets/backgrounds/Hello_World_Menu_Background.png";

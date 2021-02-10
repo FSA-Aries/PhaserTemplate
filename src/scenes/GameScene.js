@@ -406,8 +406,7 @@ export default class GameScene extends Phaser.Scene {
   createSkeleton() {
     const randomizedPositionx = this.enemyXSpawn();
     const randomizedPositiony = this.enemyYSpawn();
-    // const randomizedPositionx = Math.random() * 800 + this.player.x;
-    // const randomizedPositiony = Math.random() * 800 + this.player.y;
+
     return new Skeleton(
       this,
       randomizedPositionx,

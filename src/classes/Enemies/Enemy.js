@@ -1,6 +1,6 @@
-import Phaser from 'phaser';
+import Phaser from "phaser";
 
-const ZOMBIE_KEY = 'zombie';
+const ZOMBIE_KEY = "zombie";
 
 export default class Enemy extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y, key, type, player) {
@@ -21,38 +21,6 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
   init() {
     this.setCollideWorldBounds(true);
 
-    this.anims.create({
-      key: 'zombie-idleFront',
-      frames: this.anims.generateFrameNumbers(ZOMBIE_KEY, {
-        start: 0,
-        end: 2,
-      }),
-      frameRate: 10,
-    });
-    this.anims.create({
-      key: 'zombie-left',
-      frames: this.anims.generateFrameNumbers(ZOMBIE_KEY, {
-        start: 3,
-        end: 5,
-      }),
-      frameRate: 10,
-    }),
-      this.anims.create({
-        key: 'zombie-right',
-        frames: this.anims.generateFrameNumbers(ZOMBIE_KEY, {
-          start: 6,
-          end: 8,
-        }),
-        frameRate: 10,
-      }),
-      this.anims.create({
-        key: 'zombie-idleBack',
-        frames: this.anims.generateFrameNumbers(ZOMBIE_KEY, {
-          start: 9,
-          end: 11,
-        }),
-        frameRate: 10,
-      });
     this.setImmovable(true);
   }
 
@@ -74,18 +42,18 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
       if (Math.abs(this.x - this.player.x) > Math.abs(this.y - this.player.y)) {
         if (this.player.x < this.x) {
           this.setVelocityX(-50);
-          this.anims.play('zombie-left', true);
+          this.anims.play("zombie-left", true);
         } else {
           this.setVelocityX(50);
-          this.anims.play('zombie-right', true);
+          this.anims.play("zombie-right", true);
         }
       } else {
         if (this.player.y < this.y) {
           this.setVelocityY(-50);
-          this.anims.play('zombie-idleBack', true);
+          this.anims.play("zombie-idleBack", true);
         } else {
           this.setVelocityY(50);
-          this.anims.play('zombie-idleFront', true);
+          this.anims.play("zombie-idleFront", true);
         }
       }
     }

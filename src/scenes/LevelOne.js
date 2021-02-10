@@ -178,6 +178,9 @@ export default class LevelOne extends Phaser.Scene {
       this.onPlayerCollision
     );
 
+    this.physics.add.collider(skeletonGroup, walls);
+    this.physics.add.collider(zombieGroup, walls);
+
     this.physics.add.collider(this.player, zombieGroup, this.onPlayerCollision);
 
     this.physics.add.collider(

@@ -5,9 +5,11 @@ class MenuScene extends BaseScene {
     super('menu-scene');
 
     this.menu = [
-      { scene: 'PlayScene', text: 'Play' },
-      { scene: 'WaitingRoom', text: 'Multiplayer' },
-      { scene: null, text: 'Exit' },
+      { scene: "PlayScene", text: "Play" },
+      { scene: "LevelTwo", text: "Fire Level" },
+      { scene: "LevelThree", text: "Darkness Level" },
+      { scene: "WaitingRoom", text: "Multiplayer" },
+      { scene: "grassScene", text: "Grass Level" },
     ];
   }
 
@@ -23,15 +25,15 @@ class MenuScene extends BaseScene {
 
     this.createMenu(this.menu, this.setupMenuEvents.bind(this));
 
-    this.add.text(52, 50, 'Move', {
-      fontSize: '40px',
+    this.add.text(52, 50, "Move", {
+      fontSize: "40px",
     });
-    this.add.image(100, 150, 'arrow-keys').setDisplaySize(100, 100);
+    this.add.image(100, 150, "arrow-keys").setDisplaySize(100, 100);
 
-    this.add.text(190, 50, 'Shoot', {
-      fontSize: '40px',
+    this.add.text(190, 50, "Shoot", {
+      fontSize: "40px",
     });
-    this.add.image(250, 150, 'left-mouse-click').setDisplaySize(100, 100);
+    this.add.image(250, 150, "left-mouse-click").setDisplaySize(100, 100);
   }
 
   setupMenuEvents(menuItem) {
@@ -46,17 +48,22 @@ class MenuScene extends BaseScene {
       textGO.setStyle({ fill: '#fff' });
     });
 
-
-    textGO.on('pointerup', () => {
-      if (menuItem.text === 'Play') {
-        this.scene.start('grassScene');
+    textGO.on("pointerup", () => {
+      if (menuItem.text === "Play") {
+        menuItem.scene && this.scene.start("game-scene");
       }
-      if (menuItem.text === 'Multiplayer') {
-        this.scene.start('WaitingRoom');
+      if (menuItem.text === "Multiplayer") {
+        this.scene.start("WaitingRoom");
       }
-      if (menuItem.text === 'Exit') {
 
-        this.game.destroy(true);
+      if (menuItem.text === "Darkness Level") {
+        menuItem.scene && this.scene.start("darkness-level");
+      }
+      if (menuItem.text === "Fire Level") {
+        menuItem.scene && this.scene.start("fire-level");
+      }
+      if (menuItem.text === "Grass Level") {
+        menuItem.scene && this.scene.start("grassScene");
       }
     });
   }

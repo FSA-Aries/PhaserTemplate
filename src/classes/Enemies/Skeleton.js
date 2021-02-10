@@ -8,7 +8,7 @@ const SKELETON_KEY = 'skeleton';
 export default class Skeleton extends Enemy {
   constructor(scene, x, y, key, type, player) {
     super(scene, x, y, key, type, player);
-    this.damage = 100;
+    this.damage = 50;
     this.health = 50;
     this.init();
   }
@@ -64,7 +64,7 @@ export default class Skeleton extends Enemy {
       if (Math.abs(this.x - this.player.x) > Math.abs(this.y - this.player.y)) {
         if (this.player.x < this.x) {
           this.setVelocityX(-50);
-          this.anims.play('skeleton-left', true);
+          this.anims.play("skeleton-left", true);
           //Add skeletonhit for now for demo purposes but revert back to above after
           //this.anims.play("skeletonHit", true);
         } else {

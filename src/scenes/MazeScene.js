@@ -25,7 +25,6 @@ export default class MazeScene extends Phaser.Scene {
     this.game.scale.refresh();
     this.load.image(assets.TANKATK_KEY, assets.TANKATK_URL);
     this.load.image(assets.TANK_RETICLE_KEY, assets.TANK_RETICLE_URL);
-    this.load.image(assets.TILEMAZESET2_KEY, assets.TILEMAZESET2_URL);
     this.load.image(assets.TILEMAZESET_KEY, assets.TILEMAZESET_URL);
 
     this.load.tilemapTiledJSON(assets.TILEMAZEMAP_KEY, assets.TILEMAZEMAP_URL);
@@ -55,23 +54,15 @@ export default class MazeScene extends Phaser.Scene {
     this.playerGroup = this.add.group();
     //CREATE TILEMAP
     let map = this.make.tilemap({ key: assets.TILEMAZEMAP_KEY });
-    let tileMap_main = map.addTilesetImage("main", assets.TILEMAZESET_KEY);
-    let tileMap_accessories = map.addTilesetImage(
-      "accessories",
-      assets.TILEMAZESET2_KEY
-    );
-    const allLayers = [tileMap_main, tileMap_accessories];
-    this.tileMaze = map.createLayer("tileMaze", allLayers, 0, 0);
-    let collisionLayer = map.createLayer("Collidables", allLayers, 0, 0);
-    let collisionLayer2 = map.createLayer("Collidables 2", allLayers, 0, 0);
-    let collisionLayer3 = map.createLayer("Collidables 3", allLayers, 0, 0);
+    let tileMaze = map.addTilesetImage("main", assets.TILEMAZESET_KEY);
+    this.tileMaze = map.createLayer("Base", tileMaze, 0, 0);
+    let collisionLayer = map.createLayer("Colliders", tileMaze, 0, 0);
+    let collisionLayer2 = map.createLayer("Colliders 2", tileMaze, 0, 0);
 
     collisionLayer.setCollisionByExclusion([-1]);
     this.physics.add.collider(this.player, collisionLayer);
     collisionLayer2.setCollisionByExclusion([-1]);
     this.physics.add.collider(this.player, collisionLayer2);
-    collisionLayer3.setCollisionByExclusion([-1]);
-    this.physics.add.collider(this.player, collisionLayer3);
     //CREATE PLAYER
     this.player = this.createPlayer(this, { x: 200, y: 300 });
 

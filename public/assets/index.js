@@ -30,12 +30,10 @@ assets.TILESET_KEY = "tileSet";
 assets.TILESET_URL = "assets/tilesets/TileSet.png";
 
 //TILEMAZE
-assets.TILEMAZEMAP_KEY = "tileMaze";
-assets.TILEMAZEMAP_URL = "assets/tilesets/TileMapMaze.json";
-assets.TILEMAZESET_KEY = "tileMazeBaseSet";
-assets.TILEMAZESET_URL = "assets/tilesets/TilemapMazeBase.png";
-assets.TILEMAZESET2_KEY = "tileMazeWallsSet";
-assets.TILEMAZESET2_URL = "assets/tilesets/TilemapMazeWalls.png";
+assets.TILEMAZEMAP_KEY = "tileMazeMap";
+assets.TILEMAZEMAP_URL = "assets/tilesets/TileMaze.json";
+assets.TILEMAZESET_KEY = "tileMazeSet";
+assets.TILEMAZESET_URL = "assets/tilesets/Tilemaze.png";
 //BACKGROUND
 assets.MENU_URL = "assets/backgrounds/Hello_World_Menu_Background.png";
 assets.WASD_URL = "assets/backgrounds/WASD.png";

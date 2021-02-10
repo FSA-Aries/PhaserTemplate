@@ -1,8 +1,8 @@
-import BaseScene from './BaseScene';
+import BaseScene from "./BaseScene";
 
 class MenuScene extends BaseScene {
   constructor() {
-    super('menu-scene');
+    super("menu-scene");
 
     this.menu = [
       { scene: "PlayScene", text: "Play" },
@@ -40,12 +40,12 @@ class MenuScene extends BaseScene {
     const textGO = menuItem.textGO;
     textGO.setInteractive();
 
-    textGO.on('pointerover', () => {
-      textGO.setStyle({ fill: '#ff0' });
+    textGO.on("pointerover", () => {
+      textGO.setStyle({ fill: "#ff0" });
     });
 
-    textGO.on('pointerout', () => {
-      textGO.setStyle({ fill: '#fff' });
+    textGO.on("pointerout", () => {
+      textGO.setStyle({ fill: "#fff" });
     });
 
     textGO.on("pointerup", () => {

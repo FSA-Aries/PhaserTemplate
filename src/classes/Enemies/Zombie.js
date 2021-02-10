@@ -22,12 +22,11 @@ export default class Zombie extends Enemy {
   init() {
     this.setCollideWorldBounds(true);
     this.zombieAttackSound = this.scene.sound.add("zombie-attack", {
-
       volume: 0.2,
     });
 
     this.anims.create({
-      key: 'zombie-idleFront',
+      key: "zombie-idleFront",
       frames: this.anims.generateFrameNumbers(ZOMBIE_KEY, {
         start: 0,
         end: 2,
@@ -35,7 +34,7 @@ export default class Zombie extends Enemy {
       frameRate: 10,
     });
     this.anims.create({
-      key: 'zombie-left',
+      key: "zombie-left",
       frames: this.anims.generateFrameNumbers(ZOMBIE_KEY, {
         start: 3,
         end: 5,
@@ -43,7 +42,7 @@ export default class Zombie extends Enemy {
       frameRate: 10,
     }),
       this.anims.create({
-        key: 'zombie-right',
+        key: "zombie-right",
         frames: this.anims.generateFrameNumbers(ZOMBIE_KEY, {
           start: 6,
           end: 8,
@@ -51,7 +50,7 @@ export default class Zombie extends Enemy {
         frameRate: 10,
       }),
       this.anims.create({
-        key: 'zombie-idleBack',
+        key: "zombie-idleBack",
         frames: this.anims.generateFrameNumbers(ZOMBIE_KEY, {
           start: 9,
           end: 11,
@@ -74,8 +73,12 @@ export default class Zombie extends Enemy {
     if (!this.active) {
       return;
     }
+<<<<<<< HEAD
 
     if (this.playerGroup) {
+=======
+    if (this.playerGroup !== undefined) {
+>>>>>>> b3e752ca951176fe160715673382011f23361667
       this.playerGroup.getChildren().forEach((player) => {
         if (Phaser.Math.Distance.BetweenPoints(player, this) < 2000) {
           if (Math.abs(this.x - player.x) > Math.abs(this.y - player.y)) {
@@ -121,6 +124,10 @@ export default class Zombie extends Enemy {
         }
       }
     }
+<<<<<<< HEAD
+=======
+    // }
+>>>>>>> b3e752ca951176fe160715673382011f23361667
 
     if (this.health <= 0) {
       this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.update, this);

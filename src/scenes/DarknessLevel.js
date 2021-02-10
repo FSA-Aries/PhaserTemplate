@@ -234,6 +234,10 @@ export default class DarknessLevel extends Phaser.Scene {
       this.randomizedPosition(),
       assets.ZOMBIE_KEY,
       assets.ZOMBIE_URL,
+<<<<<<< HEAD
+=======
+      undefined,
+>>>>>>> b3e752ca951176fe160715673382011f23361667
       this.player
     );
   }
@@ -263,23 +267,39 @@ export default class DarknessLevel extends Phaser.Scene {
   introText() {
     // let zombieGroup = this.physics.add.group();
     // this.physics.add.collider(this.player, zombieGroup, this.onPlayerCollision);
+<<<<<<< HEAD
     /* 
+=======
+    /*
+>>>>>>> b3e752ca951176fe160715673382011f23361667
     Welcome to
     Then
 
     Senior Phaser
     then
     Left Click to Shoot
+<<<<<<< HEAD
     then 
+=======
+    then
+>>>>>>> b3e752ca951176fe160715673382011f23361667
     WASD to move
 
 
     add text
+<<<<<<< HEAD
     delay event-destroy text, add text 
     delay event-destroy text, add text
     delay event-destroy
 
     
+=======
+    delay event-destroy text, add text
+    delay event-destroy text, add text
+    delay event-destroy
+
+
+>>>>>>> b3e752ca951176fe160715673382011f23361667
     */
 
     this.time.addEvent({

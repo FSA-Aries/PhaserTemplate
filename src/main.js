@@ -32,7 +32,7 @@ export const config = {
     y: (HEIGHT - HEIGHT / ZOOM_FACTOR) / 2,
   },
   physics: {
-    default: 'arcade',
+    default: "arcade",
     arcade: {
       debug: false,
 

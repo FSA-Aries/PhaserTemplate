@@ -1,4 +1,6 @@
 import BaseScene from "./BaseScene";
+import assets from "../../public/assets/index";
+import { config } from "../main";
 
 class MenuScene extends BaseScene {
   constructor() {
@@ -23,6 +25,11 @@ class MenuScene extends BaseScene {
 
   create() {
     super.create();
+
+    this.createSoundButton(
+      config.rightTopCorner.x - 50,
+      config.rightTopCorner.y + 20
+    ).setScale(0.25, 0.25);
 
     this.createMenu(this.menu, this.setupMenuEvents.bind(this));
 
@@ -64,14 +71,34 @@ class MenuScene extends BaseScene {
         menuItem.scene && this.scene.start("fire-level");
       }
       if (menuItem.text === "Grass Level") {
-
         menuItem.scene && this.scene.start("characterSelect");
-
       }
       if (menuItem.text === "Level One") {
         this.scene.start("LevelOne");
       }
     });
+  }
+  createSoundButton(x, y) {
+    const button = this.add.image(x, y, assets.SOUND_ON_KEY);
+    button.setInteractive();
+
+    button.setScrollFactor(0, 0).setScale(1);
+
+    button.on("pointerdown", () => {
+      console.log("clicked");
+      if (button.texture.key === assets.SOUND_ON_KEY) {
+        console.log("sound off");
+        button.setTexture(assets.SOUND_OFF_KEY);
+        this.sound.mute = true;
+      } else {
+        console.log("sound on");
+
+        button.setTexture(assets.SOUND_ON_KEY);
+        this.sound.mute = false;
+      }
+    });
+    this.add.existing(button);
+    return button;
   }
 }
 

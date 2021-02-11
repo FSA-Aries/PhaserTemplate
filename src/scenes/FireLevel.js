@@ -1,22 +1,22 @@
-import Phaser from "phaser";
-import Zombie from "../classes/Enemies/Zombie.js";
-import Skeleton from "../classes/Enemies/Skeleton.js";
-import Boss from "../classes/Enemies/Boss";
-import Player from "../classes/Player";
-import Bullet from "../classes/Bullet";
-import assets from "../../public/assets";
-import socket from "../socket/index.js";
-import Score from "../hud/score";
-import Imp from "../classes/Enemies/Imp";
+import Phaser from 'phaser';
+import Zombie from '../classes/Enemies/Zombie.js';
+import Skeleton from '../classes/Enemies/Skeleton.js';
+import Boss from '../classes/Enemies/Boss';
+import Player from '../classes/Player';
+import Bullet from '../classes/Bullet';
+import assets from '../../public/assets';
+import socket from '../socket/index.js';
+import Score from '../hud/score';
+import Imp from '../classes/Enemies/Imp';
 
-import EventEmitter from "../events/Emitter";
-import { config } from "../main";
+import EventEmitter from '../events/Emitter';
+import { config } from '../main';
 
 // import { getEnemyTypes } from "../types";
 
 export default class FireLevel extends Phaser.Scene {
   constructor() {
-    super("fire-level");
+    super('fire-level');
     this.selectedCharacter = undefined;
     this.player = undefined;
     this.cursors = undefined;
@@ -28,22 +28,24 @@ export default class FireLevel extends Phaser.Scene {
   }
 
   init(data) {
-    this.selectedCharacter = data.character
+    this.selectedCharacter = data.character;
   }
 
   ///// PRELOAD /////
   preload() {
-    this.load.audio("intro", "assets/audio/Intro.mp3");
+    this.load.audio('intro', 'assets/audio/Intro.mp3');
 
     this.game.scale.pageAlignHorizontally = true;
     this.game.scale.pageAlignVertically = true;
     this.game.scale.refresh();
 
+    this.load.image(assets.SOUND_OFF_KEY, assets.SOUND_OFF_URL);
+    this.load.image(assets.SOUND_ON_KEY, assets.SOUND_ON_URL);
+
     this.load.image(assets.BULLET_KEY, assets.BULLET_URL);
     this.load.image(assets.RETICLE_KEY, assets.RETICLE_URL);
     this.load.image(assets.FIRESET_KEY, assets.FIRESET_URL);
     this.load.tilemapTiledJSON(assets.FIREMAP_KEY, assets.FIREMAP_URL);
-
 
     /* this.load.spritesheet(assets.PLAYER_KEY, assets.PLAYER_URL, {
       frameWidth: 50,
@@ -53,14 +55,14 @@ export default class FireLevel extends Phaser.Scene {
     this.selectedCharacter.loadSprite(this);
 
     this.load.audio(
-      "zombie-attack",
-      "assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3"
+      'zombie-attack',
+      'assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3'
     );
 
     //Enemies
     this.load.spritesheet(assets.ZOMBIE_KEY, assets.ZOMBIE_URL, {
       frameWidth: 30,
-      frameHeight: 60,
+      frameHeight: 62.5,
     });
 
     this.load.spritesheet(assets.IMP_KEY, assets.IMP_URL, {
@@ -89,10 +91,10 @@ export default class FireLevel extends Phaser.Scene {
   ///// CREATE /////
   create({ gameStatus }) {
     let map = this.make.tilemap({ key: assets.FIREMAP_KEY });
-    let tileSet = map.addTilesetImage("Fireset", assets.FIRESET_KEY);
+    let tileSet = map.addTilesetImage('Fireset', assets.FIRESET_KEY);
     // map.createLayer("Underneath", tileSet, 0, 0);
-    map.createLayer("Floor", tileSet, 0, 0);
-    let lava = map.createLayer("Collision", tileSet, 0, 0);
+    map.createLayer('Floor', tileSet, 0, 0);
+    let lava = map.createLayer('Collision', tileSet, 0, 0);
     lava.setCollisionByExclusion([-1]);
 
     this.player = this.createPlayer(this, { x: 200, y: 300 });
@@ -105,6 +107,11 @@ export default class FireLevel extends Phaser.Scene {
       config.rightTopCorner.y,
       this.getScore()
     );
+
+    this.createSoundButton(
+      config.rightTopCorner.x - 20,
+      config.rightTopCorner.y + 20
+    ).setScale(0.07, 0.07);
 
     //Zombie and Skeleton Groups
     let zombieGroup = this.physics.add.group();
@@ -191,7 +198,7 @@ export default class FireLevel extends Phaser.Scene {
     this.reticle.setDisplaySize(25, 25).setCollideWorldBounds(true);
 
     this.input.on(
-      "pointerdown",
+      'pointerdown',
       function () {
         if (this.player.active === false) return;
 
@@ -210,7 +217,7 @@ export default class FireLevel extends Phaser.Scene {
     this.setupFollowupCameraOn(this.player);
 
     this.input.on(
-      "pointermove",
+      'pointermove',
       function (pointer) {
         //console.log(this.input.mousePointer.x)
         const transformedPoint = this.cameras.main.getWorldPoint(
@@ -227,7 +234,7 @@ export default class FireLevel extends Phaser.Scene {
     );
     // this.introText();
 
-    if (gameStatus === "PLAYER_LOSE") {
+    if (gameStatus === 'PLAYER_LOSE') {
       return;
     }
     this.createGameEvents();
@@ -235,14 +242,15 @@ export default class FireLevel extends Phaser.Scene {
 
   update() { }
 
-
   // PLAYER ANIMATION
   createPlayer(player, playerInfo) {
-
-    this.player = new this.selectedCharacter(player, playerInfo.x, playerInfo.y)
+    this.player = new this.selectedCharacter(
+      player,
+      playerInfo.x,
+      playerInfo.y
+    );
     this.player.createTexture();
     return this.player;
-
   }
 
   getScore() {
@@ -339,8 +347,8 @@ export default class FireLevel extends Phaser.Scene {
   }
 
   createGameEvents() {
-    EventEmitter.on("PLAYER_LOSE", () => {
-      this.scene.start("game-over", { gameStatus: "PLAYER_LOSE" });
+    EventEmitter.on('PLAYER_LOSE', () => {
+      this.scene.start('game-over', { gameStatus: 'PLAYER_LOSE' });
     });
   }
   onPlayerCollision(player, monster) {
@@ -352,11 +360,11 @@ export default class FireLevel extends Phaser.Scene {
     let score = this.score.score;
 
     if (monster.health - bullet.damage <= 0) {
-      console.log("SCHENE", this.scene);
+      console.log('SCHENE', this.scene);
       console.log(this);
       this.score.addPoints(1);
       if (this.score.score >= 30) {
-        this.scene.start("grassScene", {
+        this.scene.start('grassScene', {
           score: score,
           character: this.selectedCharacter
         });
@@ -367,10 +375,32 @@ export default class FireLevel extends Phaser.Scene {
   }
 
   createScoreLabel(x, y, score) {
-    const style = { fontSize: "32px", fill: "#ff0000", fontStyle: "bold" };
+    const style = { fontSize: '32px', fill: '#ff0000', fontStyle: 'bold' };
     const label = new Score(this, x, y, score, style);
     label.setScrollFactor(0, 0).setScale(1);
     this.add.existing(label);
     return label;
+  }
+  createSoundButton(x, y) {
+    const button = this.add.image(x, y, assets.SOUND_ON_KEY);
+    button.setInteractive();
+
+    button.setScrollFactor(0, 0).setScale(1);
+
+    button.on("pointerdown", () => {
+      console.log("clicked");
+      if (button.texture.key === assets.SOUND_ON_KEY) {
+        console.log("sound off");
+        button.setTexture(assets.SOUND_OFF_KEY);
+        this.sound.mute = true;
+      } else {
+        console.log("sound on");
+
+        button.setTexture(assets.SOUND_ON_KEY);
+        this.sound.mute = false;
+      }
+    });
+    this.add.existing(button);
+    return button;
   }
 }

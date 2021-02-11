@@ -1,99 +1,88 @@
-import Phaser from "phaser";
-import assets from "../../public/assets";
-import HealthBar from "../hud/healthbar";
-import { config } from "../main";
-import EventEmmiter from "../events/Emitter";
+import Phaser from 'phaser';
+import assets from '../../public/assets';
+import HealthBar from '../hud/healthbar';
+import { config } from '../main';
+import EventEmmiter from '../events/Emitter';
 
 class Fumiko extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y) {
-        super(scene, x, y, "player");
-        scene.add.existing(this);
-        scene.physics.add.existing(this);
-        scene.physics.world.enable(this);
-        this.cursors = undefined;
-        this.playerId = undefined;
-        this.hidden = false;
-        //this.timer = scene.time.addEvent(this.timer);
+  constructor(scene, x, y) {
+    super(scene, x, y, 'player');
+    scene.add.existing(this);
+    scene.physics.add.existing(this);
+    scene.physics.world.enable(this);
+    this.cursors = undefined;
+    this.playerId = undefined;
 
-        this.damage = 200;
-        this.x = x;
-        this.y = y;
+    this.damage = 50;
+    this.x = x;
+    this.y = y;
 
-        this.init();
-        this.initEvents();
-        this.oldPosition = { x: this.x, y: this.y, rotation: this.rotation };
+    this.init();
+    this.initEvents();
+    this.oldPosition = { x: this.x, y: this.y, rotation: this.rotation };
+  }
 
+  init() {
+    this.hasBeenHit = false;
+    this.bounceVelocity = 250;
+    this.setCollideWorldBounds(true);
+    this.cursors = this.scene.input.keyboard.createCursorKeys();
+    this.cursors = this.scene.input.keyboard.addKeys({
+      up: Phaser.Input.Keyboard.KeyCodes.W,
+      down: Phaser.Input.Keyboard.KeyCodes.S,
+      left: Phaser.Input.Keyboard.KeyCodes.A,
+      right: Phaser.Input.Keyboard.KeyCodes.D,
+    });
+    this.health = 75;
 
-    }
+    this.hp = new HealthBar(
+      this.scene,
+      config.leftTopCorner.x + 5,
+      config.leftTopCorner.y + 5,
+      3,
+      this.health
+    );
 
+    this.anims.create({
+      key: 'left',
+      frames: this.anims.generateFrameNumbers(assets.FUMIKO_LEFT_KEY, {
+        start: 1,
+        end: 3,
+      }),
+      frameRate: 10,
+    });
 
-
-    init() {
-
-
-
-        this.hasBeenHit = false;
-        this.bounceVelocity = 250;
-        this.setCollideWorldBounds(true);
-        this.cursors = this.scene.input.keyboard.createCursorKeys();
-        this.cursors = this.scene.input.keyboard.addKeys({
-            up: Phaser.Input.Keyboard.KeyCodes.W,
-            down: Phaser.Input.Keyboard.KeyCodes.S,
-            left: Phaser.Input.Keyboard.KeyCodes.A,
-            right: Phaser.Input.Keyboard.KeyCodes.D,
-            shift: Phaser.Input.Keyboard.KeyCodes.SHIFT
-        });
-
-        this.health = 175;
-
-        this.hp = new HealthBar(
-            this.scene,
-            config.leftTopCorner.x + 5,
-            config.leftTopCorner.y + 5,
-            3,
-            this.health
-        );
-
-        this.anims.create({
-            key: "left",
-            frames: this.anims.generateFrameNumbers(assets.FUMIKO_LEFT_KEY, {
-                start: 1,
-                end: 3,
-            }),
-            frameRate: 10,
-        });
-
-        this.anims.create({
-            key: "right",
-            frames: this.anims.generateFrameNumbers(assets.FUMIKO_RIGHT_KEY, {
-                start: 1,
-                end: 3,
-            }),
-            frameRate: 10,
-        });
-        this.anims.create({
-            key: "up",
-            frames: this.anims.generateFrameNumbers(assets.FUMIKO_UP_KEY, {
-                start: 1,
-                end: 3,
-            }),
-            frameRate: 10,
-        });
-        this.anims.create({
-            key: "down",
-            frames: this.anims.generateFrameNumbers(assets.FUMIKO_DOWN_KEY, {
-                start: 1,
-                end: 3,
-            }),
-            frameRate: 10,
-        });
+    this.anims.create({
+      key: 'right',
+      frames: this.anims.generateFrameNumbers(assets.FUMIKO_RIGHT_KEY, {
+        start: 1,
+        end: 3,
+      }),
+      frameRate: 10,
+    });
+    this.anims.create({
+      key: 'up',
+      frames: this.anims.generateFrameNumbers(assets.FUMIKO_UP_KEY, {
+        start: 1,
+        end: 3,
+      }),
+      frameRate: 10,
+    });
+    this.anims.create({
+      key: 'down',
+      frames: this.anims.generateFrameNumbers(assets.FUMIKO_DOWN_KEY, {
+        start: 1,
+        end: 3,
+      }),
+      frameRate: 10,
+    });
+  }
+  initEvents() {
+    this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
+  }
 
 
 
-    }
-    initEvents() {
-        this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
-    }
 
     update() {
         if (this.hasBeenHit || !this.body) {
@@ -146,7 +135,7 @@ class Fumiko extends Phaser.Physics.Arcade.Sprite {
 
         }
 
-        if (this.cursors.shift.JustDown) {
+        if (this.cursors.shift.isDown) {
 
             this.ability()
             console.log(this.hidden)
@@ -183,49 +172,23 @@ class Fumiko extends Phaser.Physics.Arcade.Sprite {
             repeat: -1,
             tint: 0xffffff,
         });
+
+  bounceOff() {
+    if (this.body.touching.right) {
+      setTimeout(() => this.setVelocityX(-this.bounceVelocity), 0);
+
     }
-
-    bounceOff() {
-        if (this.body.touching.right) {
-            setTimeout(() => this.setVelocityX(-this.bounceVelocity), 0);
-        }
-        if (this.body.touching.left) {
-            setTimeout(() => this.setVelocityX(this.bounceVelocity), 0);
-        }
-        if (this.body.touching.up) {
-            setTimeout(() => this.setVelocityY(this.bounceVelocity), 0);
-        }
-        if (this.body.touching.down) {
-            setTimeout(() => this.setVelocityY(-this.bounceVelocity), 0);
-        }
+    if (this.body.touching.left) {
+      setTimeout(() => this.setVelocityX(this.bounceVelocity), 0);
     }
-
-    takesHit(monster) {
-        if (this.hasBeenHit) {
-            return;
-        }
-        if (this.health - monster.damage <= 0) {
-            EventEmmiter.emit("PLAYER_LOSE");
-            return;
-        }
-
-        this.hasBeenHit = true;
-        this.bounceOff();
-        const hitAnim = this.playDamageTween();
-        this.health -= monster.damage;
-        this.hp.decrease(this.health);
-
-        //controls how far and for how long the bounce happens
-        this.scene.time.delayedCall(300, () => {
-            this.hasBeenHit = false;
-            hitAnim.stop();
-            this.clearTint();
-        });
+    if (this.body.touching.up) {
+      setTimeout(() => this.setVelocityY(this.bounceVelocity), 0);
     }
-
-    createTexture() {
-        this.setTexture(assets.FUMIKO_DOWN_KEY, 0);
+    if (this.body.touching.down) {
+      setTimeout(() => this.setVelocityY(-this.bounceVelocity), 0);
     }
+  }
+
 
     static loadSprite(scene) {
         scene.load.spritesheet(assets.FUMIKO_LEFT_KEY, assets.FUMIKO_LEFT_URL, {
@@ -263,7 +226,34 @@ class Fumiko extends Phaser.Physics.Arcade.Sprite {
         });
 
 
+
+  takesHit(monster) {
+    if (this.hasBeenHit) {
+      return;
     }
-}
+    if (this.health - monster.damage <= 0) {
+      EventEmmiter.emit('PLAYER_LOSE');
+      return;
+
+    }
+
+    this.hasBeenHit = true;
+    this.bounceOff();
+    const hitAnim = this.playDamageTween();
+    this.health -= monster.damage;
+    this.hp.decrease(this.health);
+
+    //controls how far and for how long the bounce happens
+    this.scene.time.delayedCall(300, () => {
+      this.hasBeenHit = false;
+      hitAnim.stop();
+      this.clearTint();
+    });
+  }
+
+  createTexture() {
+    this.setTexture(assets.FUMIKO_DOWN_KEY, 0).setBodySize(25, 42, false);
+  }
+
 
 export default Fumiko;

@@ -42,6 +42,7 @@ assets.SMOL_JUMPONE_URL = 'assets/characters/Smol/Jump1.png';
 assets.SMOL_JUMPTWO_KEY = 'Jump2';
 assets.SMOL_JUMPTWO_URL = 'assets/characters/Smol/Jump2.png';
 
+
 //ENEMIES
 assets.ZOMBIE_KEY = 'zombie';
 assets.ZOMBIE_URL = 'assets/characters/Enemy/zombies.png';
@@ -58,6 +59,15 @@ assets.BOSS_RIGHT_URL = 'assets/characters/Enemy/Enemy-Melee-Idle-E.png';
 
 assets.BOSS_DOWN_KEY = 'boss-right';
 assets.BOSS_DOWN_URL = 'assets/characters/Enemy/Enemy-Melee-Idle-S.png';
+
+assets.BOSS_KEY = "boss";
+assets.BOSS_URL = "assets/characters/Enemy/Enemy_Melee_All_Animations.png";
+
+assets.BOSS_RIGHT_KEY = "boss-right";
+assets.BOSS_RIGHT_URL = "assets/characters/Enemy/Enemy-Melee-Idle-E.png";
+
+assets.BOSS_DOWN_KEY = "boss-right";
+assets.BOSS_DOWN_URL = "assets/characters/Enemy/Enemy-Melee-Idle-S.png";
 
 // TILESET
 assets.TILEMAP_KEY = 'tileMap';
@@ -91,5 +101,11 @@ assets.TILEMAZESET_URL = "assets/tilesets/Tilemaze.png";
 //BACKGROUND
 assets.MENU_URL = "assets/backgrounds/Hello_World_Menu_Background.png";
 assets.WASD_URL = "assets/backgrounds/WASD.png";
+
+//SELECT
+assets.FUMIKO_SELECT_KEY = 'Fumiko'
+assets.FUMIKO_SELECT_URL = "assets/characters/Select/FumikoSelect.png";
+assets.TANK_SELECT_KEY = 'Tank'
+assets.TANK_SELECT_URL = "assets/characters/Select/TankSelect.png";
 
 export default assets;

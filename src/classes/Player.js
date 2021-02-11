@@ -167,6 +167,17 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       this.clearTint();
     });
   }
+
+  static loadSprite(scene) {
+    scene.load.spritesheet(assets.PLAYER_KEY, assets.PLAYER_URL, {
+      frameWidth: 50,
+      frameHeight: 69,
+    });
+  }
+
+  createTexture() {
+    this.setTexture(assets.PLAYER_KEY, 1);
+  }
 }
 
 export default Player;

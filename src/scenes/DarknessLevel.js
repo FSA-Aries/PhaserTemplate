@@ -203,7 +203,7 @@ export default class DarknessLevel extends Phaser.Scene {
   //       this
   //     );
   //   }
-  update() {}
+  update() { }
 
   ///// HELPER FUNCTIONS /////
 

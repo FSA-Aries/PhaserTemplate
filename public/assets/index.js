@@ -1,20 +1,20 @@
 const assets = {};
 
 // ARSENAL
-assets.BULLET_KEY = "bullet";
-assets.BULLET_URL = "assets/arsenal/Bullet.png";
-assets.RETICLE_KEY = "reticle";
-assets.RETICLE_URL = "assets/arsenal/Reticle.png";
-assets.TANKATK_KEY = "sword";
-assets.TANKATK_URL = "assets/arsenal/TankWeapon.png";
-assets.TANK_RETICLE_KEY = "tankReticle";
-assets.TANK_RETICLE_URL = "assets/arsenal/TankReticle.png";
+assets.BULLET_KEY = 'bullet';
+assets.BULLET_URL = 'assets/arsenal/Bullet.png';
+assets.RETICLE_KEY = 'reticle';
+assets.RETICLE_URL = 'assets/arsenal/Reticle.png';
+assets.TANKATK_KEY = 'sword';
+assets.TANKATK_URL = 'assets/arsenal/TankWeapon.png';
+assets.TANK_RETICLE_KEY = 'tankReticle';
+assets.TANK_RETICLE_URL = 'assets/arsenal/TankReticle.png';
 
 // CHARACTERS
-assets.PLAYER_KEY = "player";
-assets.PLAYER_URL = "assets/characters/PokemonDude.png";
-assets.TANK_KEY = "tank";
-assets.TANK_URL = "assets/characters/tank.png";
+assets.PLAYER_KEY = 'player';
+assets.PLAYER_URL = 'assets/characters/PokemonDude.png';
+assets.TANK_KEY = 'tank';
+assets.TANK_URL = 'assets/characters/tank.png';
 
 assets.FUMIKO_LEFT_KEY = 'fumikoLeft';
 assets.FUMIKO_LEFT_URL = 'assets/characters/Fumiko/FumikoLeft.png';
@@ -42,14 +42,13 @@ assets.SMOL_JUMPONE_URL = 'assets/characters/Smol/Jump1.png';
 assets.SMOL_JUMPTWO_KEY = 'Jump2';
 assets.SMOL_JUMPTWO_URL = 'assets/characters/Smol/Jump2.png';
 
-
 //ENEMIES
 assets.ZOMBIE_KEY = 'zombie';
 assets.ZOMBIE_URL = 'assets/characters/Enemy/zombies.png';
 assets.SKELETON_KEY = 'skeleton';
 assets.SKELETON_URL = 'assets/characters/Enemy/skeleton.png';
-assets.VAMPIRE_KEY = "vampire";
-assets.VAMPIRE_URL = "assets/characters/Enemy/vampire.png";
+assets.VAMPIRE_KEY = 'vampire';
+assets.VAMPIRE_URL = 'assets/characters/Enemy/vampire.png';
 
 assets.BOSS_KEY = 'boss';
 assets.BOSS_URL = 'assets/characters/Enemy/Enemy_Melee_All_Animations.png';
@@ -60,20 +59,20 @@ assets.BOSS_RIGHT_URL = 'assets/characters/Enemy/Enemy-Melee-Idle-E.png';
 assets.BOSS_DOWN_KEY = 'boss-right';
 assets.BOSS_DOWN_URL = 'assets/characters/Enemy/Enemy-Melee-Idle-S.png';
 
-assets.BOSS_KEY = "boss";
-assets.BOSS_URL = "assets/characters/Enemy/Enemy_Melee_All_Animations.png";
+assets.BOSS_KEY = 'boss';
+assets.BOSS_URL = 'assets/characters/Enemy/Enemy_Melee_All_Animations.png';
 
-assets.BOSS_RIGHT_KEY = "boss-right";
-assets.BOSS_RIGHT_URL = "assets/characters/Enemy/Enemy-Melee-Idle-E.png";
+assets.BOSS_RIGHT_KEY = 'boss-right';
+assets.BOSS_RIGHT_URL = 'assets/characters/Enemy/Enemy-Melee-Idle-E.png';
 
-assets.BOSS_DOWN_KEY = "boss-right";
-assets.BOSS_DOWN_URL = "assets/characters/Enemy/Enemy-Melee-Idle-S.png";
+assets.BOSS_DOWN_KEY = 'boss-right';
+assets.BOSS_DOWN_URL = 'assets/characters/Enemy/Enemy-Melee-Idle-S.png';
 
 // TILESET
 assets.TILEMAP_KEY = 'tileMap';
 assets.TILEMAP_URL = 'assets/tilesets/TiledMap.json';
 assets.TILESET_KEY = 'tileSet';
-assets.TILESET_URL = 'assets/tilesets/TileSet.png';
+assets.TILESET_URL = 'assets/tilesets/mainlevbuild.png';
 assets.FIREMAP_KEY = 'firemap';
 assets.FIREMAP_URL = 'assets/tilesets/New-Map.json';
 assets.FIRESET_KEY = 'fireSet';
@@ -94,18 +93,18 @@ assets.TILESET2_KEY = 'tileSet2';
 assets.TILESET2_URL = 'assets/tilesets/TileSet2.png';
 
 //TILEMAZE
-assets.TILEMAZEMAP_KEY = "tileMazeMap";
-assets.TILEMAZEMAP_URL = "assets/tilesets/TileMaze.json";
-assets.TILEMAZESET_KEY = "tileMazeSet";
-assets.TILEMAZESET_URL = "assets/tilesets/Tilemaze.png";
+assets.TILEMAZEMAP_KEY = 'tileMazeMap';
+assets.TILEMAZEMAP_URL = 'assets/tilesets/TileMaze.json';
+assets.TILEMAZESET_KEY = 'tileMazeSet';
+assets.TILEMAZESET_URL = 'assets/tilesets/Tilemaze.png';
 //BACKGROUND
-assets.MENU_URL = "assets/backgrounds/Hello_World_Menu_Background.png";
-assets.WASD_URL = "assets/backgrounds/WASD.png";
+assets.MENU_URL = 'assets/backgrounds/Hello_World_Menu_Background.png';
+assets.WASD_URL = 'assets/backgrounds/WASD.png';
 
 //SELECT
-assets.FUMIKO_SELECT_KEY = 'Fumiko'
-assets.FUMIKO_SELECT_URL = "assets/characters/Select/FumikoSelect.png";
-assets.TANK_SELECT_KEY = 'Tank'
-assets.TANK_SELECT_URL = "assets/characters/Select/TankSelect.png";
+assets.FUMIKO_SELECT_KEY = 'Fumiko';
+assets.FUMIKO_SELECT_URL = 'assets/characters/Select/FumikoSelect.png';
+assets.TANK_SELECT_KEY = 'Tank';
+assets.TANK_SELECT_URL = 'assets/characters/Select/TankSelect.png';
 
 export default assets;

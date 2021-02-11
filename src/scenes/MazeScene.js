@@ -11,7 +11,7 @@ import EventEmitter from "../events/Emitter";
 export default class MazeScene extends Phaser.Scene {
   constructor() {
     super("maze-scene");
-    this.selectedCharacter = undefined
+    this.selectedCharacter = undefined;
     this.cursors = undefined;
     this.game = undefined;
     this.reticle = undefined;
@@ -19,10 +19,11 @@ export default class MazeScene extends Phaser.Scene {
     this.state = {};
     this.playerGroup = undefined;
     this.player = undefined;
+    this.name = "maze-scene";
   }
 
   init(data) {
-    this.selectedCharacter = data.character
+    this.selectedCharacter = data.character;
   }
 
   preload() {
@@ -69,7 +70,6 @@ export default class MazeScene extends Phaser.Scene {
 
     this.player = this.createPlayer(this, { x: 240, y: 50 });
     //this.player.setTexture(assets.TANK_KEY, 0);
-
 
     collisionLayer.setCollisionByExclusion([-1]);
     this.physics.add.collider(this.player, collisionLayer);
@@ -195,10 +195,19 @@ export default class MazeScene extends Phaser.Scene {
     }
     this.createGameEvents();
   }
-  update() { }
+  update() {
+    if (this.cursors.esc.isDown) {
+      this.scene.pause();
+      this.scene.launch("pause-scene", { key: this.name });
+    }
+  }
 
   createPlayer(player, playerInfo) {
-    this.player = new this.selectedCharacter(player, playerInfo.x, playerInfo.y)
+    this.player = new this.selectedCharacter(
+      player,
+      playerInfo.x,
+      playerInfo.y
+    );
     this.player.createTexture();
     return this.player;
   }

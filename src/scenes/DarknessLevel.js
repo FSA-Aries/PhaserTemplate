@@ -16,7 +16,7 @@ import { config } from "../main";
 export default class DarknessLevel extends Phaser.Scene {
   constructor() {
     super("darkness-level");
-    this.selectedCharacter = undefined
+    this.selectedCharacter = undefined;
     this.player = undefined;
     this.cursors = undefined;
     this.game = undefined;
@@ -24,12 +24,12 @@ export default class DarknessLevel extends Phaser.Scene {
     this.score = undefined;
     //Setup Sockets
     this.socket = socket;
+    this.name = "darkness-level";
   }
 
   init(data) {
-    this.selectedCharacter = data.character
+    this.selectedCharacter = data.character;
   }
-
 
   ///// PRELOAD /////
   preload() {
@@ -43,7 +43,6 @@ export default class DarknessLevel extends Phaser.Scene {
     this.load.image(assets.RETICLE_KEY, assets.RETICLE_URL);
     this.load.image(assets.DARKSET_KEY, assets.DARKSET_URL);
     this.load.tilemapTiledJSON(assets.DARKMAP_KEY, assets.DARKMAP_URL);
-
 
     /* this.load.spritesheet(assets.PLAYER_KEY, assets.PLAYER_URL, {
       frameWidth: 50,
@@ -146,6 +145,9 @@ export default class DarknessLevel extends Phaser.Scene {
     this.physics.add.collider(bossGroup, darkness);
 
     this.cursors = this.input.keyboard.createCursorKeys();
+    this.cursors = this.input.keyboard.addKeys({
+      esc: Phaser.Input.Keyboard.KeyCodes.ESC,
+    });
     let playerBullets = this.physics.add.group({
       classType: Bullet,
       runChildUpdate: true,
@@ -222,14 +224,23 @@ export default class DarknessLevel extends Phaser.Scene {
   //       this
   //     );
   //   }
-  update() { }
+  update() {
+    if (this.cursors.esc.isDown) {
+      this.scene.pause();
+      this.scene.launch("pause-scene", { key: this.name });
+    }
+  }
 
   ///// HELPER FUNCTIONS /////
 
   // PLAYER ANIMATION
   createPlayer(player, playerInfo) {
     // this.sound.add("intro", { loop: false, volume: 0.53 }).play();
-    this.player = new this.selectedCharacter(player, playerInfo.x, playerInfo.y)
+    this.player = new this.selectedCharacter(
+      player,
+      playerInfo.x,
+      playerInfo.y
+    );
     this.player.createTexture();
     return this.player;
   }

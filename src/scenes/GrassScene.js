@@ -8,7 +8,7 @@ import Bullet from "../classes/Bullet";
 import assets from "../../public/assets";
 import socket from "../socket/index.js";
 import Score from "../hud/score";
-import CharacterSelect from './CharacterSelect'
+import CharacterSelect from "./CharacterSelect";
 
 import EventEmitter from "../events/Emitter";
 import { config } from "../main";
@@ -24,14 +24,13 @@ export default class GrassScene extends Phaser.Scene {
     this.score = undefined;
     this.socket = socket;
     this.state = {};
-
-
+    this.name = "grassScene";
   }
 
   ///// INIT /////
 
   init(data) {
-    this.selectedCharacter = data.character
+    this.selectedCharacter = data.character;
   }
 
   ///// PRELOAD /////
@@ -45,9 +44,7 @@ export default class GrassScene extends Phaser.Scene {
     this.load.image(assets.SCALEDSPSET_KEY, assets.SCALEDSPSET_URL);
     this.load.tilemapTiledJSON(assets.SCALEDSPMAP_KEY, assets.SCALEDSPMAP_URL);
 
-
     this.selectedCharacter.loadSprite(this);
-
 
     this.load.audio(
       "zombie-attack",
@@ -80,7 +77,6 @@ export default class GrassScene extends Phaser.Scene {
     let collisionLayer2 = map.createLayer("Collision 2", tileSet, 0, 0);
 
     this.player = this.createPlayer(this, { x: 200, y: 300 });
-
 
     collisionLayer.setCollisionByExclusion([-1]);
     this.physics.add.collider(this.player, collisionLayer);
@@ -147,6 +143,9 @@ export default class GrassScene extends Phaser.Scene {
     this.physics.add.collider(skeletonGroup, skeletonGroup, null);
 
     this.cursors = this.input.keyboard.createCursorKeys();
+    this.cursors = this.input.keyboard.addKeys({
+      esc: Phaser.Input.Keyboard.KeyCodes.ESC,
+    });
     let playerBullets = this.physics.add.group({
       classType: Bullet,
       runChildUpdate: true,
@@ -215,6 +214,10 @@ export default class GrassScene extends Phaser.Scene {
   //     );
   //   }
   update() {
+    if (this.cursors.esc.isDown) {
+      this.scene.pause();
+      this.scene.launch("pause-scene", { key: this.name });
+    }
     /* const scene = this;
         var x = scene.player.x;
         var y = scene.player.y;
@@ -237,7 +240,11 @@ export default class GrassScene extends Phaser.Scene {
   // PLAYER ANIMATION
 
   createPlayer(player, playerInfo) {
-    this.player = new this.selectedCharacter(player, playerInfo.x, playerInfo.y)
+    this.player = new this.selectedCharacter(
+      player,
+      playerInfo.x,
+      playerInfo.y
+    );
     this.player.createTexture();
     return this.player;
   }

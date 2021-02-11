@@ -8,10 +8,10 @@ import FireLevel from "./scenes/FireLevel";
 import DarknessLevel from "./scenes/DarknessLevel";
 import GrassScene from "./scenes/GrassScene";
 import MazeScene from "./scenes/MazeScene";
-import Multiplayer from './scenes/Multiplayer'
+import Multiplayer from "./scenes/Multiplayer";
 import GameOver from "./scenes/GameOver";
 import CharacterSelect from "./scenes/CharacterSelect";
-
+import PauseScene from "./scenes/PauseMenu";
 
 const WIDTH = 800;
 
@@ -61,7 +61,8 @@ export const config = {
     DarknessLevel,
     LevelOne,
     CharacterSelect,
-    Multiplayer
+    PauseScene,
+    Multiplayer,
   ],
 };
 

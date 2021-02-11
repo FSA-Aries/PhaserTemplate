@@ -1,21 +1,20 @@
-
-import Phaser, { Scene } from 'phaser';
-import Zombie from '../classes/Enemies/Zombie.js';
-import Skeleton from '../classes/Enemies/Skeleton.js';
+import Phaser, { Scene } from "phaser";
+import Zombie from "../classes/Enemies/Zombie.js";
+import Skeleton from "../classes/Enemies/Skeleton.js";
 //import Player from '../classes/Player';
-import OtherPlayerSprite from '../classes/OtherPlayers';
-import Bullet from '../classes/Bullet';
-import assets from '../../public/assets';
-import socket from '../socket/index.js';
-import Score from '../hud/score';
+import OtherPlayerSprite from "../classes/OtherPlayers";
+import Bullet from "../classes/Bullet";
+import assets from "../../public/assets";
+import socket from "../socket/index.js";
+import Score from "../hud/score";
 
-import EventEmitter from '../events/Emitter';
-import { config } from '../main';
-import Smol from '../classes/Smol.js';
+import EventEmitter from "../events/Emitter";
+import { config } from "../main";
+import Smol from "../classes/Smol.js";
 
 export default class LevelOne extends Phaser.Scene {
   constructor() {
-    super('LevelOne');
+    super("LevelOne");
     this.selectedCharacter = undefined;
     this.player = undefined;
     this.cursors = undefined;
@@ -25,10 +24,11 @@ export default class LevelOne extends Phaser.Scene {
     this.socket = socket;
     this.state = {};
     this.otherPlayer = undefined;
+    this.name = "LevelOne";
   }
 
   init(data) {
-    this.selectedCharacter = data.character
+    this.selectedCharacter = data.character;
   }
 
   ///// PRELOAD /////
@@ -38,7 +38,7 @@ export default class LevelOne extends Phaser.Scene {
     this.game.scale.refresh();
 
     // SMOL
-    this.selectedCharacter.loadSprite(this)
+    this.selectedCharacter.loadSprite(this);
     /* this.load.image(assets.SMOL_LEFTSTART_KEY, assets.SMOL_LEFTSTART_URL);
     this.load.image(assets.SMOL_LEFTONE_KEY, assets.SMOL_LEFTONE_URL);
     this.load.image(assets.SMOL_LEFTTWO_KEY, assets.SMOL_LEFTTWO_URL);
@@ -84,7 +84,7 @@ export default class LevelOne extends Phaser.Scene {
     map.createLayer("Ground", tileSet, 0, 0);
     let walls = map.createLayer("Walls", tileSet, 0, 0);
     walls.setCollisionByExclusion([-1]);
-    map.createLayer('Details', tileSet, 0, 0);
+    map.createLayer("Details", tileSet, 0, 0);
 
     //Create player and playerGroup
     this.player = this.createPlayer(this, { x: 200, y: 300 });
@@ -154,8 +154,10 @@ export default class LevelOne extends Phaser.Scene {
     this.physics.add.collider(zombieGroup, zombieGroup, null);
     this.physics.add.collider(skeletonGroup, skeletonGroup, null);
 
-
     this.cursors = this.input.keyboard.createCursorKeys();
+    this.cursors = this.input.keyboard.addKeys({
+      esc: Phaser.Input.Keyboard.KeyCodes.ESC,
+    });
     let playerBullets = this.physics.add.group({
       classType: Bullet,
       runChildUpdate: true,
@@ -224,6 +226,10 @@ export default class LevelOne extends Phaser.Scene {
   //     );
   //   }
   update() {
+    if (this.cursors.esc.isDown) {
+      this.scene.pause();
+      this.scene.launch("pause-scene", { key: this.name });
+    }
     // const scene = this;
     // var x = scene.player.x;
     // var y = scene.player.y;
@@ -246,7 +252,11 @@ export default class LevelOne extends Phaser.Scene {
   // PLAYER ANIMATION
 
   createPlayer(player, playerInfo) {
-    this.player = new this.selectedCharacter(player, playerInfo.x, playerInfo.y)
+    this.player = new this.selectedCharacter(
+      player,
+      playerInfo.x,
+      playerInfo.y
+    );
     this.player.createTexture();
     return this.player;
   }

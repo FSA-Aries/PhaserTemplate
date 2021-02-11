@@ -1,20 +1,20 @@
 const assets = {};
 
 // ARSENAL
-assets.BULLET_KEY = "bullet";
-assets.BULLET_URL = "assets/arsenal/Bullet.png";
-assets.RETICLE_KEY = "reticle";
-assets.RETICLE_URL = "assets/arsenal/Reticle.png";
-assets.TANKATK_KEY = "sword";
-assets.TANKATK_URL = "assets/arsenal/TankWeapon.png";
-assets.TANK_RETICLE_KEY = "tankReticle";
-assets.TANK_RETICLE_URL = "assets/arsenal/TankReticle.png";
+assets.BULLET_KEY = 'bullet';
+assets.BULLET_URL = 'assets/arsenal/Bullet.png';
+assets.RETICLE_KEY = 'reticle';
+assets.RETICLE_URL = 'assets/arsenal/Reticle.png';
+assets.TANKATK_KEY = 'sword';
+assets.TANKATK_URL = 'assets/arsenal/TankWeapon.png';
+assets.TANK_RETICLE_KEY = 'tankReticle';
+assets.TANK_RETICLE_URL = 'assets/arsenal/TankReticle.png';
 
 // CHARACTERS
-assets.PLAYER_KEY = "player";
-assets.PLAYER_URL = "assets/characters/PokemonDude.png";
-assets.TANK_KEY = "tank";
-assets.TANK_URL = "assets/characters/tank.png";
+assets.PLAYER_KEY = 'player';
+assets.PLAYER_URL = 'assets/characters/PokemonDude.png';
+assets.TANK_KEY = 'tank';
+assets.TANK_URL = 'assets/characters/tank.png';
 
 assets.FUMIKO_LEFT_KEY = "fumikoLeft";
 assets.FUMIKO_LEFT_URL = "assets/characters/Fumiko/FumikoLeft.png";
@@ -55,6 +55,7 @@ assets.VAMPIRE_URL = "assets/characters/Enemy/vampire.png";
 assets.BOSS_KEY = "boss";
 assets.BOSS_URL = "assets/characters/Enemy/Enemy_Melee_All_Animations.png";
 
+
 // TILESET
 assets.TILEMAP_KEY = "tileMap";
 assets.TILEMAP_URL = "assets/tilesets/TiledMap.json";
@@ -74,25 +75,26 @@ assets.SCALEDSPMAP_URL = "assets/tilesets/scaledSPLevel.json";
 assets.SCALEDSPSET_KEY = "scaledSpSet";
 assets.SCALEDSPSET_URL = "assets/tilesets/terrain.png";
 
-assets.TILEMAP2_KEY = "tileMap2";
-assets.TILEMAP2_URL = "assets/tilesets/TiledMap2.json";
-assets.TILESET2_KEY = "tileSet2";
-assets.TILESET2_URL = "assets/tilesets/TileSet2.png";
+assets.TILEMAP2_KEY = 'tileMap2';
+assets.TILEMAP2_URL = 'assets/tilesets/TiledMap2.json';
+assets.TILESET2_KEY = 'tileSet2';
+assets.TILESET2_URL = 'assets/tilesets/TileSet2.png';
 
 //TILEMAZE
-assets.TILEMAZEMAP_KEY = "tileMazeMap";
-assets.TILEMAZEMAP_URL = "assets/tilesets/TileMaze.json";
-assets.TILEMAZESET_KEY = "tileMazeSet";
-assets.TILEMAZESET_URL = "assets/tilesets/Tilemaze.png";
+assets.TILEMAZEMAP_KEY = 'tileMazeMap';
+assets.TILEMAZEMAP_URL = 'assets/tilesets/TileMaze.json';
+assets.TILEMAZESET_KEY = 'tileMazeSet';
+assets.TILEMAZESET_URL = 'assets/tilesets/Tilemaze.png';
 //BACKGROUND
-assets.MENU_URL = "assets/backgrounds/Hello_World_Menu_Background.png";
-assets.WASD_URL = "assets/backgrounds/WASD.png";
+assets.MENU_URL = 'assets/backgrounds/Hello_World_Menu_Background.png';
+assets.WASD_URL = 'assets/backgrounds/WASD.png';
 
-//SELECT
+
 assets.FUMIKO_SELECT_KEY = "Fumiko";
 assets.FUMIKO_SELECT_URL = "assets/characters/Select/FumikoSelect.png";
 assets.TANK_SELECT_KEY = "Tank";
 assets.TANK_SELECT_URL = "assets/characters/Select/TankSelect.png";
+
 
 //AUDIO
 assets.SOUND_ON_KEY = "sound-on";

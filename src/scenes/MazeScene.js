@@ -1,16 +1,17 @@
-import Phaser from "phaser";
-import assets from "../../public/assets";
-import { config } from "../main";
-import Zombie from "../classes/Enemies/Zombie.js";
-import Vampire from "../classes/Enemies/Vampire.js";
-import Tank from "../classes/Tank";
-import Score from "../hud/score";
-import TankAtk from "../classes/TankAtk";
-import EventEmitter from "../events/Emitter";
+import Phaser from 'phaser';
+import assets from '../../public/assets';
+import { config } from '../main';
+import Zombie from '../classes/Enemies/Zombie.js';
+import Vampire from '../classes/Enemies/Vampire.js';
+import Tank from '../classes/Tank';
+import Score from '../hud/score';
+import TankAtk from '../classes/TankAtk';
+import EventEmitter from '../events/Emitter';
 
 export default class MazeScene extends Phaser.Scene {
   constructor() {
-    super("maze-scene");
+
+    super('maze-scene');
     this.selectedCharacter = undefined;
     this.cursors = undefined;
     this.game = undefined;
@@ -39,8 +40,8 @@ export default class MazeScene extends Phaser.Scene {
     this.load.tilemapTiledJSON(assets.TILEMAZEMAP_KEY, assets.TILEMAZEMAP_URL);
     //LOAD AUDIO
     this.load.audio(
-      "zombie-attack",
-      "assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3"
+      'zombie-attack',
+      'assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3'
     );
 
     //LOAD SPRITE
@@ -57,7 +58,7 @@ export default class MazeScene extends Phaser.Scene {
     });
     this.load.spritesheet(assets.ZOMBIE_KEY, assets.ZOMBIE_URL, {
       frameWidth: 30,
-      frameHeight: 60,
+      frameHeight: 62.5,
     });
   }
 
@@ -65,10 +66,10 @@ export default class MazeScene extends Phaser.Scene {
     this.playerGroup = this.add.group();
     //CREATE TILEMAP
     let map = this.make.tilemap({ key: assets.TILEMAZEMAP_KEY });
-    let tileMaze = map.addTilesetImage("Tilemaze", assets.TILEMAZESET_KEY);
-    this.tileMaze = map.createLayer("Base", tileMaze, 0, 0);
-    let collisionLayer = map.createLayer("Colliders", tileMaze, 0, 0);
-    let collisionLayer2 = map.createLayer("Colliders 2", tileMaze, 0, 0);
+    let tileMaze = map.addTilesetImage('Tilemaze', assets.TILEMAZESET_KEY);
+    this.tileMaze = map.createLayer('Base', tileMaze, 0, 0);
+    let collisionLayer = map.createLayer('Colliders', tileMaze, 0, 0);
+    let collisionLayer2 = map.createLayer('Colliders 2', tileMaze, 0, 0);
 
     this.player = this.createPlayer(this, { x: 240, y: 50 });
     //this.player.setTexture(assets.TANK_KEY, 0);
@@ -165,7 +166,7 @@ export default class MazeScene extends Phaser.Scene {
     this.reticle.setDisplaySize(25, 25).setCollideWorldBounds(true);
 
     this.input.on(
-      "pointerdown",
+      'pointerdown',
       function () {
         if (this.player.active === false) return;
 
@@ -182,7 +183,7 @@ export default class MazeScene extends Phaser.Scene {
     this.setupFollowupCameraOn(this.player);
 
     this.input.on(
-      "pointermove",
+      'pointermove',
       function (pointer) {
         //console.log(this.input.mousePointer.x)
         const transformedPoint = this.cameras.main.getWorldPoint(
@@ -198,7 +199,7 @@ export default class MazeScene extends Phaser.Scene {
       this
     );
 
-    if (gameStatus === "PLAYER_LOSE") {
+    if (gameStatus === 'PLAYER_LOSE') {
       return;
     }
     this.createGameEvents();
@@ -281,8 +282,8 @@ export default class MazeScene extends Phaser.Scene {
   }
 
   createGameEvents() {
-    EventEmitter.on("PLAYER_LOSE", () => {
-      this.scene.start("game-over", { gameStatus: "PLAYER_LOSE" });
+    EventEmitter.on('PLAYER_LOSE', () => {
+      this.scene.start('game-over', { gameStatus: 'PLAYER_LOSE' });
     });
   }
   onPlayerCollision(player, monster) {
@@ -304,7 +305,7 @@ export default class MazeScene extends Phaser.Scene {
   }
 
   createScoreLabel(x, y, score) {
-    const style = { fontSize: "32px", fill: "#ff0000", fontStyle: "bold" };
+    const style = { fontSize: '32px', fill: '#ff0000', fontStyle: 'bold' };
 
     const label = new Score(this, x, y, score, style);
     label.setScrollFactor(0, 0).setScale(1);

@@ -7,6 +7,7 @@ import Bullet from "../classes/Bullet";
 import assets from "../../public/assets";
 import socket from "../socket/index.js";
 import Score from "../hud/score";
+import Imp from "../classes/Enemies/Imp";
 
 import EventEmitter from "../events/Emitter";
 import { config } from "../main";
@@ -60,6 +61,12 @@ export default class FireLevel extends Phaser.Scene {
       frameWidth: 30,
       frameHeight: 60,
     });
+
+    this.load.spritesheet(assets.IMP_KEY, assets.IMP_URL, {
+      frameWidth: 64,
+      frameHeight: 64,
+    });
+
     this.load.spritesheet(assets.SKELETON_KEY, assets.SKELETON_URL, {
       frameWidth: 30,
       frameHeight: 64,
@@ -76,7 +83,6 @@ export default class FireLevel extends Phaser.Scene {
       frameWidth: 30,
       frameHeight: 60,
     });
-    // this.physics.add.sprite(400, 375, assets.PLAYER_KEY);
   }
 
   ///// CREATE /////
@@ -96,34 +102,41 @@ export default class FireLevel extends Phaser.Scene {
     this.score = this.createScoreLabel(
       config.rightTopCorner.x + 5,
       config.rightTopCorner.y,
-      0
+      this.getScore()
     );
-    //this.score = new Score(this, config.leftTopCorner.x + 5, config.rightTopCorner.y, 0)
 
     //Zombie and Skeleton Groups
     let zombieGroup = this.physics.add.group();
     let skeletonGroup = this.physics.add.group();
-
-    this.zombieGroup = zombieGroup;
+    let impGroup = this.physics.add.group();
 
     // Enemy Creation
-
     for (let i = 0; i < 4; i++) {
       this.time.addEvent({
         delay: 5000,
         callback: () => {
-          zombieGroup.add(this.createZombie());
+          zombieGroup.add(this.createZombie().setTint(0xff0000));
         },
         repeat: 3,
       });
+
       //DON'T DELETE- TO HAVE SET AMOUNT OF ENEMIES INSTEAD OF ENDLESS
       //repeat: 15
+    }
+    for (let i = 0; i < 2; i++) {
+      this.time.addEvent({
+        delay: 2000,
+        callback: () => {
+          impGroup.add(this.createImp());
+        },
+        repeat: 3,
+      });
     }
     for (let i = 0; i < 1; i++) {
       this.time.addEvent({
         delay: 20000,
         callback: () => {
-          skeletonGroup.add(this.createSkeleton());
+          skeletonGroup.add(this.createSkeleton().setTint(0xff0000));
         },
         repeat: 3,
       });
@@ -136,9 +149,14 @@ export default class FireLevel extends Phaser.Scene {
       skeletonGroup,
       this.onPlayerCollision
     );
-    this.physics.add.collider(zombieGroup, skeletonGroup, null);
-    this.physics.add.collider(zombieGroup, zombieGroup, null);
-    this.physics.add.collider(skeletonGroup, skeletonGroup, null);
+    this.physics.add.collider(this.player, impGroup, this.onPlayerCollision);
+
+    this.physics.add.collider(zombieGroup, skeletonGroup);
+    this.physics.add.collider(zombieGroup, zombieGroup);
+    this.physics.add.collider(skeletonGroup, skeletonGroup);
+    this.physics.add.collider(impGroup, skeletonGroup);
+    this.physics.add.collider(impGroup, impGroup);
+    this.physics.add.collider(impGroup, zombieGroup);
 
     this.cursors = this.input.keyboard.createCursorKeys();
     let playerBullets = this.physics.add.group({
@@ -156,6 +174,13 @@ export default class FireLevel extends Phaser.Scene {
     this.physics.add.collider(
       playerBullets,
       skeletonGroup,
+      this.onBulletCollision,
+      null,
+      this
+    );
+    this.physics.add.collider(
+      playerBullets,
+      impGroup,
       this.onBulletCollision,
       null,
       this
@@ -206,21 +231,24 @@ export default class FireLevel extends Phaser.Scene {
     this.createGameEvents();
   }
 
-  //       this
-  //     );
-  //   }
-  update() { }
+  update() {}
 
-  ///// HELPER FUNCTIONS /////
 
   // PLAYER ANIMATION
   createPlayer(player, playerInfo) {
 
     this.player = new this.selectedCharacter(player, playerInfo.x, playerInfo.y)
     this.player.createTexture();
-
-
     return this.player;
+
+  }
+
+  getScore() {
+    if (this.scene.settings.data.score) {
+      return this.scene.settings.data.score;
+    } else {
+      0;
+    }
   }
 
   setupFollowupCameraOn(player) {
@@ -236,154 +264,72 @@ export default class FireLevel extends Phaser.Scene {
       .setZoom(config.zoomFactor);
     this.cameras.main.startFollow(player);
   }
-  createZombie() {
-    // const randomizedPosition = Math.random() * 800;
+  enemyXSpawn() {
+    if (this.player.x > 400) {
+      if (this.player.x > 700) {
+        return this.player.x / 2 - Math.floor(Math.random() * 301 + 200);
+      }
+      return this.player.x / 2 - Math.floor(Math.random() * 201 + 100);
+    }
+
+    if (this.player.x < 400) {
+      if (this.player.x < 100)
+        return this.player.x * 2 + Math.floor(Math.random() * 301 + 200);
+    }
+    return this.player.x * 2 + Math.floor(Math.random() * 201 + 100);
+  }
+
+  enemyYSpawn() {
+    if (this.player.y > 375) {
+      if (this.player.y > 700) {
+        return this.player.y / 2 - Math.floor(Math.random() * 301 + 200);
+      }
+      return this.player.y / 2 - Math.floor(Math.random() * 201 + 100);
+    }
+
+    if (this.player.y < 375) {
+      if (this.player.y < 100)
+        return this.player.y * 2 + Math.floor(Math.random() * 301 + 200);
+    }
+    return this.player.y * 2 + Math.floor(Math.random() * 201 + 100);
+  }
+  createZombie(playerGroup) {
+    const randomizedPositionx = this.enemyXSpawn();
+    const randomizedPositiony = this.enemyYSpawn();
+
     return new Zombie(
       this,
-      this.randomizedPosition(),
-      this.randomizedPosition(),
+      randomizedPositionx,
+      randomizedPositiony,
       assets.ZOMBIE_KEY,
       assets.ZOMBIE_URL,
-      undefined,
+      this.playerGroup,
+      this.player
+    );
+  }
+  createImp(playerGroup) {
+    const randomizedPositionx = this.enemyXSpawn();
+    const randomizedPositiony = this.enemyYSpawn();
+
+    return new Imp(
+      this,
+      randomizedPositionx,
+      randomizedPositiony,
+      assets.IMP_KEY,
+      assets.IMP_URL,
+      this.playerGroup,
       this.player
     );
   }
 
-  // createEnemies(monster) {
-  //   const enemyTypes = getEnemyTypes();
-  //   const randomizedPosition = Math.random() * 800;
-
-  //   return new enemyTypes[monster](
-  //     this,
-  //     randomizedPosition,
-  //     randomizedPosition,
-  //     assets.SKELETON_KEY,
-  //     assets.SKELETON_URL,
-  //     this.player
-  //   );
-  // }
-  randomizedPosition() {
-    let position = Math.random() * 800;
-    if (this.player.x !== position && this.player.y !== position) {
-      return position;
-    } else {
-      this.randomizedPosition();
-    }
-  }
-
-  introText() {
-    // let zombieGroup = this.physics.add.group();
-    // this.physics.add.collider(this.player, zombieGroup, this.onPlayerCollision);
-    /*
-    Welcome to
-    Then
-
-    Senior Phaser
-    then
-    Left Click to Shoot
-    then
-    WASD to move
-
-
-    add text
-    delay event-destroy text, add text
-    delay event-destroy text, add text
-    delay event-destroy
-
-
-    */
-
-    this.time.addEvent({
-      delay: 3000,
-      callback: () => {
-        let text1 = this.add.text(328, 365, "Welcome To", {
-          fontSize: "25px",
-          color: "red",
-        });
-        this.time.addEvent({
-          delay: 3000,
-          callback: () => {
-            text1.destroy();
-            let text2 = this.add.text(310, 370, "Senior Phaser", {
-              fontSize: "25px",
-              color: "red",
-            });
-            this.time.addEvent({
-              delay: 3000,
-              callback: () => {
-                text2.destroy();
-                let text3 = this.add.text(350, 290, "WASD to Move", {
-                  fontSize: "25px",
-                  color: "red",
-                });
-                let arrowImage = this.add
-                  .image(450, 400, "arrow-keys")
-                  .setScale(0.6);
-                this.time.addEvent({
-                  delay: 2500,
-                  callback: () => {
-                    text3.destroy();
-                    arrowImage.destroy();
-                    let mouseImage = this.add
-                      .image(430, 400, "left-mouse-click")
-                      .setScale(0.4);
-                    let text4 = this.add.text(400, 280, "Shoot", {
-                      fontSize: "25px",
-                      color: "red",
-                    });
-                    this.zombieGroup.add(this.createZombie());
-                    this.time.addEvent({
-                      delay: 5000,
-                      callback: () => {
-                        let createdBy = this.add.text(310, 370, "Created By", {
-                          fontSize: "40px",
-                          color: "red",
-                        });
-                        let morgan = this.add.text(40, 40, "Morgan Hu", {
-                          fontSize: "35px",
-                          color: "red",
-                        });
-                        let juan = this.add.text(40, 600, "Juan Velazquez", {
-                          fontSize: "35px",
-                          color: "red",
-                        });
-                        let kelvin = this.add.text(520, 40, "Kelvin Lin", {
-                          fontSize: "35px",
-                          color: "red",
-                        });
-                        let brandon = this.add.text(520, 600, "Brandon Fox", {
-                          fontSize: "35px",
-                          color: "red",
-                        });
-                        text4.destroy();
-                        mouseImage.destroy();
-                        this.time.addEvent({
-                          delay: 5000,
-                          callback: () => {
-                            createdBy.destroy();
-                            kelvin.destroy();
-                            juan.destroy();
-                            brandon.destroy();
-                            morgan.destroy();
-                          },
-                        });
-                      },
-                    });
-                  },
-                });
-              },
-            });
-          },
-        });
-      },
-    });
-  }
-
   createSkeleton() {
+    const randomizedPositionx = this.enemyXSpawn();
+    const randomizedPositiony = this.enemyYSpawn();
+
     return new Skeleton(
       this,
-      this.randomizedPosition(),
-      this.randomizedPosition(),
+      randomizedPositionx,
+      randomizedPositiony,
       assets.SKELETON_KEY,
       assets.SKELETON_URL,
       this.player
@@ -396,19 +342,22 @@ export default class FireLevel extends Phaser.Scene {
     });
   }
   onPlayerCollision(player, monster) {
-    console.log("HEALTH ->", player.health);
-    //It should be the bullet's damage but we will just set a default value for now to test
-    // monster.takesHit(player.damage);
-    console.log(monster);
     player.takesHit(monster);
     if (monster.zombieAttackSound) monster.zombieAttackSound.play();
-    // player.setBounce(0.5, 0.5);
   }
 
   onBulletCollision(bullet, monster) {
+    let score = this.score.score;
+
     if (monster.health - bullet.damage <= 0) {
-      console.log(this.score);
+      console.log("SCHENE", this.scene);
+      console.log(this);
       this.score.addPoints(1);
+      if (this.score.score >= 30) {
+        this.scene.start("grassScene", {
+          score: score,
+        });
+      }
     }
 
     bullet.hitsEnemy(monster);

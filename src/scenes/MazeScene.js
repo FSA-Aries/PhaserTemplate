@@ -142,6 +142,10 @@ export default class MazeScene extends Phaser.Scene {
 
     //ADD WEAPON
     this.cursors = this.input.keyboard.createCursorKeys();
+    this.cursors = this.input.keyboard.addKeys({
+      esc: Phaser.Input.Keyboard.KeyCodes.ESC,
+    });
+
     let playerBullets = this.physics.add.group({
       classType: TankAtk,
       runChildUpdate: true,
@@ -332,14 +336,10 @@ export default class MazeScene extends Phaser.Scene {
     button.setScrollFactor(0, 0).setScale(1);
 
     button.on("pointerdown", () => {
-      console.log("clicked");
       if (button.texture.key === assets.SOUND_ON_KEY) {
-        console.log("sound off");
         button.setTexture(assets.SOUND_OFF_KEY);
         this.sound.mute = true;
       } else {
-        console.log("sound on");
-
         button.setTexture(assets.SOUND_ON_KEY);
         this.sound.mute = false;
       }

@@ -13,7 +13,7 @@ class Tank extends Phaser.Physics.Arcade.Sprite {
     this.cursors = undefined;
     this.playerId = undefined;
 
-    this.damage = 30;
+    this.damage = 50;
     this.x = x;
     this.y = y;
 

@@ -4,14 +4,13 @@ import Enemy from "./Enemy";
 const VAMPIRE_KEY = "vampire";
 
 export default class Vampire extends Enemy {
-  constructor(scene, x, y, key, type, playerGroup, player) {
-    super(scene, x, y, key, type, playerGroup);
+  constructor(scene, x, y, key, type, player) {
+    super(scene, x, y, key, type);
 
-    this.health = 500;
+    this.health = 300;
     this.damage = 75;
     this.init();
     this.player = player;
-    this.playerGroup = playerGroup;
   }
 
   ENEMY_KEY(monster) {
@@ -78,22 +77,22 @@ export default class Vampire extends Enemy {
       return;
     }
 
-    if (Phaser.Math.Distance.BetweenPoints(this.player, this) < 500) {
+    if (Phaser.Math.Distance.BetweenPoints(this.player, this) < 300) {
       if (Math.abs(this.x - this.player.x) > Math.abs(this.y - this.player.y)) {
         if (this.player.x < this.x) {
-          this.setVelocityX(-200);
+          this.setVelocityX(-100);
           this.anims.play("vampire-left", true);
         } else {
-          this.setVelocityX(50);
+          this.setVelocityX(100);
           this.anims.play("vampire-right", true);
         }
       } else {
         if (this.player.y < this.y) {
-          this.setVelocityY(-200);
-          this.anims.play("vampire-down", true);
-        } else {
-          this.setVelocityY(50);
+          this.setVelocityY(-100);
           this.anims.play("vampire-up", true);
+        } else {
+          this.setVelocityY(100);
+          this.anims.play("vampire-down", true);
         }
       }
     } else {

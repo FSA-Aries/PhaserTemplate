@@ -6,6 +6,7 @@ import Vampire from "../classes/Enemies/Vampire.js";
 import Tank from "../classes/Tank";
 import Score from "../hud/score";
 import TankAtk from "../classes/TankAtk";
+import EventEmitter from "../events/Emitter";
 
 export default class MazeScene extends Phaser.Scene {
   constructor() {
@@ -36,13 +37,13 @@ export default class MazeScene extends Phaser.Scene {
 
     //LOAD SPRITE
     this.load.spritesheet(assets.TANK_KEY, assets.TANK_URL, {
-      frameWidth: 75,
-      frameHeight: 109,
+      frameWidth: 61,
+      frameHeight: 86.75,
     });
     //LOAD ENEMIES
     this.load.spritesheet(assets.VAMPIRE_KEY, assets.VAMPIRE_URL, {
-      frameWidth: 72,
-      frameHeight: 107,
+      frameWidth: 53.7,
+      frameHeight: 80,
     });
     this.load.spritesheet(assets.ZOMBIE_KEY, assets.ZOMBIE_URL, {
       frameWidth: 30,
@@ -54,19 +55,18 @@ export default class MazeScene extends Phaser.Scene {
     this.playerGroup = this.add.group();
     //CREATE TILEMAP
     let map = this.make.tilemap({ key: assets.TILEMAZEMAP_KEY });
-    let tileMaze = map.addTilesetImage("main", assets.TILEMAZESET_KEY);
+    let tileMaze = map.addTilesetImage("Tilemaze", assets.TILEMAZESET_KEY);
     this.tileMaze = map.createLayer("Base", tileMaze, 0, 0);
     let collisionLayer = map.createLayer("Colliders", tileMaze, 0, 0);
     let collisionLayer2 = map.createLayer("Colliders 2", tileMaze, 0, 0);
 
+    this.player = this.createPlayer(this, { x: 240, y: 50 });
+    this.player.setTexture(assets.TANK_KEY, 0);
     collisionLayer.setCollisionByExclusion([-1]);
     this.physics.add.collider(this.player, collisionLayer);
     collisionLayer2.setCollisionByExclusion([-1]);
     this.physics.add.collider(this.player, collisionLayer2);
     //CREATE PLAYER
-    this.player = this.createPlayer(this, { x: 200, y: 300 });
-
-    this.player.setTexture(assets.TANK_KEY, 0);
 
     //CREATE SCORE LABEL
     this.score = this.createScoreLabel(
@@ -112,6 +112,11 @@ export default class MazeScene extends Phaser.Scene {
     );
 
     this.physics.add.collider(this.player, zombieGroup, this.onPlayerCollision);
+    this.physics.add.collider(
+      this.player,
+      vampireGroup,
+      this.onPlayerCollision
+    );
 
     this.physics.add.collider(zombieGroup, vampireGroup, null);
     this.physics.add.collider(zombieGroup, zombieGroup, null);
@@ -244,17 +249,12 @@ export default class MazeScene extends Phaser.Scene {
   }
 
   createVampire() {
-    const randomizedPositionx = this.enemyXSpawn();
-    const randomizedPositiony = this.enemyYSpawn();
-    // const randomizedPositionx = Math.random() * 800 + this.player.x;
-    // const randomizedPositiony = Math.random() * 800 + this.player.y;
     return new Vampire(
       this,
-      randomizedPositionx,
-      randomizedPositiony,
+      700,
+      30,
       assets.VAMPIRE_KEY,
       assets.VAMPIRE_URL,
-      undefined,
       this.player
     );
   }

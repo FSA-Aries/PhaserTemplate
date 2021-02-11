@@ -101,8 +101,7 @@ export default class CharacterSelect extends BaseScene {
     }
 
     handleContinue() {
-        //console.log("createChar --> ", Fumiko)
-        console.log('continue', this.selection)
+
         this.scene.start('grassScene', { character: this.selection })
     }
 

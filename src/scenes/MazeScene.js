@@ -7,6 +7,7 @@ import Tank from "../classes/Tank";
 import Score from "../hud/score";
 import TankAtk from "../classes/TankAtk";
 import EventEmitter from "../events/Emitter";
+import Bullet from "../classes/Bullet";
 
 export default class MazeScene extends Phaser.Scene {
   constructor() {
@@ -30,13 +31,13 @@ export default class MazeScene extends Phaser.Scene {
     this.game.scale.pageAlignHorizontally = true;
     this.game.scale.pageAlignVertically = true;
     this.game.scale.refresh();
-    this.load.image(assets.TILEMAZESET_KEY, assets.TILEMAZESET_URL);
     this.load.image(assets.BULLET_KEY, assets.BULLET_URL);
     this.load.image(assets.RETICLE_KEY, assets.RETICLE_URL);
 
     this.load.image(assets.SOUND_OFF_KEY, assets.SOUND_OFF_URL);
     this.load.image(assets.SOUND_ON_KEY, assets.SOUND_ON_URL);
 
+    this.load.image(assets.TILEMAZESET_KEY, assets.TILEMAZESET_URL);
     this.load.tilemapTiledJSON(assets.TILEMAZEMAP_KEY, assets.TILEMAZEMAP_URL);
     //LOAD AUDIO
     this.load.audio(
@@ -67,7 +68,7 @@ export default class MazeScene extends Phaser.Scene {
     //CREATE TILEMAP
     let map = this.make.tilemap({ key: assets.TILEMAZEMAP_KEY });
     let tileMaze = map.addTilesetImage("Tilemaze", assets.TILEMAZESET_KEY);
-    this.tileMaze = map.createLayer("Base", tileMaze, 0, 0);
+    map.createLayer("Base", tileMaze, 0, 0);
     let collisionLayer = map.createLayer("Colliders", tileMaze, 0, 0);
     let collisionLayer2 = map.createLayer("Colliders 2", tileMaze, 0, 0);
 
@@ -147,7 +148,7 @@ export default class MazeScene extends Phaser.Scene {
     });
 
     let playerBullets = this.physics.add.group({
-      classType: TankAtk,
+      classType: Bullet,
       runChildUpdate: true,
     });
 

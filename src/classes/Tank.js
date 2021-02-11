@@ -162,6 +162,22 @@ class Tank extends Phaser.Physics.Arcade.Sprite {
       this.clearTint();
     });
   }
+  static loadSprite(scene) {
+
+    scene.load.spritesheet(assets.TANK_KEY, assets.TANK_URL, {
+      frameWidth: 61,
+      frameHeight: 86.75,
+    });
+
+  }
+
+  createTexture() {
+    this.setTexture(assets.TANK_KEY, 1);
+  }
+
+
+
 }
+
 
 export default Tank;

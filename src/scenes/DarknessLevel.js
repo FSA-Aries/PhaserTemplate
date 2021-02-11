@@ -16,6 +16,7 @@ import { config } from "../main";
 export default class DarknessLevel extends Phaser.Scene {
   constructor() {
     super("darkness-level");
+    this.selectedCharacter = undefined
     this.player = undefined;
     this.cursors = undefined;
     this.game = undefined;
@@ -24,6 +25,11 @@ export default class DarknessLevel extends Phaser.Scene {
     //Setup Sockets
     this.socket = socket;
   }
+
+  init(data) {
+    this.selectedCharacter = data.character
+  }
+
 
   ///// PRELOAD /////
   preload() {
@@ -37,10 +43,13 @@ export default class DarknessLevel extends Phaser.Scene {
     this.load.image(assets.RETICLE_KEY, assets.RETICLE_URL);
     this.load.image(assets.DARKSET_KEY, assets.DARKSET_URL);
     this.load.tilemapTiledJSON(assets.DARKMAP_KEY, assets.DARKMAP_URL);
-    this.load.spritesheet(assets.PLAYER_KEY, assets.PLAYER_URL, {
+
+
+    /* this.load.spritesheet(assets.PLAYER_KEY, assets.PLAYER_URL, {
       frameWidth: 50,
       frameHeight: 69,
-    });
+    }); */
+    this.selectedCharacter.loadSprite(this);
 
     this.load.audio(
       "zombie-attack",
@@ -57,17 +66,10 @@ export default class DarknessLevel extends Phaser.Scene {
       frameHeight: 64,
     });
     this.load.spritesheet(assets.BOSS_KEY, assets.BOSS_URL, {
-      frameWidth: 30,
-      frameHeight: 60,
+      frameWidth: 256,
+      frameHeight: 256,
     });
-    this.load.spritesheet(assets.BOSS_RIGHT_KEY, assets.BOSS_RIGHT_URL, {
-      frameWidth: 30,
-      frameHeight: 60,
-    });
-    this.load.spritesheet(assets.BOSS_DOWN_KEY, assets.BOSS_DOWN_URL, {
-      frameWidth: 30,
-      frameHeight: 60,
-    });
+
     // this.physics.add.sprite(400, 375, assets.PLAYER_KEY);
   }
 
@@ -80,46 +82,50 @@ export default class DarknessLevel extends Phaser.Scene {
     let darkness = map.createLayer("Collision", tileSet, 0, 0);
     darkness.setCollisionByExclusion([-1]);
 
-    this.player = this.createPlayer();
-    this.player.setTexture(assets.PLAYER_KEY, 1);
+    this.player = this.createPlayer(this, { x: 200, y: 300 });
+    //this.player.setTexture(assets.PLAYER_KEY, 1);
 
     this.physics.add.collider(this.player, darkness);
 
     this.score = this.createScoreLabel(
       config.rightTopCorner.x + 5,
       config.rightTopCorner.y,
-      0
+      this.getScore()
     );
     //this.score = new Score(this, config.leftTopCorner.x + 5, config.rightTopCorner.y, 0)
 
     //Zombie and Skeleton Groups
     let zombieGroup = this.physics.add.group();
     let skeletonGroup = this.physics.add.group();
+    let bossGroup = this.physics.add.group();
 
     this.zombieGroup = zombieGroup;
 
     // Enemy Creation
 
-    for (let i = 0; i < 4; i++) {
-      this.time.addEvent({
-        delay: 4000,
-        callback: () => {
-          zombieGroup.add(this.createZombie());
-        },
-        loop: true,
-      });
-      //DON'T DELETE- TO HAVE SET AMOUNT OF ENEMIES INSTEAD OF ENDLESS
-      //repeat: 15
-    }
-    for (let i = 0; i < 3; i++) {
-      this.time.addEvent({
-        delay: 15000,
-        callback: () => {
-          skeletonGroup.add(this.createSkeleton());
-        },
-        loop: true,
-      });
-    }
+    // for (let i = 0; i < 2; i++) {
+    //   this.time.addEvent({
+    //     delay: 2000,
+    //     callback: () => {
+    //       zombieGroup.add(this.createZombie().setTint(0x9b7653));
+    //     },
+    //     repeat: 2,
+    //   });
+    //   //DON'T DELETE- TO HAVE SET AMOUNT OF ENEMIES INSTEAD OF ENDLESS
+    //   //repeat: 15
+    // }
+    // for (let i = 0; i < 4; i++) {
+    //   this.time.addEvent({
+    //     delay: 3000,
+    //     callback: () => {
+    //       skeletonGroup.add(this.createSkeleton().setTint(0x9b7653));
+    //     },
+    //     repeat: 2,
+    //   });
+    // }
+    let boss = this.createBoss();
+    boss.setScale(0.75, 0.75);
+    bossGroup.add(boss);
 
     this.physics.add.collider(this.player, zombieGroup, this.onPlayerCollision);
 
@@ -128,11 +134,16 @@ export default class DarknessLevel extends Phaser.Scene {
       skeletonGroup,
       this.onPlayerCollision
     );
+
+    this.physics.add.collider(this.player, bossGroup, this.onPlayerCollision);
+    this.physics.add.collider(skeletonGroup, bossGroup);
+    this.physics.add.collider(zombieGroup, bossGroup);
     this.physics.add.collider(zombieGroup, skeletonGroup, null);
     this.physics.add.collider(zombieGroup, zombieGroup, null);
     this.physics.add.collider(skeletonGroup, skeletonGroup, null);
     this.physics.add.collider(zombieGroup, darkness);
     this.physics.add.collider(skeletonGroup, darkness);
+    this.physics.add.collider(bossGroup, darkness);
 
     this.cursors = this.input.keyboard.createCursorKeys();
     let playerBullets = this.physics.add.group({
@@ -147,6 +158,14 @@ export default class DarknessLevel extends Phaser.Scene {
       null,
       this
     );
+    this.physics.add.collider(
+      playerBullets,
+      bossGroup,
+      this.onBulletCollision,
+      null,
+      this
+    );
+
     this.physics.add.collider(
       playerBullets,
       skeletonGroup,
@@ -208,9 +227,19 @@ export default class DarknessLevel extends Phaser.Scene {
   ///// HELPER FUNCTIONS /////
 
   // PLAYER ANIMATION
-  createPlayer() {
+  createPlayer(player, playerInfo) {
     // this.sound.add("intro", { loop: false, volume: 0.53 }).play();
-    return new Player(this, 750, 750);
+    this.player = new this.selectedCharacter(player, playerInfo.x, playerInfo.y)
+    this.player.createTexture();
+    return this.player;
+  }
+
+  getScore() {
+    if (this.scene.settings.data.score) {
+      return this.scene.settings.data.score;
+    } else {
+      0;
+    }
   }
 
   setupFollowupCameraOn(player) {
@@ -226,17 +255,42 @@ export default class DarknessLevel extends Phaser.Scene {
       .setZoom(config.zoomFactor);
     this.cameras.main.startFollow(player);
   }
-  createZombie() {
-    // const randomizedPosition = Math.random() * 800;
+  createZombie(playerGroup) {
+    const randomizedPositionx = this.enemyXSpawn();
+    const randomizedPositiony = this.enemyYSpawn();
+    // const randomizedPositionx = Math.random() * 800 + this.player.x;
+    // const randomizedPositiony = Math.random() * 800 + this.player.y;
     return new Zombie(
       this,
-      this.randomizedPosition(),
-      this.randomizedPosition(),
+      randomizedPositionx,
+      randomizedPositiony,
       assets.ZOMBIE_KEY,
       assets.ZOMBIE_URL,
-      undefined,
+      this.playerGroup,
       this.player
     );
+  }
+  createBoss(playerGroup) {
+    // const randomizedPositionx = this.enemyXSpawn();
+    // const randomizedPositiony = this.enemyYSpawn();
+    // let boss = this.createBoss();
+
+    // if(boss){
+    //   return
+    // }
+    // if (!boss) {
+    return new Boss(
+      this,
+      100,
+      100,
+      assets.BOSS_KEY,
+      assets.BOSS_URL,
+      this.player
+    );
+    // } else {
+    //   boss.destroy();
+    //   this.createBoss();
+    // }
   }
 
   // createEnemies(monster) {
@@ -252,13 +306,34 @@ export default class DarknessLevel extends Phaser.Scene {
   //     this.player
   //   );
   // }
-  randomizedPosition() {
-    let position = Math.random() * 800;
-    if (this.player.x !== position && this.player.y !== position) {
-      return position;
-    } else {
-      this.randomizedPosition();
+  enemyXSpawn() {
+    if (this.player.x > 400) {
+      if (this.player.x > 700) {
+        return this.player.x / 2 - Math.floor(Math.random() * 301 + 200);
+      }
+      return this.player.x / 2 - Math.floor(Math.random() * 201 + 100);
     }
+
+    if (this.player.x < 400) {
+      if (this.player.x < 100)
+        return this.player.x * 2 + Math.floor(Math.random() * 301 + 200);
+    }
+    return this.player.x * 2 + Math.floor(Math.random() * 201 + 100);
+  }
+
+  enemyYSpawn() {
+    if (this.player.y > 375) {
+      if (this.player.y > 700) {
+        return this.player.y / 2 - Math.floor(Math.random() * 301 + 200);
+      }
+      return this.player.y / 2 - Math.floor(Math.random() * 201 + 100);
+    }
+
+    if (this.player.y < 375) {
+      if (this.player.y < 100)
+        return this.player.y * 2 + Math.floor(Math.random() * 301 + 200);
+    }
+    return this.player.y * 2 + Math.floor(Math.random() * 201 + 100);
   }
 
   introText() {
@@ -370,10 +445,13 @@ export default class DarknessLevel extends Phaser.Scene {
   }
 
   createSkeleton() {
+    const randomizedPositionx = this.enemyXSpawn();
+    const randomizedPositiony = this.enemyYSpawn();
+
     return new Skeleton(
       this,
-      this.randomizedPosition(),
-      this.randomizedPosition(),
+      randomizedPositionx,
+      randomizedPositiony,
       assets.SKELETON_KEY,
       assets.SKELETON_URL,
       this.player
@@ -396,11 +474,17 @@ export default class DarknessLevel extends Phaser.Scene {
   }
 
   onBulletCollision(bullet, monster) {
-    if (monster.health - bullet.damage <= 0) {
-      console.log(this.score);
-      this.score.addPoints(1);
-    }
+    let score = this.score.score;
+    console.log(monster);
 
+    if (monster.health - bullet.damage <= 0) {
+      this.score.addPoints(1);
+      if (score === 100) {
+        this.scene.start("LevelOne", {
+          score: score,
+        });
+      }
+    }
     bullet.hitsEnemy(monster);
   }
 

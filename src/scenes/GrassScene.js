@@ -24,7 +24,7 @@ export default class GrassScene extends Phaser.Scene {
     this.score = undefined;
     this.socket = socket;
     this.state = {};
-    this.otherPlayer = undefined;
+
 
   }
 
@@ -90,7 +90,7 @@ export default class GrassScene extends Phaser.Scene {
     this.score = this.createScoreLabel(
       config.rightTopCorner.x + 5,
       config.rightTopCorner.y,
-      0
+      this.getScore()
     );
 
     //Zombie and Skeleton Groups
@@ -103,7 +103,7 @@ export default class GrassScene extends Phaser.Scene {
       this.time.addEvent({
         delay: 2000,
         callback: () => {
-          zombieGroup.add(this.createZombie());
+          zombieGroup.add(this.createZombie().setTint(0x3fbf3f));
         },
         repeat: 25,
       });
@@ -112,7 +112,7 @@ export default class GrassScene extends Phaser.Scene {
       this.time.addEvent({
         delay: 5000,
         callback: () => {
-          skeletonGroup.add(this.createSkeleton());
+          skeletonGroup.add(this.createSkeleton().setTint(0x3fbf3f));
         },
 
         loop: true,
@@ -237,12 +237,8 @@ export default class GrassScene extends Phaser.Scene {
   // PLAYER ANIMATION
 
   createPlayer(player, playerInfo) {
-    //this.player = new Fumiko(player, playerInfo.x, playerInfo.y);
-    //this.player.setTexture(assets.FUMIKO_DOWN_KEY, 0);
     this.player = new this.selectedCharacter(player, playerInfo.x, playerInfo.y)
     this.player.createTexture();
-
-
     return this.player;
   }
 
@@ -333,21 +329,31 @@ export default class GrassScene extends Phaser.Scene {
     });
   }
   onPlayerCollision(player, monster) {
-    //It should be the bullet's damage but we will just set a default value for now to test
-    // monster.takesHit(player.damage);
-    //console.log(monster);
     player.takesHit(monster);
     if (monster.zombieAttackSound) monster.zombieAttackSound.play();
-    // player.setBounce(0.5, 0.5);
   }
 
   onBulletCollision(bullet, monster) {
+    let score = this.score.score;
+
     if (monster.health - bullet.damage <= 0) {
       console.log(this.score);
       this.score.addPoints(1);
+      if (this.score.score >= 50) {
+        this.scene.start("darkness-level", {
+          score: score,
+        });
+      }
     }
 
     bullet.hitsEnemy(monster);
+  }
+  getScore() {
+    if (this.scene.settings.data.score) {
+      return this.scene.settings.data.score;
+    } else {
+      0;
+    }
   }
 
   createScoreLabel(x, y, score) {

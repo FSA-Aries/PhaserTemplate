@@ -16,6 +16,7 @@ assets.PLAYER_URL = 'assets/characters/PokemonDude.png';
 assets.TANK_KEY = 'tank';
 assets.TANK_URL = 'assets/characters/tank.png';
 
+
 assets.FUMIKO_LEFT_KEY = "fumikoLeft";
 assets.FUMIKO_LEFT_URL = "assets/characters/Fumiko/FumikoLeft.png";
 assets.FUMIKO_RIGHT_KEY = "fumikoRight";
@@ -90,10 +91,14 @@ assets.MENU_URL = 'assets/backgrounds/Hello_World_Menu_Background.png';
 assets.WASD_URL = 'assets/backgrounds/WASD.png';
 
 
-assets.FUMIKO_SELECT_KEY = "Fumiko";
+//SELECT
+assets.FUMIKO_SELECT_KEY = 'Fumiko'
 assets.FUMIKO_SELECT_URL = "assets/characters/Select/FumikoSelect.png";
-assets.TANK_SELECT_KEY = "Tank";
+assets.TANK_SELECT_KEY = 'Tank'
 assets.TANK_SELECT_URL = "assets/characters/Select/TankSelect.png";
+assets.SMOL_SELECT_KEY = 'Smol'
+assets.SMOL_SELECT_URL = "assets/characters/Select/smol guy.png";
+
 
 
 //AUDIO
@@ -102,5 +107,6 @@ assets.SOUND_ON_URL = "assets/audio/sound-on.png";
 
 assets.SOUND_OFF_KEY = "sound-off";
 assets.SOUND_OFF_URL = "assets/audio/sound-off.png";
+
 
 export default assets;

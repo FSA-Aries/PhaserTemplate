@@ -172,6 +172,7 @@ export default class MazeScene extends Phaser.Scene {
 
         // Get bullet from bullets group
         let bullet = playerBullets.get().setActive(true).setVisible(true);
+        bullet.setDamage(this.player.damage)
 
         if (bullet) {
           bullet.fire(this.player, this.reticle);

@@ -81,58 +81,102 @@ class Fumiko extends Phaser.Physics.Arcade.Sprite {
     this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
   }
 
-  update() {
-    if (this.hasBeenHit || !this.body) {
-      return;
-    }
-    this.setVelocity(0);
-    let prevVelocity = this.body.velocity.clone();
 
-    if (this.cursors.left.isDown) {
-      this.setVelocityX(-250);
-      prevVelocity = this.body.velocity.clone();
-    } else if (this.cursors.right.isDown) {
-      this.setVelocityX(250);
-      prevVelocity = this.body.velocity.clone();
-    }
-    if (this.cursors.up.isDown) {
-      this.setVelocityY(-250);
-      prevVelocity = this.body.velocity.clone();
-    } else if (this.cursors.down.isDown) {
-      this.setVelocityY(250);
-      prevVelocity = this.body.velocity.clone();
+
+
+    update() {
+        if (this.hasBeenHit || !this.body) {
+            return;
+        }
+        this.setVelocity(0);
+        let prevVelocity = this.body.velocity.clone();
+
+        if (this.cursors.left.isDown) {
+            this.setVelocityX(-300);
+            prevVelocity = this.body.velocity.clone()
+
+
+        } else if (this.cursors.right.isDown) {
+            this.setVelocityX(300);
+            prevVelocity = this.body.velocity.clone()
+
+        }
+        if (this.cursors.up.isDown) {
+            this.setVelocityY(-300);
+            prevVelocity = this.body.velocity.clone()
+
+        } else if (this.cursors.down.isDown) {
+            this.setVelocityY(300);
+            prevVelocity = this.body.velocity.clone()
+
+        }
+
+        if (this.cursors.left.isDown) {
+            this.anims.play("left", true);
+        } else if (this.cursors.right.isDown) {
+            this.anims.play("right", true);
+        } else if (this.cursors.up.isDown) {
+            this.anims.play("up", true);
+        } else if (this.cursors.down.isDown) {
+            this.anims.play("down", true);
+        } else {
+            this.anims.stop();
+            console.log(this.anims.getName())
+
+            if (this.anims.getName() === 'left') {
+                this.setTexture(assets.FUMIKO_LEFT_KEY, 0)
+            } else if (this.anims.getName() === 'right') {
+                this.setTexture(assets.FUMIKO_RIGHT_KEY, 0)
+            } else if (this.anims.getName() === 'up') {
+                this.setTexture(assets.FUMIKO_UP_KEY, 0)
+            } else if (this.anims.getName() === 'down') {
+                this.setTexture(assets.FUMIKO_DOWN_KEY, 0)
+            }
+
+        }
+
+        if (this.cursors.shift.isDown) {
+
+            this.ability()
+            console.log(this.hidden)
+
+        }
     }
 
-    if (this.cursors.left.isDown) {
-      this.anims.play('left', true);
-    } else if (this.cursors.right.isDown) {
-      this.anims.play('right', true);
-    } else if (this.cursors.up.isDown) {
-      this.anims.play('up', true);
-    } else if (this.cursors.down.isDown) {
-      this.anims.play('down', true);
-    } else {
-      this.anims.stop();
+    ability() {
 
-      if (prevVelocity.x < 0) this.setTexture(assets.FUMIKO_LEFT_KEY, 0);
-      else if (prevVelocity.x > 0) this.setTexture(assets.FUMIKO_RIGHT_KEY, 0);
-      else if (prevVelocity.y < 0) this.setTexture(assets.FUMIKO_UP_KEY, 0);
-      else if (prevVelocity.y > 0) this.setTexture(assets.FUMIKO_DOWN_KEY, 0);
+        /* if (!this.hidden) {
+            this.body.checkCollision.none = !this.body.checkCollision.none
+
+
+        }
+        if (this.body.checkCollision.none) {
+            this.setAlpha(.5)
+            setTimeout(function () {
+                console.log(this)
+                this.body.checkCollision.none = !this.body.checkCollision.none
+                this.setAlpha(1)
+            }, 3000)
+
+        } */
+
+
     }
-  }
 
-  playDamageTween() {
-    return this.scene.tweens.add({
-      targets: this,
-      duration: 100,
-      repeat: -1,
-      tint: 0xffffff,
-    });
-  }
+
+
+    playDamageTween() {
+        return this.scene.tweens.add({
+            targets: this,
+            duration: 100,
+            repeat: -1,
+            tint: 0xffffff,
+        });
 
   bounceOff() {
     if (this.body.touching.right) {
       setTimeout(() => this.setVelocityX(-this.bounceVelocity), 0);
+
     }
     if (this.body.touching.left) {
       setTimeout(() => this.setVelocityX(this.bounceVelocity), 0);
@@ -145,6 +189,44 @@ class Fumiko extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
+
+    static loadSprite(scene) {
+        scene.load.spritesheet(assets.FUMIKO_LEFT_KEY, assets.FUMIKO_LEFT_URL, {
+            frameWidth: 32.25,
+            frameHeight: 46,
+        });
+        scene.load.spritesheet(assets.FUMIKO_RIGHT_KEY, assets.FUMIKO_RIGHT_URL, {
+            frameWidth: 31.75,
+            frameHeight: 44,
+        });
+        scene.load.spritesheet(assets.FUMIKO_UP_KEY, assets.FUMIKO_UP_URL, {
+            frameWidth: 31.25,
+            frameHeight: 45,
+        });
+        scene.load.spritesheet(assets.FUMIKO_DOWN_KEY, assets.FUMIKO_DOWN_URL, {
+            frameWidth: 31.25,
+            frameHeight: 45,
+        });
+
+        scene.load.spritesheet(assets.FUMIKO_DOWNPHASE_KEY, assets.FUMIKO_DOWNPHASE_URL, {
+            frameWidth: 30,
+            frameHeight: 45,
+        });
+        scene.load.spritesheet(assets.FUMIKO_LEFTPHASE_KEY, assets.FUMIKO_LEFTPHASE_URL, {
+            frameWidth: 33,
+            frameHeight: 42,
+        });
+        scene.load.spritesheet(assets.FUMIKO_RIGHTPHASE_KEY, assets.FUMIKO_RIGHTPHASE_URL, {
+            frameWidth: 33,
+            frameHeight: 42,
+        });
+        scene.load.spritesheet(assets.FUMIKO_UPPHASE_KEY, assets.FUMIKO_UPPHASE_URL, {
+            frameWidth: 32,
+            frameHeight: 53,
+        });
+
+
+
   takesHit(monster) {
     if (this.hasBeenHit) {
       return;
@@ -152,6 +234,7 @@ class Fumiko extends Phaser.Physics.Arcade.Sprite {
     if (this.health - monster.damage <= 0) {
       EventEmmiter.emit('PLAYER_LOSE');
       return;
+
     }
 
     this.hasBeenHit = true;
@@ -172,24 +255,5 @@ class Fumiko extends Phaser.Physics.Arcade.Sprite {
     this.setTexture(assets.FUMIKO_DOWN_KEY, 0).setBodySize(25, 42, false);
   }
 
-  static loadSprite(scene) {
-    scene.load.spritesheet(assets.FUMIKO_LEFT_KEY, assets.FUMIKO_LEFT_URL, {
-      frameWidth: 32.5,
-      frameHeight: 46,
-    });
-    scene.load.spritesheet(assets.FUMIKO_RIGHT_KEY, assets.FUMIKO_RIGHT_URL, {
-      frameWidth: 31.75,
-      frameHeight: 44,
-    });
-    scene.load.spritesheet(assets.FUMIKO_UP_KEY, assets.FUMIKO_UP_URL, {
-      frameWidth: 31.25,
-      frameHeight: 45,
-    });
-    scene.load.spritesheet(assets.FUMIKO_DOWN_KEY, assets.FUMIKO_DOWN_URL, {
-      frameWidth: 31.25,
-      frameHeight: 45,
-    });
-  }
-}
 
 export default Fumiko;

@@ -1,19 +1,27 @@
 import Phaser from "phaser";
+import Fumiko from '../classes/Fumiko'
 
 export default class Bullet extends Phaser.Physics.Arcade.Sprite {
   // Bullet Constructor
   constructor(scene) {
     super(scene, 0, 0, "bullet");
     //Phaser.GameObjects.Image.call(this, scene, 0, 0, 'bullet');
+
     this.speed = 1;
     this.born = 0;
     this.direction = 0;
     this.xSpeed = 0;
     this.ySpeed = 0;
-    this.damage = 15;
+    this.damage = 0;
 
     //this.setSize(12, 12, true);
   }
+
+  /* init(data) {
+    this.player = data.character
+    this.damage = this.player.damage
+
+  } */
 
   //Fires a bullet from the player to the reticle
   fire(shooter, target) {
@@ -30,6 +38,8 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
     this.setVelocity(this.xSpeed * 1000, this.ySpeed * 1000);
     this.rotation = shooter.rotation; // angle bullet with shooters rotation
     this.born = 0; // Time since new bullet spawned
+
+
   }
 
   /*fire: function (shooter, target)
@@ -57,6 +67,11 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
 
     //target.destroy();
   }
+
+  setDamage(damage) {
+    this.damage = damage
+  }
+
 
   // Updates the position of the bullet each cycle
   update(time, delta) {

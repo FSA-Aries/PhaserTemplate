@@ -51,6 +51,7 @@ export default class FireLevel extends Phaser.Scene {
       frameWidth: 50,
       frameHeight: 69,
     }); */
+    console.log(this.selectedCharacter)
     this.selectedCharacter.loadSprite(this);
 
     this.load.audio(
@@ -73,7 +74,7 @@ export default class FireLevel extends Phaser.Scene {
       frameWidth: 30,
       frameHeight: 64,
     });
-    this.load.spritesheet(assets.BOSS_KEY, assets.BOSS_URL, {
+    /* this.load.spritesheet(assets.BOSS_KEY, assets.BOSS_URL, {
       frameWidth: 30,
       frameHeight: 60,
     });
@@ -84,7 +85,7 @@ export default class FireLevel extends Phaser.Scene {
     this.load.spritesheet(assets.BOSS_DOWN_KEY, assets.BOSS_DOWN_URL, {
       frameWidth: 30,
       frameHeight: 60,
-    });
+    }); */
   }
 
   ///// CREATE /////
@@ -203,6 +204,7 @@ export default class FireLevel extends Phaser.Scene {
 
         // Get bullet from bullets group
         let bullet = playerBullets.get().setActive(true).setVisible(true);
+        bullet.setDamage(this.player.damage)
 
         if (bullet) {
           bullet.fire(this.player, this.reticle);
@@ -238,7 +240,7 @@ export default class FireLevel extends Phaser.Scene {
     this.createGameEvents();
   }
 
-  update() {}
+  update() { }
 
   // PLAYER ANIMATION
   createPlayer(player, playerInfo) {
@@ -364,6 +366,7 @@ export default class FireLevel extends Phaser.Scene {
       if (this.score.score >= 30) {
         this.scene.start('grassScene', {
           score: score,
+          character: this.selectedCharacter
         });
       }
     }

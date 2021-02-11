@@ -181,6 +181,7 @@ export default class GrassScene extends Phaser.Scene {
 
         // Get bullet from bullets group
         let bullet = playerBullets.get().setActive(true).setVisible(true);
+        bullet.setDamage(this.player.damage)
 
         if (bullet) {
           bullet.fire(this.player, this.reticle);
@@ -350,6 +351,7 @@ export default class GrassScene extends Phaser.Scene {
       if (this.score.score >= 50) {
         this.scene.start('darkness-level', {
           score: score,
+          character: this.selectedCharacter
         });
       }
     }

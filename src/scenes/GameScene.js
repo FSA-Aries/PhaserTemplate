@@ -144,6 +144,8 @@ export default class GameScene extends Phaser.Scene {
       runChildUpdate: true,
     });
 
+
+
     this.physics.add.collider(
       playerBullets,
       zombieGroup,
@@ -159,6 +161,7 @@ export default class GameScene extends Phaser.Scene {
       this
     );
 
+
     this.physics.add.collider(this.playerGroup, this.playerGroup);
     this.physics.add.collider(this.player, walls);
 
@@ -172,6 +175,7 @@ export default class GameScene extends Phaser.Scene {
 
         // Get bullet from bullets group
         let bullet = playerBullets.get().setActive(true).setVisible(true);
+        bullet.setDamage(this.player.damage)
 
         if (bullet) {
           bullet.fire(this.player, this.reticle);
@@ -351,8 +355,10 @@ export default class GameScene extends Phaser.Scene {
   }
 
   createGameEvents() {
-    EventEmitter.on('PLAYER_LOSE', () => {
-      this.scene.start('game-over', { gameStatus: 'PLAYER_LOSE' });
+
+    EventEmitter.on("PLAYER_LOSE", () => {
+      this.scene.start("game-over", { gameStatus: "PLAYER_LOSE", character: this.selectedCharacter });
+
     });
   }
 
@@ -369,6 +375,7 @@ export default class GameScene extends Phaser.Scene {
       if (score === 15) {
         this.scene.start('fire-level', {
           score: score,
+          character: this.selectedCharacter
         });
       }
     }

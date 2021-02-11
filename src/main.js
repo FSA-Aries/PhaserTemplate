@@ -7,8 +7,10 @@ import LevelOne from "./scenes/LevelOne";
 import FireLevel from "./scenes/FireLevel";
 import DarknessLevel from "./scenes/DarknessLevel";
 import GrassScene from "./scenes/GrassScene";
-
+import MazeScene from "./scenes/MazeScene";
 import GameOver from "./scenes/GameOver";
+import CharacterSelect from "./scenes/CharacterSelect";
+
 
 const WIDTH = 800;
 
@@ -52,10 +54,12 @@ export const config = {
     WaitingRoom,
     GameScene,
     GameOver,
+    MazeScene,
     GrassScene,
     FireLevel,
     DarknessLevel,
     LevelOne,
+    CharacterSelect
   ],
 };
 

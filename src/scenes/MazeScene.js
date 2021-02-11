@@ -1,103 +1,82 @@
+import Phaser from "phaser";
+import assets from "../../public/assets";
+import { config } from "../main";
+import Zombie from "../classes/Enemies/Zombie.js";
+import Vampire from "../classes/Enemies/Vampire.js";
+import Tank from "../classes/Tank";
+import Score from "../hud/score";
+import TankAtk from "../classes/TankAtk";
+import EventEmitter from "../events/Emitter";
 
-import Phaser, { Scene } from 'phaser';
-import Zombie from '../classes/Enemies/Zombie.js';
-import Skeleton from '../classes/Enemies/Skeleton.js';
-//import Player from '../classes/Player';
-import OtherPlayerSprite from '../classes/OtherPlayers';
-import Bullet from '../classes/Bullet';
-import assets from '../../public/assets';
-import socket from '../socket/index.js';
-import Score from '../hud/score';
-
-import EventEmitter from '../events/Emitter';
-import { config } from '../main';
-import Smol from '../classes/Smol.js';
-
-export default class LevelOne extends Phaser.Scene {
+export default class MazeScene extends Phaser.Scene {
   constructor() {
-    super("LevelOne");
-    this.player = undefined;
+    super("maze-scene");
     this.cursors = undefined;
     this.game = undefined;
     this.reticle = undefined;
     this.score = undefined;
-    this.socket = socket;
     this.state = {};
-    this.otherPlayer = undefined;
+    this.playerGroup = undefined;
+    this.player = undefined;
   }
 
-  ///// PRELOAD /////
   preload() {
     this.game.scale.pageAlignHorizontally = true;
     this.game.scale.pageAlignVertically = true;
     this.game.scale.refresh();
+    this.load.image(assets.TANKATK_KEY, assets.TANKATK_URL);
+    this.load.image(assets.TANK_RETICLE_KEY, assets.TANK_RETICLE_URL);
+    this.load.image(assets.TILEMAZESET_KEY, assets.TILEMAZESET_URL);
 
-    // SMOL
-    this.load.image(assets.SMOL_LEFTSTART_KEY, assets.SMOL_LEFTSTART_URL);
-    this.load.image(assets.SMOL_LEFTONE_KEY, assets.SMOL_LEFTONE_URL);
-    this.load.image(assets.SMOL_LEFTTWO_KEY, assets.SMOL_LEFTTWO_URL);
-    this.load.image(assets.SMOL_RIGHTSTART_KEY, assets.SMOL_RIGHTSTART_URL);
-    this.load.image(assets.SMOL_RIGHTONE_KEY, assets.SMOL_RIGHTONE_URL);
-    this.load.image(assets.SMOL_RIGHTTWO_KEY, assets.SMOL_RIGHTTWO_URL);
-    this.load.image(assets.SMOL_JUMPONE_KEY, assets.SMOL_JUMPONE_URL);
-    this.load.image(assets.SMOL_JUMPTWO_KEY, assets.SMOL_JUMPTWO_URL);
-
-    this.load.image(assets.BULLET_KEY, assets.BULLET_URL);
-    this.load.image(assets.RETICLE_KEY, assets.RETICLE_URL);
-    this.load.image(assets.TILESET2_KEY, assets.TILESET2_URL);
-    this.load.tilemapTiledJSON(assets.TILEMAP2_KEY, assets.TILEMAP2_URL);
-    // this.load.spritesheet(assets.PLAYER_KEY, assets.PLAYER_URL, {
-    //   frameWidth: 50,
-    //   frameHeight: 69,
-    // });
-
+    this.load.tilemapTiledJSON(assets.TILEMAZEMAP_KEY, assets.TILEMAZEMAP_URL);
+    //LOAD AUDIO
     this.load.audio(
       "zombie-attack",
       "assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3"
     );
 
-    //Enemies
+    //LOAD SPRITE
+    this.load.spritesheet(assets.TANK_KEY, assets.TANK_URL, {
+      frameWidth: 61,
+      frameHeight: 86.75,
+    });
+    //LOAD ENEMIES
+    this.load.spritesheet(assets.VAMPIRE_KEY, assets.VAMPIRE_URL, {
+      frameWidth: 53.7,
+      frameHeight: 80,
+    });
     this.load.spritesheet(assets.ZOMBIE_KEY, assets.ZOMBIE_URL, {
       frameWidth: 30,
       frameHeight: 60,
     });
-    this.load.spritesheet(assets.SKELETON_KEY, assets.SKELETON_URL, {
-      frameWidth: 30,
-      frameHeight: 64,
-    });
-
-    // this.physics.add.sprite(400, 375, assets.PLAYER_KEY);
   }
 
-  ///// CREATE /////
   create({ gameStatus }) {
     this.playerGroup = this.add.group();
-    //const scene = this;
-    let map = this.make.tilemap({ key: assets.TILEMAP2_KEY });
-    let tileSet = map.addTilesetImage("TiledSet2", assets.TILESET2_KEY);
-    map.createLayer("Ground", tileSet, 0, 0);
-    let walls = map.createLayer("Walls", tileSet, 0, 0);
-    walls.setCollisionByExclusion([-1]);
-    map.createLayer('Details', tileSet, 0, 0);
+    //CREATE TILEMAP
+    let map = this.make.tilemap({ key: assets.TILEMAZEMAP_KEY });
+    let tileMaze = map.addTilesetImage("Tilemaze", assets.TILEMAZESET_KEY);
+    this.tileMaze = map.createLayer("Base", tileMaze, 0, 0);
+    let collisionLayer = map.createLayer("Colliders", tileMaze, 0, 0);
+    let collisionLayer2 = map.createLayer("Colliders 2", tileMaze, 0, 0);
 
-    //Create player and playerGroup
-    this.player = this.createPlayer(this, { x: 200, y: 300 });
+    this.player = this.createPlayer(this, { x: 240, y: 50 });
+    this.player.setTexture(assets.TANK_KEY, 0);
+    collisionLayer.setCollisionByExclusion([-1]);
+    this.physics.add.collider(this.player, collisionLayer);
+    collisionLayer2.setCollisionByExclusion([-1]);
+    this.physics.add.collider(this.player, collisionLayer2);
+    //CREATE PLAYER
 
-    this.playerGroup.add(this.player);
-    //CREATE OTHER PLAYERS GROUP
-    this.player.setTexture(assets.SMOL_RIGHTSTART_KEY, 0);
-    this.physics.add.collider(this.player, walls);
-
+    //CREATE SCORE LABEL
     this.score = this.createScoreLabel(
       config.rightTopCorner.x + 5,
       config.rightTopCorner.y,
-      this.getScore()
+      0
     );
-    //this.score = new Score(this, config.leftTopCorner.x + 5, config.rightTopCorner.y, 0)
-
     //Zombie and Skeleton Groups
     let zombieGroup = this.physics.add.group();
-    let skeletonGroup = this.physics.add.group();
+    let vampireGroup = this.physics.add.group();
 
     // Enemy Creation
 
@@ -105,25 +84,21 @@ export default class LevelOne extends Phaser.Scene {
       this.time.addEvent({
         delay: 2000,
         callback: () => {
-          zombieGroup.add(this.createZombie().setTint(0x0000ff));
+          zombieGroup.add(this.createZombie());
         },
         repeat: 25,
       });
     }
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 1; i++) {
       this.time.addEvent({
         delay: 5000,
         callback: () => {
-          skeletonGroup.add(this.createSkeleton().setTint(0xea0909));
+          vampireGroup.add(this.createVampire());
         },
 
         loop: true,
       });
     }
-    //1) We need to create a player group and add it to colliders
-    //2) We need to refactor how we create the enemy classes (specify which player zombie follows)
-    ////Can add a method that takes in array of zombies and all of the players and for each monster --> checks distance and points towards player
-    //Add method to each monster and velocity updates
 
     this.physics.add.collider(
       this.playerGroup,
@@ -132,26 +107,25 @@ export default class LevelOne extends Phaser.Scene {
     );
     this.physics.add.collider(
       this.playerGroup,
-      skeletonGroup,
+      vampireGroup,
       this.onPlayerCollision
     );
 
     this.physics.add.collider(this.player, zombieGroup, this.onPlayerCollision);
-
     this.physics.add.collider(
       this.player,
-      skeletonGroup,
+      vampireGroup,
       this.onPlayerCollision
     );
 
-    this.physics.add.collider(zombieGroup, skeletonGroup, null);
+    this.physics.add.collider(zombieGroup, vampireGroup, null);
     this.physics.add.collider(zombieGroup, zombieGroup, null);
-    this.physics.add.collider(skeletonGroup, skeletonGroup, null);
+    this.physics.add.collider(vampireGroup, vampireGroup, null);
 
-
+    //ADD WEAPON
     this.cursors = this.input.keyboard.createCursorKeys();
     let playerBullets = this.physics.add.group({
-      classType: Bullet,
+      classType: TankAtk,
       runChildUpdate: true,
     });
 
@@ -164,13 +138,13 @@ export default class LevelOne extends Phaser.Scene {
     );
     this.physics.add.collider(
       playerBullets,
-      skeletonGroup,
+      vampireGroup,
       this.onBulletCollision,
       null,
       this
     );
 
-    this.reticle = this.physics.add.sprite(0, 0, assets.RETICLE_KEY);
+    this.reticle = this.physics.add.sprite(0, 0, assets.TANK_RETICLE_KEY);
     this.reticle.setDisplaySize(25, 25).setCollideWorldBounds(true);
 
     this.input.on(
@@ -188,7 +162,6 @@ export default class LevelOne extends Phaser.Scene {
       },
       this
     );
-
     this.setupFollowupCameraOn(this.player);
 
     this.input.on(
@@ -213,64 +186,20 @@ export default class LevelOne extends Phaser.Scene {
     }
     this.createGameEvents();
   }
-
-  //       this
-  //     );
-  //   }
-  update() {
-    // const scene = this;
-    // var x = scene.player.x;
-    // var y = scene.player.y;
-    // // if (x !== scene.player.oldPosition.x || y !== scene.player.oldPosition.y) {
-    // //   scene.player.moving = true;
-    // //   socket.emit('playerMovement', {
-    // //     x: scene.player.x,
-    // //     y: scene.player.y,
-    // //     roomKey: scene.state.roomKey,
-    // //   });
-    // // }
-    // scene.player.oldPosition = {
-    //   x: scene.player.x,
-    //   y: scene.player.y,
-    // };
-  }
-
-  ///// HELPER FUNCTIONS /////
-
-  // PLAYER ANIMATION
-
+  update() {}
   createPlayer(player, playerInfo) {
-    this.player = new Smol(player, playerInfo.x, playerInfo.y);
-    this.player.setTexture(assets.SMOL_RIGHTSTART_KEY, 1);
+    this.player = new Tank(player, playerInfo.x, playerInfo.y);
+    this.player.setTexture(assets.TANK_KEY, 0);
+
     return this.player;
   }
-
-  createOtherPlayer(player, playerInfo) {
-    console.log("createOtherPlayer -->", playerInfo);
-    this.otherPlayer = new OtherPlayerSprite(
-      player,
-      playerInfo.x + 40,
-      playerInfo.y + 40
-    );
-    this.otherPlayer.playerId = playerInfo.playerId;
-    // playerGroup.add(this.otherPlayer)
-  }
-
   setupFollowupCameraOn(player) {
     this.physics.world.setBounds(0, 0, config.width, config.height);
 
     this.cameras.main
       .setBounds(0, 0, config.width, config.height)
-      .setZoom(config.zoomFactor + 0.5);
+      .setZoom(config.zoomFactor);
     this.cameras.main.startFollow(player);
-  }
-
-  getScore() {
-    if (this.scene.settings.data.score) {
-      return this.scene.settings.data.score;
-    } else {
-      0;
-    }
   }
 
   enemyXSpawn() {
@@ -319,33 +248,16 @@ export default class LevelOne extends Phaser.Scene {
     );
   }
 
-  createSkeleton() {
-    const randomizedPositionx = this.enemyXSpawn();
-    const randomizedPositiony = this.enemyYSpawn();
-    // const randomizedPositionx = Math.random() * 800 + this.player.x;
-    // const randomizedPositiony = Math.random() * 800 + this.player.y;
-    return new Skeleton(
+  createVampire() {
+    return new Vampire(
       this,
-      randomizedPositionx,
-      randomizedPositiony,
-      assets.SKELETON_KEY,
-      assets.SKELETON_URL,
+      700,
+      30,
+      assets.VAMPIRE_KEY,
+      assets.VAMPIRE_URL,
       this.player
     );
   }
-  // createEnemies(monster) {
-  //   const enemyTypes = getEnemyTypes();
-  //   const randomizedPosition = Math.random() * 800;
-
-  //   return new enemyTypes[monster](
-  //     this,
-  //     randomizedPosition,
-  //     randomizedPosition,
-  //     assets.SKELETON_KEY,
-  //     assets.SKELETON_URL,
-  //     this.player
-  //   );
-  // }
 
   createGameEvents() {
     EventEmitter.on("PLAYER_LOSE", () => {
@@ -355,6 +267,7 @@ export default class LevelOne extends Phaser.Scene {
   onPlayerCollision(player, monster) {
     //It should be the bullet's damage but we will just set a default value for now to test
     // monster.takesHit(player.damage);
+    //console.log(monster);
     player.takesHit(monster);
     if (monster.zombieAttackSound) monster.zombieAttackSound.play();
     // player.setBounce(0.5, 0.5);

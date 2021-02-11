@@ -1,4 +1,4 @@
-import Phaser, { Scene } from "phaser";
+import Phaser from "phaser";
 import Zombie from "../classes/Enemies/Zombie.js";
 import Skeleton from "../classes/Enemies/Skeleton.js";
 import Boss from "../classes/Enemies/Boss";
@@ -80,6 +80,7 @@ export default class GameScene extends Phaser.Scene {
     const scene = this;
     this.playerGroup = this.add.group();
     let map = this.make.tilemap({ key: assets.TILEMAP_KEY });
+
 
     let tileSet = map.addTilesetImage("TiledSet", assets.TILESET_KEY);
     map.createLayer("Ground", tileSet, 0, 0);
@@ -174,7 +175,6 @@ export default class GameScene extends Phaser.Scene {
     this.playerGroup.add(this.player);
     //CREATE OTHER PLAYERS GROUP
     this.player.setTexture(assets.PLAYER_KEY, 1);
-    this.physics.add.collider(this.player, walls);
 
     this.score = this.createScoreLabel(
       config.rightTopCorner.x + 5,

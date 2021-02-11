@@ -4,7 +4,7 @@ import HealthBar from "../hud/healthbar";
 import { config } from "../main";
 import EventEmmiter from "../events/Emitter";
 
-class Player extends Phaser.Physics.Arcade.Sprite {
+class Tank extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
     super(scene, x, y, "player");
     scene.add.existing(this);
@@ -24,7 +24,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
   init() {
     this.hasBeenHit = false;
-    this.bounceVelocity = 250;
+    this.bounceVelocity = 50;
     this.setCollideWorldBounds(true);
     this.cursors = this.scene.input.keyboard.createCursorKeys();
     this.cursors = this.scene.input.keyboard.addKeys({
@@ -33,7 +33,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       left: Phaser.Input.Keyboard.KeyCodes.A,
       right: Phaser.Input.Keyboard.KeyCodes.D,
     });
-    this.health = 200;
+    this.health = 500;
 
     this.hp = new HealthBar(
       this.scene,
@@ -44,39 +44,34 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     );
 
     this.anims.create({
-      key: "left",
-      frames: this.anims.generateFrameNumbers(assets.PLAYER_KEY, {
-        start: 3,
+      key: "down",
+      frames: this.anims.generateFrameNumbers(assets.TANK_KEY, {
+        start: 0,
         end: 5,
       }),
       frameRate: 10,
     });
     this.anims.create({
-      key: "turn",
-      frames: [{ key: assets.PLAYER_KEY, frame: 1 }],
-      frameRate: 10,
-    });
-    this.anims.create({
-      key: "right",
-      frames: this.anims.generateFrameNumbers(assets.PLAYER_KEY, {
+      key: "left",
+      frames: this.anims.generateFrameNumbers(assets.TANK_KEY, {
         start: 6,
-        end: 8,
-      }),
-      frameRate: 10,
-    });
-    this.anims.create({
-      key: "up",
-      frames: this.anims.generateFrameNumbers(assets.PLAYER_KEY, {
-        start: 9,
         end: 11,
       }),
       frameRate: 10,
     });
     this.anims.create({
-      key: "down",
-      frames: this.anims.generateFrameNumbers(assets.PLAYER_KEY, {
-        start: 0,
-        end: 2,
+      key: "right",
+      frames: this.anims.generateFrameNumbers(assets.TANK_KEY, {
+        start: 12,
+        end: 17,
+      }),
+      frameRate: 10,
+    });
+    this.anims.create({
+      key: "up",
+      frames: this.anims.generateFrameNumbers(assets.TANK_KEY, {
+        start: 18,
+        end: 23,
       }),
       frameRate: 10,
     });
@@ -167,17 +162,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       this.clearTint();
     });
   }
-
-  static loadSprite(scene) {
-    scene.load.spritesheet(assets.PLAYER_KEY, assets.PLAYER_URL, {
-      frameWidth: 50,
-      frameHeight: 69,
-    });
-  }
-
-  createTexture() {
-    this.setTexture(assets.PLAYER_KEY, 1);
-  }
 }
 
-export default Player;
+export default Tank;

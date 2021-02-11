@@ -225,6 +225,7 @@ export default class FireLevel extends Phaser.Scene {
 
   update() {}
 
+
   // PLAYER ANIMATION
   createPlayer() {
     return new Player(this, 350, 400);

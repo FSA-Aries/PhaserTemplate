@@ -33,7 +33,7 @@ class Smol extends Phaser.Physics.Arcade.Sprite {
       left: Phaser.Input.Keyboard.KeyCodes.A,
       right: Phaser.Input.Keyboard.KeyCodes.D,
     });
-    this.health = 10;
+    this.health = 25;
 
     this.hp = new HealthBar(
       this.scene,

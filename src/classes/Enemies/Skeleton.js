@@ -8,8 +8,8 @@ const SKELETON_KEY = 'skeleton';
 export default class Skeleton extends Enemy {
   constructor(scene, x, y, key, type, player) {
     super(scene, x, y, key, type, player);
-    this.damage = 50;
-    this.health = 50;
+    this.damage = 25;
+    this.health = 200;
     this.init();
   }
 

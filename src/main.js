@@ -8,6 +8,7 @@ import FireLevel from "./scenes/FireLevel";
 import DarknessLevel from "./scenes/DarknessLevel";
 import GrassScene from "./scenes/GrassScene";
 import MazeScene from "./scenes/MazeScene";
+import Multiplayer from './scenes/Multiplayer'
 import GameOver from "./scenes/GameOver";
 import CharacterSelect from "./scenes/CharacterSelect";
 
@@ -59,7 +60,8 @@ export const config = {
     FireLevel,
     DarknessLevel,
     LevelOne,
-    CharacterSelect
+    CharacterSelect,
+    Multiplayer
   ],
 };
 

@@ -11,6 +11,7 @@ import EventEmitter from "../events/Emitter";
 export default class MazeScene extends Phaser.Scene {
   constructor() {
     super("maze-scene");
+    this.selectedCharacter = undefined
     this.cursors = undefined;
     this.game = undefined;
     this.reticle = undefined;
@@ -18,6 +19,10 @@ export default class MazeScene extends Phaser.Scene {
     this.state = {};
     this.playerGroup = undefined;
     this.player = undefined;
+  }
+
+  init(data) {
+    this.selectedCharacter = data.character
   }
 
   preload() {
@@ -36,10 +41,12 @@ export default class MazeScene extends Phaser.Scene {
     );
 
     //LOAD SPRITE
-    this.load.spritesheet(assets.TANK_KEY, assets.TANK_URL, {
+    /* this.load.spritesheet(assets.TANK_KEY, assets.TANK_URL, {
       frameWidth: 61,
       frameHeight: 86.75,
-    });
+    }); */
+    this.selectedCharacter.loadSprite(this);
+
     //LOAD ENEMIES
     this.load.spritesheet(assets.VAMPIRE_KEY, assets.VAMPIRE_URL, {
       frameWidth: 53.7,
@@ -61,7 +68,9 @@ export default class MazeScene extends Phaser.Scene {
     let collisionLayer2 = map.createLayer("Colliders 2", tileMaze, 0, 0);
 
     this.player = this.createPlayer(this, { x: 240, y: 50 });
-    this.player.setTexture(assets.TANK_KEY, 0);
+    //this.player.setTexture(assets.TANK_KEY, 0);
+
+
     collisionLayer.setCollisionByExclusion([-1]);
     this.physics.add.collider(this.player, collisionLayer);
     collisionLayer2.setCollisionByExclusion([-1]);
@@ -186,11 +195,11 @@ export default class MazeScene extends Phaser.Scene {
     }
     this.createGameEvents();
   }
-  update() {}
-  createPlayer(player, playerInfo) {
-    this.player = new Tank(player, playerInfo.x, playerInfo.y);
-    this.player.setTexture(assets.TANK_KEY, 0);
+  update() { }
 
+  createPlayer(player, playerInfo) {
+    this.player = new this.selectedCharacter(player, playerInfo.x, playerInfo.y)
+    this.player.createTexture();
     return this.player;
   }
   setupFollowupCameraOn(player) {

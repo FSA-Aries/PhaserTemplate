@@ -167,6 +167,24 @@ class Smol extends Phaser.Physics.Arcade.Sprite {
       this.clearTint();
     });
   }
+
+  static loadSprite(scene) {
+
+    scene.load.image(assets.SMOL_LEFTSTART_KEY, assets.SMOL_LEFTSTART_URL);
+    scene.load.image(assets.SMOL_LEFTONE_KEY, assets.SMOL_LEFTONE_URL);
+    scene.load.image(assets.SMOL_LEFTTWO_KEY, assets.SMOL_LEFTTWO_URL);
+    scene.load.image(assets.SMOL_RIGHTSTART_KEY, assets.SMOL_RIGHTSTART_URL);
+    scene.load.image(assets.SMOL_RIGHTONE_KEY, assets.SMOL_RIGHTONE_URL);
+    scene.load.image(assets.SMOL_RIGHTTWO_KEY, assets.SMOL_RIGHTTWO_URL);
+    scene.load.image(assets.SMOL_JUMPONE_KEY, assets.SMOL_JUMPONE_URL);
+    scene.load.image(assets.SMOL_JUMPTWO_KEY, assets.SMOL_JUMPTWO_URL);
+
+
+  }
+
+  createTexture() {
+    this.setTexture(assets.SMOL_RIGHTSTART_KEY, 0);
+  }
 }
 
 export default Smol;

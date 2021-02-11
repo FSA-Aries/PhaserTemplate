@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import assets from "../../public/assets/index"
+import Smol from '../classes/Smol'
 
 import Fumiko from "../classes/Fumiko";
 import Player from "../classes/Player";
@@ -16,7 +17,7 @@ export default class CharacterSelect extends BaseScene {
         this.menu = [
             { key: assets.TANK_SELECT_KEY, character: Player },
             { key: assets.FUMIKO_SELECT_KEY, character: Fumiko },
-            //{ key: "Skeleton", character: "Skeleton" },
+            { key: assets.FUMIKO_SELECT_KEY, character: Smol },
             //{ key: "Brandon", character: Player }
         ];
     }
@@ -24,6 +25,8 @@ export default class CharacterSelect extends BaseScene {
     preload() {
         this.load.image(assets.FUMIKO_SELECT_KEY, assets.FUMIKO_SELECT_URL);
         this.load.image(assets.TANK_SELECT_KEY, assets.TANK_SELECT_URL);
+        //load smol sleectkey
+        //this.load.image(assets.TANK_SELECT_KEY, assets.TANK_SELECT_URL);
 
     }
 
@@ -102,7 +105,7 @@ export default class CharacterSelect extends BaseScene {
 
     handleContinue() {
 
-        this.scene.start('grassScene', { character: this.selection })
+        this.scene.start('game-scene', { character: this.selection })
     }
 
 

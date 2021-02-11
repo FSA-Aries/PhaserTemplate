@@ -15,7 +15,8 @@ import Smol from '../classes/Smol.js';
 
 export default class LevelOne extends Phaser.Scene {
   constructor() {
-    super("LevelOne");
+    super('LevelOne');
+    this.selectedCharacter = undefined;
     this.player = undefined;
     this.cursors = undefined;
     this.game = undefined;
@@ -26,6 +27,10 @@ export default class LevelOne extends Phaser.Scene {
     this.otherPlayer = undefined;
   }
 
+  init(data) {
+    this.selectedCharacter = data.character
+  }
+
   ///// PRELOAD /////
   preload() {
     this.game.scale.pageAlignHorizontally = true;
@@ -33,14 +38,15 @@ export default class LevelOne extends Phaser.Scene {
     this.game.scale.refresh();
 
     // SMOL
-    this.load.image(assets.SMOL_LEFTSTART_KEY, assets.SMOL_LEFTSTART_URL);
+    this.selectedCharacter.loadSprite(this)
+    /* this.load.image(assets.SMOL_LEFTSTART_KEY, assets.SMOL_LEFTSTART_URL);
     this.load.image(assets.SMOL_LEFTONE_KEY, assets.SMOL_LEFTONE_URL);
     this.load.image(assets.SMOL_LEFTTWO_KEY, assets.SMOL_LEFTTWO_URL);
     this.load.image(assets.SMOL_RIGHTSTART_KEY, assets.SMOL_RIGHTSTART_URL);
     this.load.image(assets.SMOL_RIGHTONE_KEY, assets.SMOL_RIGHTONE_URL);
     this.load.image(assets.SMOL_RIGHTTWO_KEY, assets.SMOL_RIGHTTWO_URL);
     this.load.image(assets.SMOL_JUMPONE_KEY, assets.SMOL_JUMPONE_URL);
-    this.load.image(assets.SMOL_JUMPTWO_KEY, assets.SMOL_JUMPTWO_URL);
+    this.load.image(assets.SMOL_JUMPTWO_KEY, assets.SMOL_JUMPTWO_URL); */
 
     this.load.image(assets.BULLET_KEY, assets.BULLET_URL);
     this.load.image(assets.RETICLE_KEY, assets.RETICLE_URL);
@@ -85,7 +91,7 @@ export default class LevelOne extends Phaser.Scene {
 
     this.playerGroup.add(this.player);
     //CREATE OTHER PLAYERS GROUP
-    this.player.setTexture(assets.SMOL_RIGHTSTART_KEY, 0);
+    //this.player.setTexture(assets.SMOL_RIGHTSTART_KEY, 0);
     this.physics.add.collider(this.player, walls);
 
     this.score = this.createScoreLabel(
@@ -240,8 +246,8 @@ export default class LevelOne extends Phaser.Scene {
   // PLAYER ANIMATION
 
   createPlayer(player, playerInfo) {
-    this.player = new Smol(player, playerInfo.x, playerInfo.y);
-    this.player.setTexture(assets.SMOL_RIGHTSTART_KEY, 1);
+    this.player = new this.selectedCharacter(player, playerInfo.x, playerInfo.y)
+    this.player.createTexture();
     return this.player;
   }
 

@@ -1,3 +1,4 @@
+
 import Phaser, { Scene } from 'phaser';
 import Zombie from '../classes/Enemies/Zombie.js';
 import Skeleton from '../classes/Enemies/Skeleton.js';
@@ -37,6 +38,9 @@ export default class GrassScene extends Phaser.Scene {
     this.game.scale.pageAlignHorizontally = true;
     this.game.scale.pageAlignVertically = true;
     this.game.scale.refresh();
+
+    this.load.image(assets.SOUND_OFF_KEY, assets.SOUND_OFF_URL);
+    this.load.image(assets.SOUND_ON_KEY, assets.SOUND_ON_URL);
 
     this.load.image(assets.BULLET_KEY, assets.BULLET_URL);
     this.load.image(assets.RETICLE_KEY, assets.RETICLE_URL);
@@ -87,6 +91,11 @@ export default class GrassScene extends Phaser.Scene {
       config.rightTopCorner.y,
       this.getScore()
     );
+
+    this.createSoundButton(
+      config.rightTopCorner.x - 20,
+      config.rightTopCorner.y + 20
+    ).setScale(0.07, 0.07);
 
     //Zombie and Skeleton Groups
     let zombieGroup = this.physics.add.group();
@@ -362,5 +371,27 @@ export default class GrassScene extends Phaser.Scene {
     label.setScrollFactor(0, 0).setScale(1);
     this.add.existing(label);
     return label;
+  }
+  createSoundButton(x, y) {
+    const button = this.add.image(x, y, assets.SOUND_ON_KEY);
+    button.setInteractive();
+
+    button.setScrollFactor(0, 0).setScale(1);
+
+    button.on("pointerdown", () => {
+      console.log("clicked");
+      if (button.texture.key === assets.SOUND_ON_KEY) {
+        console.log("sound off");
+        button.setTexture(assets.SOUND_OFF_KEY);
+        this.sound.mute = true;
+      } else {
+        console.log("sound on");
+
+        button.setTexture(assets.SOUND_ON_KEY);
+        this.sound.mute = false;
+      }
+    });
+    this.add.existing(button);
+    return button;
   }
 }

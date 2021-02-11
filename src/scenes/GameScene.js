@@ -35,6 +35,9 @@ export default class GameScene extends Phaser.Scene {
     this.game.scale.pageAlignVertically = true;
     this.game.scale.refresh();
 
+    this.load.image(assets.SOUND_OFF_KEY, assets.SOUND_OFF_URL);
+    this.load.image(assets.SOUND_ON_KEY, assets.SOUND_ON_URL);
+
     this.load.image(assets.BULLET_KEY, assets.BULLET_URL);
     this.load.image(assets.RETICLE_KEY, assets.RETICLE_URL);
     this.load.image(assets.TILESET_KEY, assets.TILESET_URL);
@@ -67,6 +70,7 @@ export default class GameScene extends Phaser.Scene {
     this.playerGroup = this.add.group();
     let map = this.make.tilemap({ key: assets.TILEMAP_KEY });
 
+
     let tileSet = map.addTilesetImage('TiledSet', assets.TILESET_KEY);
     map.createLayer('Ground', tileSet, 0, 0);
     let walls = map.createLayer('Walls', tileSet, 0, 0);
@@ -80,6 +84,11 @@ export default class GameScene extends Phaser.Scene {
       config.rightTopCorner.y,
       0
     );
+    this.createSoundButton(
+      config.rightTopCorner.x - 20,
+      config.rightTopCorner.y + 20
+    ).setScale(0.07, 0.07);
+
 
     //Zombie and Skeleton Groups
     let zombieGroup = this.physics.add.group();
@@ -188,6 +197,7 @@ export default class GameScene extends Phaser.Scene {
     );
     this.introText();
 
+
     if (gameStatus === 'PLAYER_LOSE') {
       return;
     }
@@ -201,6 +211,7 @@ export default class GameScene extends Phaser.Scene {
   // PLAYER ANIMATION
 
   createPlayer(player, playerInfo) {
+
     this.sound.add('intro', { loop: false, volume: 0.53 }).play();
     this.player = new this.selectedCharacter(
       player,
@@ -372,4 +383,27 @@ export default class GameScene extends Phaser.Scene {
     this.add.existing(label);
     return label;
   }
+  createSoundButton(x, y) {
+    const button = this.add.image(x, y, assets.SOUND_ON_KEY);
+    button.setInteractive()
+
+    button.setScrollFactor(0, 0).setScale(1);
+
+    button.on("pointerdown", () => {
+      console.log("clicked");
+      if (button.texture.key === assets.SOUND_ON_KEY) {
+        console.log("sound off");
+        button.setTexture(assets.SOUND_OFF_KEY);
+        this.sound.mute = true;
+      } else {
+        console.log("sound on");
+
+        button.setTexture(assets.SOUND_ON_KEY);
+        this.sound.mute = false;
+      }
+    });
+    this.add.existing(button);
+    return button;
+  }
+
 }

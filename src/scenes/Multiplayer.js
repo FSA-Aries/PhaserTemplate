@@ -14,6 +14,7 @@ import { config } from '../main';
 
 export default class Multiplayer extends Phaser.Scene {
   constructor() {
+
     super('Multiplayer');
     this.cursors = undefined;
     this.game = undefined;
@@ -43,14 +44,19 @@ export default class Multiplayer extends Phaser.Scene {
       frameHeight: 69,
     });
 
+    this.load.image(assets.SOUND_OFF_KEY, assets.SOUND_OFF_URL);
+    this.load.image(assets.SOUND_ON_KEY, assets.SOUND_ON_URL);
+
     this.load.audio(
-      'zombie-attack',
-      'assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3'
+      "zombie-attack",
+      "assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3"
+
     );
 
     //Enemies
     this.load.spritesheet(assets.ZOMBIE_KEY, assets.ZOMBIE_URL, {
       frameWidth: 30,
+
       frameHeight: 62.5,
     });
     this.load.spritesheet(assets.SKELETON_KEY, assets.SKELETON_URL, {
@@ -65,6 +71,7 @@ export default class Multiplayer extends Phaser.Scene {
     this.playerGroup = this.add.group();
     let map = this.make.tilemap({ key: assets.TILEMAP_KEY });
 
+
     let tileSet = map.addTilesetImage('TiledSet', assets.TILESET_KEY);
     map.createLayer('Ground', tileSet, 0, 0);
     let walls = map.createLayer('Walls', tileSet, 0, 0);
@@ -78,6 +85,7 @@ export default class Multiplayer extends Phaser.Scene {
       scene.state.players = players;
       scene.state.numPlayers = numPlayers;
     });
+
 
     socket.on('currentPlayers', function (playerInfo) {
       console.log('Playerinfo ->', playerInfo);
@@ -99,6 +107,7 @@ export default class Multiplayer extends Phaser.Scene {
       scene.state.numPlayers = numPlayers;
     });
 
+
     socket.on('playerMoved', function (playerInfo) {
       //Grab all members of the group
       if (scene.playerGroup.getChildren().length > 1) {
@@ -110,6 +119,7 @@ export default class Multiplayer extends Phaser.Scene {
       }
     });
 
+
     socket.on('bulletFired', function (playerInfo) {
       scene.playerGroup.getChildren().forEach(function () {
         if (playerInfo.playerId === scene.otherPlayer.playerId) {
@@ -118,6 +128,7 @@ export default class Multiplayer extends Phaser.Scene {
         }
       });
     });
+
 
     socket.on('scoreChanges', function ({ playerInfo, score }) {
       scene.playerGroup.getChildren().forEach(function () {
@@ -135,6 +146,7 @@ export default class Multiplayer extends Phaser.Scene {
       });
     });
 
+
     socket.on('disconnected', function (arg) {
       const { playerId, numPlayers } = arg;
       scene.state.numPlayers = numPlayers;
@@ -144,6 +156,7 @@ export default class Multiplayer extends Phaser.Scene {
         }
       });
     });
+
 
     socket.emit('joinRoom', input);
     //Create player and playerGroup
@@ -158,6 +171,11 @@ export default class Multiplayer extends Phaser.Scene {
       0
     );
 
+    this.createSoundButton(
+      config.rightTopCorner.x - 20,
+      config.rightTopCorner.y + 20
+    ).setScale(0.07, 0.07);
+
     //Zombie and Skeleton Groups
     let zombieGroup = this.physics.add.group();
     let skeletonGroup = this.physics.add.group();
@@ -171,6 +189,7 @@ export default class Multiplayer extends Phaser.Scene {
         },
         repeat: 25,
       });
+
     }
 
     for (let i = 0; i < 2; i++) {
@@ -233,6 +252,7 @@ export default class Multiplayer extends Phaser.Scene {
     this.reticle.setDisplaySize(25, 25).setCollideWorldBounds(true);
 
     this.input.on(
+
       'pointerdown',
       function () {
         if (this.player.active === false) return;
@@ -242,6 +262,7 @@ export default class Multiplayer extends Phaser.Scene {
 
         if (bullet) {
           bullet.fire(this.player, this.reticle);
+
           socket.emit('bulletFire', {
             roomKey: this.state.roomKey,
           });
@@ -253,12 +274,14 @@ export default class Multiplayer extends Phaser.Scene {
     this.setupFollowupCameraOn(this.player);
 
     this.input.on(
+
       'pointermove',
       function (pointer) {
         const transformedPoint = this.cameras.main.getWorldPoint(
           pointer.x,
           pointer.y
         );
+
 
         this.reticle.x = transformedPoint.x;
         this.reticle.y = transformedPoint.y;
@@ -411,4 +434,28 @@ export default class Multiplayer extends Phaser.Scene {
     this.add.existing(label);
     return label;
   }
+
+  createSoundButton(x, y) {
+    const button = this.add.image(x, y, assets.SOUND_ON_KEY);
+    button.setInteractive();
+
+    button.setScrollFactor(0, 0).setScale(1);
+
+    button.on("pointerdown", () => {
+      console.log("clicked");
+      if (button.texture.key === assets.SOUND_ON_KEY) {
+        console.log("sound off");
+        button.setTexture(assets.SOUND_OFF_KEY);
+        this.sound.mute = true;
+      } else {
+        console.log("sound on");
+
+        button.setTexture(assets.SOUND_ON_KEY);
+        this.sound.mute = false;
+      }
+    });
+    this.add.existing(button);
+    return button;
+  }
+
 }

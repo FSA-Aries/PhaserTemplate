@@ -10,6 +10,7 @@ import EventEmitter from '../events/Emitter';
 
 export default class MazeScene extends Phaser.Scene {
   constructor() {
+
     super('maze-scene');
     this.selectedCharacter = undefined;
     this.cursors = undefined;
@@ -32,6 +33,9 @@ export default class MazeScene extends Phaser.Scene {
     this.load.image(assets.TANKATK_KEY, assets.TANKATK_URL);
     this.load.image(assets.TANK_RETICLE_KEY, assets.TANK_RETICLE_URL);
     this.load.image(assets.TILEMAZESET_KEY, assets.TILEMAZESET_URL);
+
+    this.load.image(assets.SOUND_OFF_KEY, assets.SOUND_OFF_URL);
+    this.load.image(assets.SOUND_ON_KEY, assets.SOUND_ON_URL);
 
     this.load.tilemapTiledJSON(assets.TILEMAZEMAP_KEY, assets.TILEMAZEMAP_URL);
     //LOAD AUDIO
@@ -82,6 +86,12 @@ export default class MazeScene extends Phaser.Scene {
       config.rightTopCorner.y,
       0
     );
+
+    this.createSoundButton(
+      config.rightTopCorner.x - 20,
+      config.rightTopCorner.y + 20
+    ).setScale(0.07, 0.07);
+
     //Zombie and Skeleton Groups
     let zombieGroup = this.physics.add.group();
     let vampireGroup = this.physics.add.group();
@@ -301,5 +311,27 @@ export default class MazeScene extends Phaser.Scene {
     label.setScrollFactor(0, 0).setScale(1);
     this.add.existing(label);
     return label;
+  }
+  createSoundButton(x, y) {
+    const button = this.add.image(x, y, assets.SOUND_ON_KEY);
+    button.setInteractive();
+
+    button.setScrollFactor(0, 0).setScale(1);
+
+    button.on("pointerdown", () => {
+      console.log("clicked");
+      if (button.texture.key === assets.SOUND_ON_KEY) {
+        console.log("sound off");
+        button.setTexture(assets.SOUND_OFF_KEY);
+        this.sound.mute = true;
+      } else {
+        console.log("sound on");
+
+        button.setTexture(assets.SOUND_ON_KEY);
+        this.sound.mute = false;
+      }
+    });
+    this.add.existing(button);
+    return button;
   }
 }

@@ -1,16 +1,16 @@
-import Phaser from "phaser";
-import Zombie from "../classes/Enemies/Zombie.js";
-import Skeleton from "../classes/Enemies/Skeleton.js";
-import Player from "../classes/Player";
-import Bullet from "../classes/Bullet";
-import assets from "../../public/assets";
-import Score from "../hud/score";
-import EventEmitter from "../events/Emitter";
-import { config } from "../main";
+import Phaser from 'phaser';
+import Zombie from '../classes/Enemies/Zombie.js';
+import Skeleton from '../classes/Enemies/Skeleton.js';
+import Player from '../classes/Player';
+import Bullet from '../classes/Bullet';
+import assets from '../../public/assets';
+import Score from '../hud/score';
+import EventEmitter from '../events/Emitter';
+import { config } from '../main';
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
-    super("game-scene");
+    super('game-scene');
     this.selectedCharacter = undefined;
     this.cursors = undefined;
     this.game = undefined;
@@ -30,11 +30,14 @@ export default class GameScene extends Phaser.Scene {
 
   ///// PRELOAD /////
   preload() {
-    this.load.audio("intro", "assets/audio/Intro.mp3");
+    this.load.audio('intro', 'assets/audio/Intro.mp3');
 
     this.game.scale.pageAlignHorizontally = true;
     this.game.scale.pageAlignVertically = true;
     this.game.scale.refresh();
+
+    this.load.image(assets.SOUND_OFF_KEY, assets.SOUND_OFF_URL);
+    this.load.image(assets.SOUND_ON_KEY, assets.SOUND_ON_URL);
 
     this.load.image(assets.BULLET_KEY, assets.BULLET_URL);
     this.load.image(assets.RETICLE_KEY, assets.RETICLE_URL);
@@ -48,14 +51,14 @@ export default class GameScene extends Phaser.Scene {
     this.selectedCharacter.loadSprite(this);
 
     this.load.audio(
-      "zombie-attack",
-      "assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3"
+      'zombie-attack',
+      'assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3'
     );
 
     //Enemies
     this.load.spritesheet(assets.ZOMBIE_KEY, assets.ZOMBIE_URL, {
       frameWidth: 30,
-      frameHeight: 60,
+      frameHeight: 62.5,
     });
     this.load.spritesheet(assets.SKELETON_KEY, assets.SKELETON_URL, {
       frameWidth: 30,
@@ -81,6 +84,10 @@ export default class GameScene extends Phaser.Scene {
       config.rightTopCorner.y,
       0
     );
+    this.createSoundButton(
+      config.rightTopCorner.x - 20,
+      config.rightTopCorner.y + 20
+    ).setScale(0.07, 0.07);
 
     //Zombie and Skeleton Groups
     let zombieGroup = this.physics.add.group();
@@ -140,6 +147,8 @@ export default class GameScene extends Phaser.Scene {
       runChildUpdate: true,
     });
 
+
+
     this.physics.add.collider(
       playerBullets,
       zombieGroup,
@@ -155,18 +164,21 @@ export default class GameScene extends Phaser.Scene {
       this
     );
 
+
     this.physics.add.collider(this.playerGroup, this.playerGroup);
+    this.physics.add.collider(this.player, walls);
 
     this.reticle = this.physics.add.sprite(0, 0, assets.RETICLE_KEY);
     this.reticle.setDisplaySize(25, 25).setCollideWorldBounds(true);
 
     this.input.on(
-      "pointerdown",
+      'pointerdown',
       function () {
         if (this.player.active === false) return;
 
         // Get bullet from bullets group
         let bullet = playerBullets.get().setActive(true).setVisible(true);
+        bullet.setDamage(this.player.damage)
 
         if (bullet) {
           bullet.fire(this.player, this.reticle);
@@ -178,7 +190,7 @@ export default class GameScene extends Phaser.Scene {
     this.setupFollowupCameraOn(this.player);
 
     this.input.on(
-      "pointermove",
+      'pointermove',
       function (pointer) {
         const transformedPoint = this.cameras.main.getWorldPoint(
           pointer.x,
@@ -212,6 +224,8 @@ export default class GameScene extends Phaser.Scene {
 
   createPlayer(player, playerInfo) {
     this.sound.add("intro", { loop: false, volume: 0.53 }).play();
+
+    this.sound.add('intro', { loop: false, volume: 0.53 }).play();
     this.player = new this.selectedCharacter(
       player,
       playerInfo.x,
@@ -293,42 +307,42 @@ export default class GameScene extends Phaser.Scene {
     this.time.addEvent({
       delay: 3000,
       callback: () => {
-        let text1 = this.add.text(328, 365, "Welcome To", {
-          fontSize: "25px",
-          color: "red",
+        let text1 = this.add.text(328, 365, 'Welcome To', {
+          fontSize: '25px',
+          color: 'red',
         });
         this.time.addEvent({
           delay: 3000,
           callback: () => {
             text1.destroy();
-            let text2 = this.add.text(310, 370, "Senior Phaser", {
-              fontSize: "25px",
-              color: "red",
+            let text2 = this.add.text(310, 370, 'Senior Phaser', {
+              fontSize: '25px',
+              color: 'red',
             });
             this.zombieGroup.add(this.createZombie());
             this.time.addEvent({
               delay: 5000,
               callback: () => {
                 text2.destroy();
-                let createdBy = this.add.text(310, 370, "Created By", {
-                  fontSize: "40px",
-                  color: "red",
+                let createdBy = this.add.text(310, 370, 'Created By', {
+                  fontSize: '40px',
+                  color: 'red',
                 });
-                let morgan = this.add.text(40, 40, "Morgan Hu", {
-                  fontSize: "35px",
-                  color: "red",
+                let morgan = this.add.text(40, 40, 'Morgan Hu', {
+                  fontSize: '35px',
+                  color: 'red',
                 });
-                let juan = this.add.text(40, 600, "Juan Velazquez", {
-                  fontSize: "35px",
-                  color: "red",
+                let juan = this.add.text(40, 600, 'Juan Velazquez', {
+                  fontSize: '35px',
+                  color: 'red',
                 });
-                let kelvin = this.add.text(520, 40, "Kelvin Lin", {
-                  fontSize: "35px",
-                  color: "red",
+                let kelvin = this.add.text(520, 40, 'Kelvin Lin', {
+                  fontSize: '35px',
+                  color: 'red',
                 });
-                let brandon = this.add.text(520, 600, "Brandon Fox", {
-                  fontSize: "35px",
-                  color: "red",
+                let brandon = this.add.text(520, 600, 'Brandon Fox', {
+                  fontSize: '35px',
+                  color: 'red',
                 });
 
                 this.time.addEvent({
@@ -350,8 +364,10 @@ export default class GameScene extends Phaser.Scene {
   }
 
   createGameEvents() {
+
     EventEmitter.on("PLAYER_LOSE", () => {
-      this.scene.start("game-over", { gameStatus: "PLAYER_LOSE" });
+      this.scene.start("game-over", { gameStatus: "PLAYER_LOSE", character: this.selectedCharacter });
+
     });
   }
 
@@ -366,8 +382,9 @@ export default class GameScene extends Phaser.Scene {
       this.score.addPoints(1);
 
       if (score === 15) {
-        this.scene.start("fire-level", {
+        this.scene.start('fire-level', {
           score: score,
+          character: this.selectedCharacter
         });
       }
     }
@@ -376,10 +393,32 @@ export default class GameScene extends Phaser.Scene {
   }
 
   createScoreLabel(x, y, score) {
-    const style = { fontSize: "32px", fill: "#ff0000", fontStyle: "bold" };
+    const style = { fontSize: '32px', fill: '#ff0000', fontStyle: 'bold' };
     const label = new Score(this, x, y, score, style);
     label.setScrollFactor(0, 0).setScale(1);
     this.add.existing(label);
     return label;
+  }
+  createSoundButton(x, y) {
+    const button = this.add.image(x, y, assets.SOUND_ON_KEY);
+    button.setInteractive()
+
+    button.setScrollFactor(0, 0).setScale(1);
+
+    button.on("pointerdown", () => {
+      console.log("clicked");
+      if (button.texture.key === assets.SOUND_ON_KEY) {
+        console.log("sound off");
+        button.setTexture(assets.SOUND_OFF_KEY);
+        this.sound.mute = true;
+      } else {
+        console.log("sound on");
+
+        button.setTexture(assets.SOUND_ON_KEY);
+        this.sound.mute = false;
+      }
+    });
+    this.add.existing(button);
+    return button;
   }
 }

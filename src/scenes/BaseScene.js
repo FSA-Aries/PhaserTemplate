@@ -14,6 +14,9 @@ class BaseScene extends Phaser.Scene {
   preload() {
     this.load.image('menu-bg', assets.MENU_URL);
 
+    this.load.image(assets.SOUND_OFF_KEY, assets.SOUND_OFF_URL);
+    this.load.image(assets.SOUND_ON_KEY, assets.SOUND_ON_URL);
+
     this.load.audio('theme', 'assets/audio/City-of-the-Disturbed_Looping.mp3');
 
     this.load.image(
@@ -74,7 +77,7 @@ class BaseScene extends Phaser.Scene {
 
   createCharacterMenu(menu, setupMenuEvents) {
     //let lastMenuPositionY = 0;
-    let lastMenuPositionX = 0;
+    let lastMenuPositionX = -200;
 
     menu.forEach((menuItem) => {
       const menuPosition = [

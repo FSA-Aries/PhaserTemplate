@@ -7,12 +7,8 @@ class MenuScene extends BaseScene {
     super("menu-scene");
 
     this.menu = [
-      { scene: "PlayScene", text: "Play" },
-      { scene: "LevelOne", text: "Level One" },
-      { scene: "LevelTwo", text: "Fire Level" },
-      { scene: "LevelThree", text: "Darkness Level" },
-      { scene: "WaitingRoom", text: "Multiplayer" },
-      { scene: "grassScene", text: "Grass Level" },
+      { scene: "PlayScene", text: "Campaign" },
+      { scene: "WaitingRoom", text: "Two-Player" },
     ];
   }
 
@@ -57,24 +53,11 @@ class MenuScene extends BaseScene {
     });
 
     textGO.on("pointerup", () => {
-      if (menuItem.text === "Play") {
+      if (menuItem.text === "Campaign") {
         menuItem.scene && this.scene.start("characterSelect");
       }
-      if (menuItem.text === "Multiplayer") {
+      if (menuItem.text === "Two-Player") {
         this.scene.start("WaitingRoom");
-      }
-
-      if (menuItem.text === "Darkness Level") {
-        menuItem.scene && this.scene.start("darkness-level");
-      }
-      if (menuItem.text === "Fire Level") {
-        menuItem.scene && this.scene.start("fire-level");
-      }
-      if (menuItem.text === "Grass Level") {
-        menuItem.scene && this.scene.start("characterSelect");
-      }
-      if (menuItem.text === "Level One") {
-        this.scene.start("LevelOne");
       }
     });
   }

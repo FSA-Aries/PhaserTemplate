@@ -12,6 +12,7 @@ import Multiplayer from "./scenes/Multiplayer";
 import GameOver from "./scenes/GameOver";
 import CharacterSelect from "./scenes/CharacterSelect";
 import PauseScene from "./scenes/PauseMenu";
+import TitleScene from "./scenes/TitleScene";
 
 const WIDTH = 800;
 
@@ -51,6 +52,7 @@ export const config = {
   },
 
   scene: [
+    TitleScene,
     MenuScene,
     WaitingRoom,
     GameScene,

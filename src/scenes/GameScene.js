@@ -1,16 +1,16 @@
-import Phaser from "phaser";
-import Zombie from "../classes/Enemies/Zombie.js";
-import Skeleton from "../classes/Enemies/Skeleton.js";
-import Player from "../classes/Player";
-import Bullet from "../classes/Bullet";
-import assets from "../../public/assets";
-import Score from "../hud/score";
-import EventEmitter from "../events/Emitter";
-import { config } from "../main";
+import Phaser from 'phaser';
+import Zombie from '../classes/Enemies/Zombie.js';
+import Skeleton from '../classes/Enemies/Skeleton.js';
+import Player from '../classes/Player';
+import Bullet from '../classes/Bullet';
+import assets from '../../public/assets';
+import Score from '../hud/score';
+import EventEmitter from '../events/Emitter';
+import { config } from '../main';
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
-    super("game-scene");
+    super('game-scene');
     this.selectedCharacter = undefined;
     this.cursors = undefined;
     this.game = undefined;
@@ -24,12 +24,12 @@ export default class GameScene extends Phaser.Scene {
   }
 
   init(data) {
-    this.selectedCharacter = data.character
+    this.selectedCharacter = data.character;
   }
 
   ///// PRELOAD /////
   preload() {
-    this.load.audio("intro", "assets/audio/Intro.mp3");
+    this.load.audio('intro', 'assets/audio/Intro.mp3');
 
     this.game.scale.pageAlignHorizontally = true;
     this.game.scale.pageAlignVertically = true;
@@ -40,7 +40,6 @@ export default class GameScene extends Phaser.Scene {
     this.load.image(assets.TILESET_KEY, assets.TILESET_URL);
     this.load.tilemapTiledJSON(assets.TILEMAP_KEY, assets.TILEMAP_URL);
 
-
     /* this.load.spritesheet(assets.PLAYER_KEY, assets.PLAYER_URL, {
       frameWidth: 50,
       frameHeight: 69,
@@ -48,47 +47,39 @@ export default class GameScene extends Phaser.Scene {
     this.selectedCharacter.loadSprite(this);
 
     this.load.audio(
-      "zombie-attack",
-      "assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3"
+      'zombie-attack',
+      'assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3'
     );
 
     //Enemies
     this.load.spritesheet(assets.ZOMBIE_KEY, assets.ZOMBIE_URL, {
       frameWidth: 30,
-      frameHeight: 60,
+      frameHeight: 62.5,
     });
     this.load.spritesheet(assets.SKELETON_KEY, assets.SKELETON_URL, {
       frameWidth: 30,
       frameHeight: 64,
     });
-
   }
 
   ///// CREATE /////
   create({ gameStatus }) {
-
     this.playerGroup = this.add.group();
     let map = this.make.tilemap({ key: assets.TILEMAP_KEY });
 
-
-    let tileSet = map.addTilesetImage("TiledSet", assets.TILESET_KEY);
-    map.createLayer("Ground", tileSet, 0, 0);
-    let walls = map.createLayer("Walls", tileSet, 0, 0);
+    let tileSet = map.addTilesetImage('TiledSet', assets.TILESET_KEY);
+    map.createLayer('Ground', tileSet, 0, 0);
+    let walls = map.createLayer('Walls', tileSet, 0, 0);
     walls.setCollisionByExclusion([-1]);
-
 
     //Create player and playerGroup
     this.player = this.createPlayer(this, { x: 200, y: 300 });
-
-
-
 
     this.score = this.createScoreLabel(
       config.rightTopCorner.x + 5,
       config.rightTopCorner.y,
       0
     );
-
 
     //Zombie and Skeleton Groups
     let zombieGroup = this.physics.add.group();
@@ -103,7 +94,6 @@ export default class GameScene extends Phaser.Scene {
         },
         repeat: 25,
       });
-
     }
 
     for (let i = 0; i < 2; i++) {
@@ -161,12 +151,13 @@ export default class GameScene extends Phaser.Scene {
     );
 
     this.physics.add.collider(this.playerGroup, this.playerGroup);
+    this.physics.add.collider(this.player, walls);
 
     this.reticle = this.physics.add.sprite(0, 0, assets.RETICLE_KEY);
     this.reticle.setDisplaySize(25, 25).setCollideWorldBounds(true);
 
     this.input.on(
-      "pointerdown",
+      'pointerdown',
       function () {
         if (this.player.active === false) return;
 
@@ -175,8 +166,6 @@ export default class GameScene extends Phaser.Scene {
 
         if (bullet) {
           bullet.fire(this.player, this.reticle);
-
-
         }
       },
       this
@@ -185,9 +174,8 @@ export default class GameScene extends Phaser.Scene {
     this.setupFollowupCameraOn(this.player);
 
     this.input.on(
-      "pointermove",
+      'pointermove',
       function (pointer) {
-
         const transformedPoint = this.cameras.main.getWorldPoint(
           pointer.x,
           pointer.y
@@ -195,35 +183,33 @@ export default class GameScene extends Phaser.Scene {
 
         this.reticle.x = transformedPoint.x;
         this.reticle.y = transformedPoint.y;
-
-
       },
       this
     );
     this.introText();
 
-    if (gameStatus === "PLAYER_LOSE") {
-
+    if (gameStatus === 'PLAYER_LOSE') {
       return;
     }
 
     this.createGameEvents();
   }
-  update() {
-
-  }
+  update() {}
 
   ///// HELPER FUNCTIONS /////
 
   // PLAYER ANIMATION
 
   createPlayer(player, playerInfo) {
-    this.sound.add("intro", { loop: false, volume: 0.53 }).play();
-    this.player = new this.selectedCharacter(player, playerInfo.x, playerInfo.y)
+    this.sound.add('intro', { loop: false, volume: 0.53 }).play();
+    this.player = new this.selectedCharacter(
+      player,
+      playerInfo.x,
+      playerInfo.y
+    );
     this.player.createTexture();
     return this.player;
   }
-
 
   setupFollowupCameraOn(player) {
     this.physics.world.setBounds(0, 0, config.width, config.height);
@@ -293,47 +279,46 @@ export default class GameScene extends Phaser.Scene {
     );
   }
 
-
   introText() {
     this.time.addEvent({
       delay: 3000,
       callback: () => {
-        let text1 = this.add.text(328, 365, "Welcome To", {
-          fontSize: "25px",
-          color: "red",
+        let text1 = this.add.text(328, 365, 'Welcome To', {
+          fontSize: '25px',
+          color: 'red',
         });
         this.time.addEvent({
           delay: 3000,
           callback: () => {
             text1.destroy();
-            let text2 = this.add.text(310, 370, "Senior Phaser", {
-              fontSize: "25px",
-              color: "red",
+            let text2 = this.add.text(310, 370, 'Senior Phaser', {
+              fontSize: '25px',
+              color: 'red',
             });
             this.zombieGroup.add(this.createZombie());
             this.time.addEvent({
               delay: 5000,
               callback: () => {
                 text2.destroy();
-                let createdBy = this.add.text(310, 370, "Created By", {
-                  fontSize: "40px",
-                  color: "red",
+                let createdBy = this.add.text(310, 370, 'Created By', {
+                  fontSize: '40px',
+                  color: 'red',
                 });
-                let morgan = this.add.text(40, 40, "Morgan Hu", {
-                  fontSize: "35px",
-                  color: "red",
+                let morgan = this.add.text(40, 40, 'Morgan Hu', {
+                  fontSize: '35px',
+                  color: 'red',
                 });
-                let juan = this.add.text(40, 600, "Juan Velazquez", {
-                  fontSize: "35px",
-                  color: "red",
+                let juan = this.add.text(40, 600, 'Juan Velazquez', {
+                  fontSize: '35px',
+                  color: 'red',
                 });
-                let kelvin = this.add.text(520, 40, "Kelvin Lin", {
-                  fontSize: "35px",
-                  color: "red",
+                let kelvin = this.add.text(520, 40, 'Kelvin Lin', {
+                  fontSize: '35px',
+                  color: 'red',
                 });
-                let brandon = this.add.text(520, 600, "Brandon Fox", {
-                  fontSize: "35px",
-                  color: "red",
+                let brandon = this.add.text(520, 600, 'Brandon Fox', {
+                  fontSize: '35px',
+                  color: 'red',
                 });
 
                 this.time.addEvent({
@@ -355,16 +340,14 @@ export default class GameScene extends Phaser.Scene {
   }
 
   createGameEvents() {
-    EventEmitter.on("PLAYER_LOSE", () => {
-      this.scene.start("game-over", { gameStatus: "PLAYER_LOSE" });
+    EventEmitter.on('PLAYER_LOSE', () => {
+      this.scene.start('game-over', { gameStatus: 'PLAYER_LOSE' });
     });
   }
 
   onPlayerCollision(player, monster) {
-
     player.takesHit(monster);
     if (monster.zombieAttackSound) monster.zombieAttackSound.play();
-
   }
 
   onBulletCollision(bullet, monster) {
@@ -373,22 +356,20 @@ export default class GameScene extends Phaser.Scene {
       this.score.addPoints(1);
 
       if (score === 15) {
-        this.scene.start("fire-level", {
+        this.scene.start('fire-level', {
           score: score,
         });
       }
-
     }
 
     bullet.hitsEnemy(monster);
   }
 
   createScoreLabel(x, y, score) {
-    const style = { fontSize: "32px", fill: "#ff0000", fontStyle: "bold" };
+    const style = { fontSize: '32px', fill: '#ff0000', fontStyle: 'bold' };
     const label = new Score(this, x, y, score, style);
     label.setScrollFactor(0, 0).setScale(1);
     this.add.existing(label);
     return label;
   }
-
 }

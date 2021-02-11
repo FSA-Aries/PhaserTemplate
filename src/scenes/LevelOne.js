@@ -61,8 +61,8 @@ export default class LevelOne extends Phaser.Scene {
     // });
 
     this.load.audio(
-      'zombie-attack',
-      'assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3'
+      "zombie-attack",
+      "assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3"
     );
 
     //Enemies
@@ -83,9 +83,9 @@ export default class LevelOne extends Phaser.Scene {
     this.playerGroup = this.add.group();
     //const scene = this;
     let map = this.make.tilemap({ key: assets.TILEMAP2_KEY });
-    let tileSet = map.addTilesetImage('TiledSet2', assets.TILESET2_KEY);
-    map.createLayer('Ground', tileSet, 0, 0);
-    let walls = map.createLayer('Walls', tileSet, 0, 0);
+    let tileSet = map.addTilesetImage("TiledSet2", assets.TILESET2_KEY);
+    map.createLayer("Ground", tileSet, 0, 0);
+    let walls = map.createLayer("Walls", tileSet, 0, 0);
     walls.setCollisionByExclusion([-1]);
     map.createLayer("Details", tileSet, 0, 0);
 
@@ -190,7 +190,7 @@ export default class LevelOne extends Phaser.Scene {
     this.reticle.setDisplaySize(25, 25).setCollideWorldBounds(true);
 
     this.input.on(
-      'pointerdown',
+      "pointerdown",
       function () {
         if (this.player.active === false) return;
 
@@ -208,7 +208,7 @@ export default class LevelOne extends Phaser.Scene {
     this.setupFollowupCameraOn(this.player);
 
     this.input.on(
-      'pointermove',
+      "pointermove",
       function (pointer) {
         //console.log(this.input.mousePointer.x)
         const transformedPoint = this.cameras.main.getWorldPoint(
@@ -224,7 +224,7 @@ export default class LevelOne extends Phaser.Scene {
       this
     );
 
-    if (gameStatus === 'PLAYER_LOSE') {
+    if (gameStatus === "PLAYER_LOSE") {
       return;
     }
     this.createGameEvents();
@@ -270,7 +270,7 @@ export default class LevelOne extends Phaser.Scene {
   }
 
   createOtherPlayer(player, playerInfo) {
-    console.log('createOtherPlayer -->', playerInfo);
+    console.log("createOtherPlayer -->", playerInfo);
     this.otherPlayer = new OtherPlayerSprite(
       player,
       playerInfo.x + 40,
@@ -372,8 +372,8 @@ export default class LevelOne extends Phaser.Scene {
   // }
 
   createGameEvents() {
-    EventEmitter.on('PLAYER_LOSE', () => {
-      this.scene.start('game-over', { gameStatus: 'PLAYER_LOSE' });
+    EventEmitter.on("PLAYER_LOSE", () => {
+      this.scene.start("game-over", { gameStatus: "PLAYER_LOSE" });
     });
   }
   onPlayerCollision(player, monster) {
@@ -385,16 +385,23 @@ export default class LevelOne extends Phaser.Scene {
   }
 
   onBulletCollision(bullet, monster) {
+    let score = this.score.score;
     if (monster.health - bullet.damage <= 0) {
       console.log(this.score);
       this.score.addPoints(1);
+      if (this.score.score >= 100) {
+        this.scene.start("darkness-level", {
+          score: score,
+          character: this.selectedCharacter,
+        });
+      }
     }
 
     bullet.hitsEnemy(monster);
   }
 
   createScoreLabel(x, y, score) {
-    const style = { fontSize: '32px', fill: '#ff0000', fontStyle: 'bold' };
+    const style = { fontSize: "32px", fill: "#ff0000", fontStyle: "bold" };
 
     const label = new Score(this, x, y, score, style);
     label.setScrollFactor(0, 0).setScale(1);

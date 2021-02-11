@@ -1,4 +1,3 @@
-
 import Phaser, { Scene } from "phaser";
 import Zombie from "../classes/Enemies/Zombie.js";
 import Skeleton from "../classes/Enemies/Skeleton.js";
@@ -16,7 +15,7 @@ import { config } from "../main";
 
 export default class GrassScene extends Phaser.Scene {
   constructor() {
-    super('grassScene');
+    super("grassScene");
     this.selectedCharacter = undefined;
     this.player = undefined;
     this.cursors = undefined;
@@ -51,8 +50,8 @@ export default class GrassScene extends Phaser.Scene {
     this.selectedCharacter.loadSprite(this);
 
     this.load.audio(
-      'zombie-attack',
-      'assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3'
+      "zombie-attack",
+      "assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3"
     );
 
     //Enemies
@@ -73,12 +72,12 @@ export default class GrassScene extends Phaser.Scene {
     this.playerGroup = this.add.group();
     //const scene = this;
     let map = this.make.tilemap({ key: assets.SCALEDSPMAP_KEY });
-    let tileSet = map.addTilesetImage('Terrain', assets.SCALEDSPSET_KEY);
-    map.createLayer('Floor', tileSet, 0, 0);
-    map.createLayer('Between 2', tileSet, 0, 0);
-    let collisionLayer = map.createLayer('Collision 1', tileSet, 0, 0);
-    map.createLayer('Between', tileSet, 0, 0);
-    let collisionLayer2 = map.createLayer('Collision 2', tileSet, 0, 0);
+    let tileSet = map.addTilesetImage("Terrain", assets.SCALEDSPSET_KEY);
+    map.createLayer("Floor", tileSet, 0, 0);
+    map.createLayer("Between 2", tileSet, 0, 0);
+    let collisionLayer = map.createLayer("Collision 1", tileSet, 0, 0);
+    map.createLayer("Between", tileSet, 0, 0);
+    let collisionLayer2 = map.createLayer("Collision 2", tileSet, 0, 0);
 
     this.player = this.createPlayer(this, { x: 200, y: 300 });
 
@@ -179,13 +178,13 @@ export default class GrassScene extends Phaser.Scene {
     this.reticle.setDisplaySize(25, 25).setCollideWorldBounds(true);
 
     this.input.on(
-      'pointerdown',
+      "pointerdown",
       function () {
         if (this.player.active === false) return;
 
         // Get bullet from bullets group
         let bullet = playerBullets.get().setActive(true).setVisible(true);
-        bullet.setDamage(this.player.damage)
+        bullet.setDamage(this.player.damage);
 
         if (bullet) {
           bullet.fire(this.player, this.reticle);
@@ -198,7 +197,7 @@ export default class GrassScene extends Phaser.Scene {
     this.setupFollowupCameraOn(this.player);
 
     this.input.on(
-      'pointermove',
+      "pointermove",
       function (pointer) {
         //console.log(this.input.mousePointer.x)
         const transformedPoint = this.cameras.main.getWorldPoint(
@@ -214,7 +213,7 @@ export default class GrassScene extends Phaser.Scene {
       this
     );
 
-    if (gameStatus === 'PLAYER_LOSE') {
+    if (gameStatus === "PLAYER_LOSE") {
       return;
     }
     this.createGameEvents();
@@ -341,8 +340,8 @@ export default class GrassScene extends Phaser.Scene {
   }
 
   createGameEvents() {
-    EventEmitter.on('PLAYER_LOSE', () => {
-      this.scene.start('game-over', { gameStatus: 'PLAYER_LOSE' });
+    EventEmitter.on("PLAYER_LOSE", () => {
+      this.scene.start("game-over", { gameStatus: "PLAYER_LOSE" });
     });
   }
   onPlayerCollision(player, monster) {
@@ -357,9 +356,9 @@ export default class GrassScene extends Phaser.Scene {
       console.log(this.score);
       this.score.addPoints(1);
       if (this.score.score >= 50) {
-        this.scene.start('darkness-level', {
+        this.scene.start("maze-scene", {
           score: score,
-          character: this.selectedCharacter
+          character: this.selectedCharacter,
         });
       }
     }
@@ -375,7 +374,7 @@ export default class GrassScene extends Phaser.Scene {
   }
 
   createScoreLabel(x, y, score) {
-    const style = { fontSize: '32px', fill: '#ff0000', fontStyle: 'bold' };
+    const style = { fontSize: "32px", fill: "#ff0000", fontStyle: "bold" };
 
     const label = new Score(this, x, y, score, style);
     label.setScrollFactor(0, 0).setScale(1);

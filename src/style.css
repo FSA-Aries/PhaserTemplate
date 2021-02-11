@@ -1,9 +1,9 @@
-body {
+/* body {
   max-width: 800px;
   max-height: 600px;
   height: 100vh;
   background-image: url("https://www.wallpapertip.com/wmimgs/146-1468180_scary-dark-forest-desktop-wallpaper-red-and-black.jpg");
-}
+} */
 /* Dark Green Forest Background: https://cloud.netlifyusercontent.com/assets/344dbf88-fdf9-42bb-adb4-46f01eedd629/ea5cfc09-4f21-41f2-98d8-9dcf51b85012/horror-wallpaper32.jpg */
 
 /* Bloody Hall Background https://wallpaperaccess.com/full/162297.jpg */
@@ -25,4 +25,9 @@ body {
   display: flex;
   justify-content: center;
   align-content: center;
+  background-image: url("https://www.wallpapertip.com/wmimgs/146-1468180_scary-dark-forest-desktop-wallpaper-red-and-black.jpg");
+  height: 100vh;
+}
+body {
+  margin: 0%;
 }

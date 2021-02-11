@@ -30,9 +30,9 @@ export default class MazeScene extends Phaser.Scene {
     this.game.scale.pageAlignHorizontally = true;
     this.game.scale.pageAlignVertically = true;
     this.game.scale.refresh();
-    this.load.image(assets.TANKATK_KEY, assets.TANKATK_URL);
-    this.load.image(assets.TANK_RETICLE_KEY, assets.TANK_RETICLE_URL);
     this.load.image(assets.TILEMAZESET_KEY, assets.TILEMAZESET_URL);
+    this.load.image(assets.BULLET_KEY, assets.BULLET_URL);
+    this.load.image(assets.RETICLE_KEY, assets.RETICLE_URL);
 
     this.load.image(assets.SOUND_OFF_KEY, assets.SOUND_OFF_URL);
     this.load.image(assets.SOUND_ON_KEY, assets.SOUND_ON_URL);
@@ -166,7 +166,7 @@ export default class MazeScene extends Phaser.Scene {
       this
     );
 
-    this.reticle = this.physics.add.sprite(0, 0, assets.TANK_RETICLE_KEY);
+    this.reticle = this.physics.add.sprite(0, 0, assets.RETICLE_KEY);
     this.reticle.setDisplaySize(25, 25).setCollideWorldBounds(true);
 
     this.input.on(

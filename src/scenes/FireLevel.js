@@ -55,7 +55,7 @@ export default class FireLevel extends Phaser.Scene {
     });
 
     this.load.spritesheet(assets.IMP_KEY, assets.IMP_URL, {
-      frameWidth: 30,
+      frameWidth: 64,
       frameHeight: 64,
     });
 
@@ -94,7 +94,7 @@ export default class FireLevel extends Phaser.Scene {
     this.score = this.createScoreLabel(
       config.rightTopCorner.x + 5,
       config.rightTopCorner.y,
-      0
+      this.getScore()
     );
 
     //Zombie and Skeleton Groups
@@ -230,6 +230,14 @@ export default class FireLevel extends Phaser.Scene {
     return new Player(this, 350, 400);
   }
 
+  getScore() {
+    if (this.scene.settings.data.score) {
+      return this.scene.settings.data.score;
+    } else {
+      0;
+    }
+  }
+
   setupFollowupCameraOn(player) {
     this.physics.world.setBounds(
       0,
@@ -326,9 +334,17 @@ export default class FireLevel extends Phaser.Scene {
   }
 
   onBulletCollision(bullet, monster) {
+    let score = this.score.score;
+
     if (monster.health - bullet.damage <= 0) {
-      console.log(this.score);
+      console.log("SCHENE", this.scene);
+      console.log(this);
       this.score.addPoints(1);
+      if (this.score.score >= 30) {
+        this.scene.start("grassScene", {
+          score: score,
+        });
+      }
     }
 
     bullet.hitsEnemy(monster);

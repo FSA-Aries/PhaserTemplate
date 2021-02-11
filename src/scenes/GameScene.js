@@ -532,8 +532,14 @@ export default class GameScene extends Phaser.Scene {
   }
 
   onBulletCollision(bullet, monster) {
+    let score = this.score.score;
     if (monster.health - bullet.damage <= 0) {
       this.score.addPoints(1);
+      if (score === 15) {
+        this.scene.start("fire-level", {
+          score: score,
+        });
+      }
       socket.emit("scoreChanged", {
         roomKey: this.state.roomKey,
         score: this.score.score,

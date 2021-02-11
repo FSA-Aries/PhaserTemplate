@@ -133,7 +133,7 @@ export default class LevelOne extends Phaser.Scene {
     this.score = this.createScoreLabel(
       config.rightTopCorner.x + 5,
       config.rightTopCorner.y,
-      0
+      this.getScore()
     );
     //this.score = new Score(this, config.leftTopCorner.x + 5, config.rightTopCorner.y, 0)
 
@@ -178,9 +178,6 @@ export default class LevelOne extends Phaser.Scene {
       this.onPlayerCollision
     );
 
-    this.physics.add.collider(skeletonGroup, walls);
-    this.physics.add.collider(zombieGroup, walls);
-
     this.physics.add.collider(this.player, zombieGroup, this.onPlayerCollision);
 
     this.physics.add.collider(
@@ -192,6 +189,8 @@ export default class LevelOne extends Phaser.Scene {
     this.physics.add.collider(zombieGroup, skeletonGroup, null);
     this.physics.add.collider(zombieGroup, zombieGroup, null);
     this.physics.add.collider(skeletonGroup, skeletonGroup, null);
+    this.physics.add.collider(skeletonGroup, walls, null);
+    this.physics.add.collider(zombieGroup, walls, null);
 
     this.cursors = this.input.keyboard.createCursorKeys();
     let playerBullets = this.physics.add.group({
@@ -307,6 +306,14 @@ export default class LevelOne extends Phaser.Scene {
       .setBounds(0, 0, config.width, config.height)
       .setZoom(config.zoomFactor);
     this.cameras.main.startFollow(player);
+  }
+
+  getScore() {
+    if (this.scene.settings.data.score) {
+      return this.scene.settings.data.score;
+    } else {
+      0;
+    }
   }
 
   enemyXSpawn() {

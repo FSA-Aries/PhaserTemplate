@@ -33,7 +33,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       left: Phaser.Input.Keyboard.KeyCodes.A,
       right: Phaser.Input.Keyboard.KeyCodes.D,
     });
-    this.health = 100;
+    this.health = 200;
 
     this.hp = new HealthBar(
       this.scene,

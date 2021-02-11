@@ -24,6 +24,15 @@ assets.FUMIKO_UP_KEY = 'fumikoUp';
 assets.FUMIKO_UP_URL = 'assets/characters/Fumiko/FumikoUp.png';
 assets.FUMIKO_DOWN_KEY = 'fumikoDown';
 assets.FUMIKO_DOWN_URL = 'assets/characters/Fumiko/FumikoDown.png';
+assets.FUMIKO_LEFTPHASE_KEY = 'fumikoLeftPhase';
+assets.FUMIKO_LEFTPHASE_URL = 'assets/characters/Fumiko/FumikoLeftPhase.png';
+assets.FUMIKO_RIGHTPHASE_KEY = 'fumikoRightPhase';
+assets.FUMIKO_RIGHTPHASE_URL = 'assets/characters/Fumiko/FumikoRightPhase.png';
+assets.FUMIKO_UPPHASE_KEY = 'fumikoUpPhase';
+assets.FUMIKO_UPPHASE_URL = 'assets/characters/Fumiko/FumikoUpPhase.png';
+assets.FUMIKO_DOWNPHASE_KEY = 'fumikoDownPhase';
+assets.FUMIKO_DOWNPHASE_URL = 'assets/characters/Fumiko/FumikoDownPhase.png';
+
 
 assets.SMOL_LEFTSTART_KEY = 'LeftStart';
 assets.SMOL_LEFTSTART_URL = 'assets/characters/Smol/LeftStart.png';

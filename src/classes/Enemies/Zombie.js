@@ -73,7 +73,6 @@ export default class Zombie extends Enemy {
     if (!this.active) {
       return;
     }
-
     if (this.playerGroup !== undefined) {
       this.playerGroup.getChildren().forEach((player) => {
         if (Phaser.Math.Distance.BetweenPoints(player, this) < 2000) {

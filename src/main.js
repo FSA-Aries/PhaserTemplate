@@ -1,10 +1,15 @@
 import Phaser from "phaser";
 
-import MenuScene from "./scenes/MenuScene";
-import WaitingRoom from "./scenes/WaitingRoom";
 import GameScene from "./scenes/GameScene";
-import GameOver from "./scenes/GameOver";
+import WaitingRoom from "./scenes/WaitingRoom";
+import MenuScene from "./scenes/MenuScene";
+import LevelOne from './scenes/LevelOne';
+import FireLevel from "./scenes/FireLevel";
+import DarknessLevel from "./scenes/DarknessLevel";
+import GrassScene from "./scenes/GrassScene";
 import MazeScene from "./scenes/MazeScene";
+
+import GameOver from "./scenes/GameOver";
 
 const WIDTH = 800;
 
@@ -12,7 +17,6 @@ const WIDTH = 800;
 const MAP_WIDTH = document.body.offsetWidth;
 const HEIGHT = 800;
 const ZOOM_FACTOR = 1.5;
-
 export const config = {
   type: Phaser.AUTO,
   mapOffset: MAP_WIDTH > WIDTH ? MAP_WIDTH - WIDTH : 0,
@@ -39,12 +43,23 @@ export const config = {
     },
   },
 
-  parent: "mygame",
+  parent: 'mygame',
   dom: {
     createContainer: true,
   },
-  // scene: [MenuScene, WaitingRoom, GameScene, GameOver],
-  scene: [MazeScene],
+
+  scene: [
+    MenuScene,
+    WaitingRoom,
+    GameScene,
+    GameOver,
+    MazeScene,
+    GrassScene,
+    FireLevel,
+    DarknessLevel,
+  LevelOne
+  ],
+
 };
 
 export default new Phaser.Game(config);

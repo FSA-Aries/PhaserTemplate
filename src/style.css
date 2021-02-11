@@ -1,20 +1,25 @@
-/* body {
-  margin: 200px;
+body {
   max-width: 800px;
   max-height: 600px;
+  height: 100vh;
+  background-image: url("https://www.wallpapertip.com/wmimgs/146-1468180_scary-dark-forest-desktop-wallpaper-red-and-black.jpg");
 }
+/* Dark Green Forest Background: https://cloud.netlifyusercontent.com/assets/344dbf88-fdf9-42bb-adb4-46f01eedd629/ea5cfc09-4f21-41f2-98d8-9dcf51b85012/horror-wallpaper32.jpg */
 
+/* Bloody Hall Background https://wallpaperaccess.com/full/162297.jpg */
 
-canvas {
+/* https://i.pinimg.com/originals/4e/f5/ed/4ef5ed23dd7614b990195ae96bc6e678.jpg */
+
+/* https://www.wallpapertip.com/wmimgs/146-1468180_scary-dark-forest-desktop-wallpaper-red-and-black.jpg */
+
+/* Dark Blood Wall background:  https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/e9f595ce-2a04-40e2-bd37-b4ce458c5c17/daht6es-7a76fa36-ecb3-4171-92b7-3f95a53ba36b.jpg/v1/fill/w_850,h_600,q_75,strp/horror_background_by_survivorcz_daht6es-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3siaGVpZ2h0IjoiPD02MDAiLCJwYXRoIjoiXC9mXC9lOWY1OTVjZS0yYTA0LTQwZTItYmQzNy1iNGNlNDU4YzVjMTdcL2RhaHQ2ZXMtN2E3NmZhMzYtZWNiMy00MTcxLTkyYjctM2Y5NWE1M2JhMzZiLmpwZyIsIndpZHRoIjoiPD04NTAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.RAf13yoBDBWGx3SQCdSQ4x9EZleCnXEJEuyZHNvKczw*/
+
+/* https://c4.wallpaperflare.com/wallpaper/843/200/882/creature-creatures-creepy-dark-wallpaper-preview.jpg */
+
+/* canvas {
   display: block;
-  margin-left: 50vh;
-  margin-right: 50vh;
-
-} */
-
-body {
-  margin: 2%;
-}
+  margin-left: 10vw;
+  /* margin-right: 20vw; */
 
 #mygame {
   display: flex;

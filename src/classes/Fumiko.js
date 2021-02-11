@@ -155,17 +155,6 @@ class Fumiko extends Phaser.Physics.Arcade.Sprite {
     }
 
     ability() {
-        this.body.checkCollision.none = true
-        this.scene.time.addEvent({
-            delay: 3000,
-            callback: () => {
-                console.log('callback')
-                this.body.checkCollision.none = false
-            }
-        })
-
-
-
 
         /* if (!this.hidden) {
             this.body.checkCollision.none = !this.body.checkCollision.none
@@ -181,9 +170,6 @@ class Fumiko extends Phaser.Physics.Arcade.Sprite {
             }, 3000)
 
         } */
-
-
-
 
 
     }

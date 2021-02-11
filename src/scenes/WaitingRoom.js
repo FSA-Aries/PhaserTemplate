@@ -85,8 +85,8 @@ export default class WaitingRoom extends Phaser.Scene {
       scene.notValidText.setText("Invalid Room Key");
     });
     socket.on("keyIsValid", function (input) {
-      scene.scene.start("game-scene", { input: input });
+      scene.scene.start("Multiplayer", { input: input });
     });
   }
-  update() {}
+  update() { }
 }

@@ -24,7 +24,7 @@ export default class GrassScene extends Phaser.Scene {
     this.score = undefined;
     this.socket = socket;
     this.state = {};
-    this.otherPlayer = undefined;
+
 
   }
 
@@ -237,12 +237,8 @@ export default class GrassScene extends Phaser.Scene {
   // PLAYER ANIMATION
 
   createPlayer(player, playerInfo) {
-    //this.player = new Fumiko(player, playerInfo.x, playerInfo.y);
-    //this.player.setTexture(assets.FUMIKO_DOWN_KEY, 0);
     this.player = new this.selectedCharacter(player, playerInfo.x, playerInfo.y)
     this.player.createTexture();
-
-
     return this.player;
   }
 

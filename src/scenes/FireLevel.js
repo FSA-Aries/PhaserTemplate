@@ -16,6 +16,7 @@ import { config } from "../main";
 export default class FireLevel extends Phaser.Scene {
   constructor() {
     super("fire-level");
+    this.selectedCharacter = undefined;
     this.player = undefined;
     this.cursors = undefined;
     this.game = undefined;
@@ -23,6 +24,10 @@ export default class FireLevel extends Phaser.Scene {
     this.score = undefined;
     //Setup Sockets
     this.socket = socket;
+  }
+
+  init(data) {
+    this.selectedCharacter = data.character
   }
 
   ///// PRELOAD /////
@@ -37,10 +42,13 @@ export default class FireLevel extends Phaser.Scene {
     this.load.image(assets.RETICLE_KEY, assets.RETICLE_URL);
     this.load.image(assets.FIRESET_KEY, assets.FIRESET_URL);
     this.load.tilemapTiledJSON(assets.FIREMAP_KEY, assets.FIREMAP_URL);
-    this.load.spritesheet(assets.PLAYER_KEY, assets.PLAYER_URL, {
+
+
+    /* this.load.spritesheet(assets.PLAYER_KEY, assets.PLAYER_URL, {
       frameWidth: 50,
       frameHeight: 69,
-    });
+    }); */
+    this.selectedCharacter.loadSprite(this);
 
     this.load.audio(
       "zombie-attack",
@@ -80,8 +88,8 @@ export default class FireLevel extends Phaser.Scene {
     let lava = map.createLayer("Collision", tileSet, 0, 0);
     lava.setCollisionByExclusion([-1]);
 
-    this.player = this.createPlayer();
-    this.player.setTexture(assets.PLAYER_KEY, 1);
+    this.player = this.createPlayer(this, { x: 200, y: 300 });
+    //this.player.setTexture(assets.PLAYER_KEY, 1);
 
     this.physics.add.collider(this.player, lava);
 
@@ -206,9 +214,13 @@ export default class FireLevel extends Phaser.Scene {
   ///// HELPER FUNCTIONS /////
 
   // PLAYER ANIMATION
-  createPlayer() {
-    // this.sound.add("intro", { loop: false, volume: 0.53 }).play();
-    return new Player(this, 350, 400);
+  createPlayer(player, playerInfo) {
+
+    this.player = new this.selectedCharacter(player, playerInfo.x, playerInfo.y)
+    this.player.createTexture();
+
+
+    return this.player;
   }
 
   setupFollowupCameraOn(player) {

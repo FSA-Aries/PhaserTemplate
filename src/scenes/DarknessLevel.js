@@ -16,6 +16,7 @@ import { config } from "../main";
 export default class DarknessLevel extends Phaser.Scene {
   constructor() {
     super("darkness-level");
+    this.selectedCharacter = undefined
     this.player = undefined;
     this.cursors = undefined;
     this.game = undefined;
@@ -24,6 +25,11 @@ export default class DarknessLevel extends Phaser.Scene {
     //Setup Sockets
     this.socket = socket;
   }
+
+  init(data) {
+    this.selectedCharacter = data.character
+  }
+
 
   ///// PRELOAD /////
   preload() {
@@ -37,10 +43,13 @@ export default class DarknessLevel extends Phaser.Scene {
     this.load.image(assets.RETICLE_KEY, assets.RETICLE_URL);
     this.load.image(assets.DARKSET_KEY, assets.DARKSET_URL);
     this.load.tilemapTiledJSON(assets.DARKMAP_KEY, assets.DARKMAP_URL);
-    this.load.spritesheet(assets.PLAYER_KEY, assets.PLAYER_URL, {
+
+
+    /* this.load.spritesheet(assets.PLAYER_KEY, assets.PLAYER_URL, {
       frameWidth: 50,
       frameHeight: 69,
-    });
+    }); */
+    this.selectedCharacter.loadSprite(this);
 
     this.load.audio(
       "zombie-attack",
@@ -80,8 +89,8 @@ export default class DarknessLevel extends Phaser.Scene {
     let darkness = map.createLayer("Collision", tileSet, 0, 0);
     darkness.setCollisionByExclusion([-1]);
 
-    this.player = this.createPlayer();
-    this.player.setTexture(assets.PLAYER_KEY, 1);
+    this.player = this.createPlayer(this, { x: 200, y: 300 });
+    //this.player.setTexture(assets.PLAYER_KEY, 1);
 
     this.physics.add.collider(this.player, darkness);
 
@@ -208,9 +217,11 @@ export default class DarknessLevel extends Phaser.Scene {
   ///// HELPER FUNCTIONS /////
 
   // PLAYER ANIMATION
-  createPlayer() {
+  createPlayer(player, playerInfo) {
     // this.sound.add("intro", { loop: false, volume: 0.53 }).play();
-    return new Player(this, 750, 750);
+    this.player = new this.selectedCharacter(player, playerInfo.x, playerInfo.y)
+    this.player.createTexture();
+    return this.player;
   }
 
   setupFollowupCameraOn(player) {

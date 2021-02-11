@@ -21,6 +21,7 @@ export default class GameScene extends Phaser.Scene {
     this.player = undefined;
     this.secondScore = undefined;
     this.zombieGroup = undefined;
+    this.name = "game-scene";
   }
 
   init(data) {
@@ -70,10 +71,9 @@ export default class GameScene extends Phaser.Scene {
     this.playerGroup = this.add.group();
     let map = this.make.tilemap({ key: assets.TILEMAP_KEY });
 
-
-    let tileSet = map.addTilesetImage('TiledSet', assets.TILESET_KEY);
-    map.createLayer('Ground', tileSet, 0, 0);
-    let walls = map.createLayer('Walls', tileSet, 0, 0);
+    let tileSet = map.addTilesetImage("TiledSet", assets.TILESET_KEY);
+    map.createLayer("Ground", tileSet, 0, 0);
+    let walls = map.createLayer("Walls", tileSet, 0, 0);
     walls.setCollisionByExclusion([-1]);
 
     //Create player and playerGroup
@@ -88,7 +88,6 @@ export default class GameScene extends Phaser.Scene {
       config.rightTopCorner.x - 20,
       config.rightTopCorner.y + 20
     ).setScale(0.07, 0.07);
-
 
     //Zombie and Skeleton Groups
     let zombieGroup = this.physics.add.group();
@@ -139,6 +138,10 @@ export default class GameScene extends Phaser.Scene {
     this.physics.add.collider(skeletonGroup, skeletonGroup, null);
 
     this.cursors = this.input.keyboard.createCursorKeys();
+    //PAUSE MENU
+    this.cursors = this.input.keyboard.addKeys({
+      esc: Phaser.Input.Keyboard.KeyCodes.ESC,
+    });
     let playerBullets = this.physics.add.group({
       classType: Bullet,
       runChildUpdate: true,
@@ -199,22 +202,28 @@ export default class GameScene extends Phaser.Scene {
       },
       this
     );
+
     this.introText();
 
-
-    if (gameStatus === 'PLAYER_LOSE') {
+    if (gameStatus === "PLAYER_LOSE") {
       return;
     }
 
     this.createGameEvents();
   }
-  update() {}
+  update() {
+    if (this.cursors.esc.isDown) {
+      this.scene.pause();
+      this.scene.launch("pause-scene", { key: this.name });
+    }
+  }
 
   ///// HELPER FUNCTIONS /////
 
   // PLAYER ANIMATION
 
   createPlayer(player, playerInfo) {
+    this.sound.add("intro", { loop: false, volume: 0.53 }).play();
 
     this.sound.add('intro', { loop: false, volume: 0.53 }).play();
     this.player = new this.selectedCharacter(
@@ -412,5 +421,4 @@ export default class GameScene extends Phaser.Scene {
     this.add.existing(button);
     return button;
   }
-
 }

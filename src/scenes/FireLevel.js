@@ -25,6 +25,7 @@ export default class FireLevel extends Phaser.Scene {
     this.score = undefined;
     //Setup Sockets
     this.socket = socket;
+    this.name = "fire-level";
   }
 
   init(data) {
@@ -167,6 +168,9 @@ export default class FireLevel extends Phaser.Scene {
     this.physics.add.collider(impGroup, zombieGroup);
 
     this.cursors = this.input.keyboard.createCursorKeys();
+    this.cursors = this.input.keyboard.addKeys({
+      esc: Phaser.Input.Keyboard.KeyCodes.ESC,
+    });
     let playerBullets = this.physics.add.group({
       classType: Bullet,
       runChildUpdate: true,
@@ -240,7 +244,12 @@ export default class FireLevel extends Phaser.Scene {
     this.createGameEvents();
   }
 
-  update() { }
+  update() {
+    if (this.cursors.esc.isDown) {
+      this.scene.pause();
+      this.scene.launch("pause-scene", { key: this.name });
+    }
+  }
 
   // PLAYER ANIMATION
   createPlayer(player, playerInfo) {

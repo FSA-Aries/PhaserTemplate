@@ -10,8 +10,7 @@ import EventEmitter from '../events/Emitter';
 
 export default class MazeScene extends Phaser.Scene {
   constructor() {
-
-    super('maze-scene');
+    super("maze-scene");
     this.selectedCharacter = undefined;
     this.cursors = undefined;
     this.game = undefined;
@@ -20,6 +19,7 @@ export default class MazeScene extends Phaser.Scene {
     this.state = {};
     this.playerGroup = undefined;
     this.player = undefined;
+    this.name = "maze-scene";
   }
 
   init(data) {
@@ -205,7 +205,12 @@ export default class MazeScene extends Phaser.Scene {
     }
     this.createGameEvents();
   }
-  update() {}
+  update() {
+    if (this.cursors.esc.isDown) {
+      this.scene.pause();
+      this.scene.launch("pause-scene", { key: this.name });
+    }
+  }
 
   createPlayer(player, playerInfo) {
     this.player = new this.selectedCharacter(

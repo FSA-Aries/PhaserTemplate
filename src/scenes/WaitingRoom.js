@@ -21,30 +21,32 @@ export default class WaitingRoom extends Phaser.Scene {
 
     // for popup window
     scene.popUp.lineStyle(1, 0xffffff);
-    scene.popUp.fillStyle(0xffffff, 0.5);
+    scene.popUp.fillStyle(0x03192d, 0.5);
 
     // for boxes
     scene.boxes.lineStyle(1, 0xffffff);
-    scene.boxes.fillStyle(0xa9a9a9, 1);
+    scene.boxes.fillStyle(0x03192d, 1);
 
     // popup window
     scene.popUp.strokeRect(25, 25, 750, 500);
     scene.popUp.fillRect(25, 25, 750, 500);
 
     //title
-    scene.title = scene.add.text(100, 75, "Senior Phaser", {
-      color: "#add8e6",
-      fontSize: "66px",
+    scene.title = scene.add.text(200, 75, "Two-Player Competitive", {
+      color: "#EFF6EE",
+      fontSize: "40px",
       fontStyle: "bold",
+      fontFamily: "Stencil Std, fantasy",
     });
 
     //left popup
     scene.boxes.strokeRect(100, 200, 275, 100);
     scene.boxes.fillRect(100, 200, 275, 100);
     scene.requestButton = scene.add.text(140, 215, "Request Room Key", {
-      color: "#000000",
+      color: "#EFF6EE",
       fontSize: "20px",
       fontStyle: "bold",
+      fontFamily: "Stencil Std, fantasy",
     });
 
     //right popup
@@ -66,13 +68,15 @@ export default class WaitingRoom extends Phaser.Scene {
     });
 
     scene.notValidText = scene.add.text(670, 295, "", {
-      color: "#ff0000",
+      color: "#273043",
       fontSize: "15px",
+      fontFamily: "Stencil Std, fantasy",
     });
     scene.roomKeyText = scene.add.text(210, 250, "", {
       color: "#00ff00",
       fontSize: "20px",
       fontStyle: "bold",
+      fontFamily: "Stencil Std, fantasy",
     });
 
     socket.on("roomCreated", function (roomKey) {
@@ -88,5 +92,5 @@ export default class WaitingRoom extends Phaser.Scene {
       scene.scene.start("Multiplayer", { input: input });
     });
   }
-  update() { }
+  update() {}
 }

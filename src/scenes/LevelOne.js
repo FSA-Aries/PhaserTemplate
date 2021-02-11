@@ -1,7 +1,6 @@
-
-import Phaser, { Scene } from 'phaser';
-import Zombie from '../classes/Enemies/Zombie.js';
-import Skeleton from '../classes/Enemies/Skeleton.js';
+import Phaser, { Scene } from "phaser";
+import Zombie from "../classes/Enemies/Zombie.js";
+import Skeleton from "../classes/Enemies/Skeleton.js";
 //import Player from '../classes/Player';
 import OtherPlayerSprite from "../classes/OtherPlayers";
 import Bullet from "../classes/Bullet";
@@ -25,6 +24,7 @@ export default class LevelOne extends Phaser.Scene {
     this.socket = socket;
     this.state = {};
     this.otherPlayer = undefined;
+    this.name = "LevelOne";
   }
 
   init(data) {
@@ -163,6 +163,9 @@ export default class LevelOne extends Phaser.Scene {
     this.physics.add.collider(skeletonGroup, skeletonGroup, null);
 
     this.cursors = this.input.keyboard.createCursorKeys();
+    this.cursors = this.input.keyboard.addKeys({
+      esc: Phaser.Input.Keyboard.KeyCodes.ESC,
+    });
     let playerBullets = this.physics.add.group({
       classType: Bullet,
       runChildUpdate: true,
@@ -231,6 +234,10 @@ export default class LevelOne extends Phaser.Scene {
   //     );
   //   }
   update() {
+    if (this.cursors.esc.isDown) {
+      this.scene.pause();
+      this.scene.launch("pause-scene", { key: this.name });
+    }
     // const scene = this;
     // var x = scene.player.x;
     // var y = scene.player.y;

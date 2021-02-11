@@ -16,7 +16,6 @@ import { config } from '../main';
 export default class DarknessLevel extends Phaser.Scene {
   constructor() {
     super("darkness-level");
-
     this.selectedCharacter = undefined;
     this.player = undefined;
     this.cursors = undefined;
@@ -25,6 +24,7 @@ export default class DarknessLevel extends Phaser.Scene {
     this.score = undefined;
     //Setup Sockets
     this.socket = socket;
+    this.name = "darkness-level";
   }
 
   init(data) {
@@ -153,6 +153,9 @@ export default class DarknessLevel extends Phaser.Scene {
     this.physics.add.collider(bossGroup, darkness);
 
     this.cursors = this.input.keyboard.createCursorKeys();
+    this.cursors = this.input.keyboard.addKeys({
+      esc: Phaser.Input.Keyboard.KeyCodes.ESC,
+    });
     let playerBullets = this.physics.add.group({
       classType: Bullet,
       runChildUpdate: true,
@@ -230,7 +233,11 @@ export default class DarknessLevel extends Phaser.Scene {
   //       this
   //     );
   //   }
-  update() {}
+    if (this.cursors.esc.isDown) {
+      this.scene.pause();
+      this.scene.launch("pause-scene", { key: this.name });
+    }
+  }
 
   ///// HELPER FUNCTIONS /////
 

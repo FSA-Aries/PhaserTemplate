@@ -1,18 +1,18 @@
 
-import Phaser, { Scene } from 'phaser';
-import Zombie from '../classes/Enemies/Zombie.js';
-import Skeleton from '../classes/Enemies/Skeleton.js';
-import Player from '../classes/Player';
-import Fumiko from '../classes/Fumiko';
-import OtherPlayerSprite from '../classes/OtherPlayers';
-import Bullet from '../classes/Bullet';
-import assets from '../../public/assets';
-import socket from '../socket/index.js';
-import Score from '../hud/score';
-import CharacterSelect from './CharacterSelect';
+import Phaser, { Scene } from "phaser";
+import Zombie from "../classes/Enemies/Zombie.js";
+import Skeleton from "../classes/Enemies/Skeleton.js";
+import Player from "../classes/Player";
+import Fumiko from "../classes/Fumiko";
+import OtherPlayerSprite from "../classes/OtherPlayers";
+import Bullet from "../classes/Bullet";
+import assets from "../../public/assets";
+import socket from "../socket/index.js";
+import Score from "../hud/score";
+import CharacterSelect from "./CharacterSelect";
 
-import EventEmitter from '../events/Emitter';
-import { config } from '../main';
+import EventEmitter from "../events/Emitter";
+import { config } from "../main";
 
 export default class GrassScene extends Phaser.Scene {
   constructor() {
@@ -25,6 +25,7 @@ export default class GrassScene extends Phaser.Scene {
     this.score = undefined;
     this.socket = socket;
     this.state = {};
+    this.name = "grassScene";
   }
 
   ///// INIT /////
@@ -151,6 +152,9 @@ export default class GrassScene extends Phaser.Scene {
     this.physics.add.collider(skeletonGroup, skeletonGroup, null);
 
     this.cursors = this.input.keyboard.createCursorKeys();
+    this.cursors = this.input.keyboard.addKeys({
+      esc: Phaser.Input.Keyboard.KeyCodes.ESC,
+    });
     let playerBullets = this.physics.add.group({
       classType: Bullet,
       runChildUpdate: true,
@@ -220,6 +224,10 @@ export default class GrassScene extends Phaser.Scene {
   //     );
   //   }
   update() {
+    if (this.cursors.esc.isDown) {
+      this.scene.pause();
+      this.scene.launch("pause-scene", { key: this.name });
+    }
     /* const scene = this;
         var x = scene.player.x;
         var y = scene.player.y;

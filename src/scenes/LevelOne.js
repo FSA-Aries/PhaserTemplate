@@ -1,7 +1,7 @@
 import Phaser, { Scene } from 'phaser';
 import Zombie from '../classes/Enemies/Zombie.js';
 import Skeleton from '../classes/Enemies/Skeleton.js';
-import Player from '../classes/Player';
+//import Player from '../classes/Player';
 import OtherPlayerSprite from '../classes/OtherPlayers';
 import Bullet from '../classes/Bullet';
 import assets from '../../public/assets';
@@ -10,6 +10,7 @@ import Score from '../hud/score';
 
 import EventEmitter from '../events/Emitter';
 import { config } from '../main';
+import Smol from '../classes/Smol.js';
 
 export default class LevelOne extends Phaser.Scene {
   constructor() {
@@ -30,14 +31,24 @@ export default class LevelOne extends Phaser.Scene {
     this.game.scale.pageAlignVertically = true;
     this.game.scale.refresh();
 
+    // SMOL
+    this.load.image(assets.SMOL_LEFTSTART_KEY, assets.SMOL_LEFTSTART_URL);
+    this.load.image(assets.SMOL_LEFTONE_KEY, assets.SMOL_LEFTONE_URL);
+    this.load.image(assets.SMOL_LEFTTWO_KEY, assets.SMOL_LEFTTWO_URL);
+    this.load.image(assets.SMOL_RIGHTSTART_KEY, assets.SMOL_RIGHTSTART_URL);
+    this.load.image(assets.SMOL_RIGHTONE_KEY, assets.SMOL_RIGHTONE_URL);
+    this.load.image(assets.SMOL_RIGHTTWO_KEY, assets.SMOL_RIGHTTWO_URL);
+    this.load.image(assets.SMOL_JUMPONE_KEY, assets.SMOL_JUMPONE_URL);
+    this.load.image(assets.SMOL_JUMPTWO_KEY, assets.SMOL_JUMPTWO_URL);
+
     this.load.image(assets.BULLET_KEY, assets.BULLET_URL);
     this.load.image(assets.RETICLE_KEY, assets.RETICLE_URL);
     this.load.image(assets.TILESET2_KEY, assets.TILESET2_URL);
     this.load.tilemapTiledJSON(assets.TILEMAP2_KEY, assets.TILEMAP2_URL);
-    this.load.spritesheet(assets.PLAYER_KEY, assets.PLAYER_URL, {
-      frameWidth: 50,
-      frameHeight: 69,
-    });
+    // this.load.spritesheet(assets.PLAYER_KEY, assets.PLAYER_URL, {
+    //   frameWidth: 50,
+    //   frameHeight: 69,
+    // });
 
     this.load.audio(
       'zombie-attack',
@@ -58,76 +69,22 @@ export default class LevelOne extends Phaser.Scene {
   }
 
   ///// CREATE /////
-  create({ input, gameStatus }) {
+  create({ gameStatus }) {
     this.playerGroup = this.add.group();
-    const scene = this;
+    //const scene = this;
     let map = this.make.tilemap({ key: assets.TILEMAP2_KEY });
     let tileSet = map.addTilesetImage('TiledSet2', assets.TILESET2_KEY);
     map.createLayer('Ground', tileSet, 0, 0);
     let walls = map.createLayer('Walls', tileSet, 0, 0);
     walls.setCollisionByExclusion([-1]);
+    map.createLayer('Details', tileSet, 0, 0);
 
-    //Sockets
-    // socket.on('setState', function (state) {
-    //   const { roomKey, players, numPlayers } = state;
-
-    //   scene.state.roomKey = roomKey;
-    //   scene.state.players = players;
-    //   scene.state.numPlayers = numPlayers;
-    // });
-
-    // socket.on('currentPlayers', function (playerInfo) {
-    //   console.log('Playerinfo ->', playerInfo);
-    //   const { player, numPlayers } = playerInfo;
-    //   scene.state.numPlayers = numPlayers;
-    //   console.log('keys ->', Object.keys(player));
-    //   Object.keys(player).forEach(function (id) {
-    //     if (player[id].playerId === socket.id) {
-    //       scene.player.roomKey = scene.state.roomKey;
-    //     } else {
-    //       scene.createOtherPlayer(scene, player[id]);
-    //     }
-    //   });
-    // });
-
-    // socket.on('newPlayer', function (arg) {
-    //   const { playerInfo, numPlayers } = arg;
-    //   scene.createOtherPlayer(scene, playerInfo);
-    //   scene.state.numPlayers = numPlayers;
-    // });
-
-    // socket.on('playerMoved', function (playerInfo) {
-    //   //Grab all members of the group
-    //   console.log('PLAYERMOVED ->', playerInfo);
-    //   scene.playerGroup.getChildren().forEach(function (otherPlayer) {
-    //     console.log(
-    //       'PLAYERIDS',
-    //       playerInfo.playerId,
-    //       scene.otherPlayer.playerId
-    //     );
-    //     if (playerInfo.playerId === scene.otherPlayer.playerId) {
-    //       scene.otherPlayer.setPosition(playerInfo.x, playerInfo.y);
-    //     }
-    //   });
-    // });
-
-    // this.socket.on("disconnected", function (arg) {
-    //   const { playerId, numPlayers } = arg;
-    //   this.state.numPlayers = numPlayers;
-    //   this.otherPlayers.getChildren().forEach(function (otherPlayer) {
-    //     if (playerId === otherPlayer.playerId) {
-    //       otherPlayer.destroy();
-    //     }
-    //   });
-    // });
-
-    // socket.emit('joinRoom', input);
     //Create player and playerGroup
     this.player = this.createPlayer(this, { x: 200, y: 300 });
-    console.log(this.player);
+
     this.playerGroup.add(this.player);
     //CREATE OTHER PLAYERS GROUP
-    this.player.setTexture(assets.PLAYER_KEY, 1);
+    this.player.setTexture(assets.SMOL_RIGHTSTART_KEY, 0);
     this.physics.add.collider(this.player, walls);
 
     this.score = this.createScoreLabel(
@@ -189,6 +146,8 @@ export default class LevelOne extends Phaser.Scene {
     this.physics.add.collider(zombieGroup, skeletonGroup, null);
     this.physics.add.collider(zombieGroup, zombieGroup, null);
     this.physics.add.collider(skeletonGroup, skeletonGroup, null);
+    // this.physics.add.collider(zombieGroup, walls, null);
+    // this.physics.add.collider(skeletonGroup, walls, null);
 
     this.cursors = this.input.keyboard.createCursorKeys();
     let playerBullets = this.physics.add.group({
@@ -281,8 +240,8 @@ export default class LevelOne extends Phaser.Scene {
   // PLAYER ANIMATION
 
   createPlayer(player, playerInfo) {
-    this.player = new Player(player, playerInfo.x, playerInfo.y);
-    this.player.setTexture(assets.PLAYER_KEY, 1);
+    this.player = new Smol(player, playerInfo.x, playerInfo.y);
+    this.player.setTexture(assets.SMOL_RIGHTSTART_KEY, 1);
     return this.player;
   }
 
@@ -302,7 +261,7 @@ export default class LevelOne extends Phaser.Scene {
 
     this.cameras.main
       .setBounds(0, 0, config.width, config.height)
-      .setZoom(config.zoomFactor);
+      .setZoom(config.zoomFactor + 0.5);
     this.cameras.main.startFollow(player);
   }
 
@@ -388,7 +347,6 @@ export default class LevelOne extends Phaser.Scene {
   onPlayerCollision(player, monster) {
     //It should be the bullet's damage but we will just set a default value for now to test
     // monster.takesHit(player.damage);
-    console.log(monster);
     player.takesHit(monster);
     if (monster.zombieAttackSound) monster.zombieAttackSound.play();
     // player.setBounce(0.5, 0.5);

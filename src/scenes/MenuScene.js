@@ -64,7 +64,9 @@ class MenuScene extends BaseScene {
         menuItem.scene && this.scene.start("fire-level");
       }
       if (menuItem.text === "Grass Level") {
+
         menuItem.scene && this.scene.start("characterSelect");
+
       }
       if (menuItem.text === "Level One") {
         this.scene.start("LevelOne");

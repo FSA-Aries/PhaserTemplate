@@ -1,21 +1,20 @@
-
-import Phaser, { Scene } from 'phaser';
-import Zombie from '../classes/Enemies/Zombie.js';
-import Skeleton from '../classes/Enemies/Skeleton.js';
+import Phaser, { Scene } from "phaser";
+import Zombie from "../classes/Enemies/Zombie.js";
+import Skeleton from "../classes/Enemies/Skeleton.js";
 //import Player from '../classes/Player';
-import OtherPlayerSprite from '../classes/OtherPlayers';
-import Bullet from '../classes/Bullet';
-import assets from '../../public/assets';
-import socket from '../socket/index.js';
-import Score from '../hud/score';
+import OtherPlayerSprite from "../classes/OtherPlayers";
+import Bullet from "../classes/Bullet";
+import assets from "../../public/assets";
+import socket from "../socket/index.js";
+import Score from "../hud/score";
 
-import EventEmitter from '../events/Emitter';
-import { config } from '../main';
-import Smol from '../classes/Smol.js';
+import EventEmitter from "../events/Emitter";
+import { config } from "../main";
+import Smol from "../classes/Smol.js";
 
 export default class LevelOne extends Phaser.Scene {
   constructor() {
-    super('LevelOne');
+    super("LevelOne");
     this.selectedCharacter = undefined;
     this.player = undefined;
     this.cursors = undefined;
@@ -28,7 +27,7 @@ export default class LevelOne extends Phaser.Scene {
   }
 
   init(data) {
-    this.selectedCharacter = data.character
+    this.selectedCharacter = data.character;
   }
 
   ///// PRELOAD /////
@@ -37,8 +36,11 @@ export default class LevelOne extends Phaser.Scene {
     this.game.scale.pageAlignVertically = true;
     this.game.scale.refresh();
 
+    this.load.image(assets.SOUND_OFF_KEY, assets.SOUND_OFF_URL);
+    this.load.image(assets.SOUND_ON_KEY, assets.SOUND_ON_URL);
+
     // SMOL
-    this.selectedCharacter.loadSprite(this)
+    this.selectedCharacter.loadSprite(this);
     /* this.load.image(assets.SMOL_LEFTSTART_KEY, assets.SMOL_LEFTSTART_URL);
     this.load.image(assets.SMOL_LEFTONE_KEY, assets.SMOL_LEFTONE_URL);
     this.load.image(assets.SMOL_LEFTTWO_KEY, assets.SMOL_LEFTTWO_URL);
@@ -84,7 +86,7 @@ export default class LevelOne extends Phaser.Scene {
     map.createLayer("Ground", tileSet, 0, 0);
     let walls = map.createLayer("Walls", tileSet, 0, 0);
     walls.setCollisionByExclusion([-1]);
-    map.createLayer('Details', tileSet, 0, 0);
+    map.createLayer("Details", tileSet, 0, 0);
 
     //Create player and playerGroup
     this.player = this.createPlayer(this, { x: 200, y: 300 });
@@ -99,6 +101,11 @@ export default class LevelOne extends Phaser.Scene {
       config.rightTopCorner.y,
       this.getScore()
     );
+
+    this.createSoundButton(
+      config.rightTopCorner.x - 20,
+      config.rightTopCorner.y + 20
+    ).setScale(0.07, 0.07);
     //this.score = new Score(this, config.leftTopCorner.x + 5, config.rightTopCorner.y, 0)
 
     //Zombie and Skeleton Groups
@@ -153,7 +160,6 @@ export default class LevelOne extends Phaser.Scene {
     this.physics.add.collider(zombieGroup, skeletonGroup, null);
     this.physics.add.collider(zombieGroup, zombieGroup, null);
     this.physics.add.collider(skeletonGroup, skeletonGroup, null);
-
 
     this.cursors = this.input.keyboard.createCursorKeys();
     let playerBullets = this.physics.add.group({
@@ -246,7 +252,11 @@ export default class LevelOne extends Phaser.Scene {
   // PLAYER ANIMATION
 
   createPlayer(player, playerInfo) {
-    this.player = new this.selectedCharacter(player, playerInfo.x, playerInfo.y)
+    this.player = new this.selectedCharacter(
+      player,
+      playerInfo.x,
+      playerInfo.y
+    );
     this.player.createTexture();
     return this.player;
   }
@@ -382,5 +392,27 @@ export default class LevelOne extends Phaser.Scene {
     label.setScrollFactor(0, 0).setScale(1);
     this.add.existing(label);
     return label;
+  }
+  createSoundButton(x, y) {
+    const button = this.add.image(x, y, assets.SOUND_ON_KEY);
+    button.setInteractive();
+
+    button.setScrollFactor(0, 0).setScale(1);
+
+    button.on("pointerdown", () => {
+      console.log("clicked");
+      if (button.texture.key === assets.SOUND_ON_KEY) {
+        console.log("sound off");
+        button.setTexture(assets.SOUND_OFF_KEY);
+        this.sound.mute = true;
+      } else {
+        console.log("sound on");
+
+        button.setTexture(assets.SOUND_ON_KEY);
+        this.sound.mute = false;
+      }
+    });
+    this.add.existing(button);
+    return button;
   }
 }

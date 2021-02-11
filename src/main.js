@@ -1,6 +1,5 @@
 import Phaser from "phaser";
 
-
 import GameScene from "./scenes/GameScene";
 import WaitingRoom from "./scenes/WaitingRoom";
 import MenuScene from "./scenes/MenuScene";
@@ -8,9 +7,9 @@ import LevelOne from './scenes/LevelOne';
 import FireLevel from "./scenes/FireLevel";
 import DarknessLevel from "./scenes/DarknessLevel";
 import GrassScene from "./scenes/GrassScene";
+import MazeScene from "./scenes/MazeScene";
 
 import GameOver from "./scenes/GameOver";
-
 
 const WIDTH = 800;
 
@@ -54,6 +53,7 @@ export const config = {
     WaitingRoom,
     GameScene,
     GameOver,
+    MazeScene,
     GrassScene,
     FireLevel,
     DarknessLevel,

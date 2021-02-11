@@ -32,6 +32,7 @@ class Fumiko extends Phaser.Physics.Arcade.Sprite {
             down: Phaser.Input.Keyboard.KeyCodes.S,
             left: Phaser.Input.Keyboard.KeyCodes.A,
             right: Phaser.Input.Keyboard.KeyCodes.D,
+            shift: Phaser.Input.Keyboard.KeyCodes.SHIFT,
         });
         this.health = 75;
 
@@ -209,7 +210,7 @@ class Fumiko extends Phaser.Physics.Arcade.Sprite {
             frameHeight: 45,
         });
 
-        scene.load.spritesheet(assets.FUMIKO_DOWNPHASE_KEY, assets.FUMIKO_DOWNPHASE_URL, {
+        /* scene.load.spritesheet(assets.FUMIKO_DOWNPHASE_KEY, assets.FUMIKO_DOWNPHASE_URL, {
             frameWidth: 30,
             frameHeight: 45,
         });
@@ -224,7 +225,7 @@ class Fumiko extends Phaser.Physics.Arcade.Sprite {
         scene.load.spritesheet(assets.FUMIKO_UPPHASE_KEY, assets.FUMIKO_UPPHASE_URL, {
             frameWidth: 32,
             frameHeight: 53,
-        });
+        }); */
     }
 
 

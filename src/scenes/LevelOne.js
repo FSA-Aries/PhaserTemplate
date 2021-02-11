@@ -1,7 +1,7 @@
 import Phaser, { Scene } from 'phaser';
 import Zombie from '../classes/Enemies/Zombie.js';
 import Skeleton from '../classes/Enemies/Skeleton.js';
-import Player from '../classes/Player';
+//import Player from '../classes/Player';
 import OtherPlayerSprite from '../classes/OtherPlayers';
 import Bullet from '../classes/Bullet';
 import assets from '../../public/assets';
@@ -146,8 +146,8 @@ export default class LevelOne extends Phaser.Scene {
     this.physics.add.collider(zombieGroup, skeletonGroup, null);
     this.physics.add.collider(zombieGroup, zombieGroup, null);
     this.physics.add.collider(skeletonGroup, skeletonGroup, null);
-    this.physics.add.collider(zombieGroup, walls, null);
-    this.physics.add.collider(skeletonGroup, walls, null);
+    // this.physics.add.collider(zombieGroup, walls, null);
+    // this.physics.add.collider(skeletonGroup, walls, null);
 
     this.cursors = this.input.keyboard.createCursorKeys();
     let playerBullets = this.physics.add.group({
@@ -347,7 +347,6 @@ export default class LevelOne extends Phaser.Scene {
   onPlayerCollision(player, monster) {
     //It should be the bullet's damage but we will just set a default value for now to test
     // monster.takesHit(player.damage);
-    console.log(monster);
     player.takesHit(monster);
     if (monster.zombieAttackSound) monster.zombieAttackSound.play();
     // player.setBounce(0.5, 0.5);

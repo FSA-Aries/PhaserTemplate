@@ -74,8 +74,8 @@ export default class WaitingRoom extends Phaser.Scene {
       socket.emit("getRoomCode");
     });
 
-    scene.notValidText = scene.add.text(670, 295, "", {
-      color: "#273043",
+    scene.notValidText = scene.add.text(500, 275, "", {
+      color: "#00ff00",
       fontSize: "15px",
       fontFamily: "Stencil Std, fantasy",
     });

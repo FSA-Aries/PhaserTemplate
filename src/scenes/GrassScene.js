@@ -318,12 +318,6 @@ export default class GrassScene extends Phaser.Scene {
 
     if (monster.health - bullet.damage <= 0) {
       this.score.addPoints(1);
-      // if (this.score.score >= 50) {
-      //   this.scene.start("maze-scene", {
-      //     score: score,
-      //     character: this.selectedCharacter,
-      //   });
-      // }
     }
 
     bullet.hitsEnemy(monster);

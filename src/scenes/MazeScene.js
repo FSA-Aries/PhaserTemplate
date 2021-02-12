@@ -85,7 +85,7 @@ export default class MazeScene extends Phaser.Scene {
     this.score = this.createScoreLabel(
       config.rightTopCorner.x + 5,
       config.rightTopCorner.y,
-      0
+      this.getScore()
     );
 
     this.createSoundButton(
@@ -290,6 +290,13 @@ export default class MazeScene extends Phaser.Scene {
       assets.VAMPIRE_URL,
       this.player
     );
+  }
+  getScore() {
+    if (this.scene.settings.data.score) {
+      return this.scene.settings.data.score;
+    } else {
+      0;
+    }
   }
 
   createGameEvents() {

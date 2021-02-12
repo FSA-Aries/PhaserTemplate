@@ -7,6 +7,8 @@ export default class WaitingRoom extends Phaser.Scene {
     this.state = {};
     this.hasBeenSet = false;
     this.roomKey = "";
+    this.cursors = undefined;
+    this.name = "WaitingRoom";
   }
 
   preload() {
@@ -15,6 +17,11 @@ export default class WaitingRoom extends Phaser.Scene {
 
   create() {
     const scene = this;
+
+    this.cursors = this.input.keyboard.createCursorKeys();
+    this.cursors = this.input.keyboard.addKeys({
+      esc: Phaser.Input.Keyboard.KeyCodes.ESC,
+    });
 
     scene.popUp = scene.add.graphics();
     scene.boxes = scene.add.graphics();
@@ -92,5 +99,10 @@ export default class WaitingRoom extends Phaser.Scene {
       scene.scene.start("Multiplayer", { input: input });
     });
   }
-  update() {}
+  update() {
+    if (this.cursors.esc.isDown) {
+      this.scene.pause();
+      this.scene.launch("pause-scene", { key: this.name });
+    }
+  }
 }

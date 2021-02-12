@@ -8,7 +8,6 @@ import Fireman from "../classes/Fireman";
 import BaseScene from "./BaseScene";
 
 export default class CharacterSelect extends BaseScene {
-
     constructor() {
         super("characterSelect");
         this.selection = undefined;
@@ -23,7 +22,6 @@ export default class CharacterSelect extends BaseScene {
             { key: assets.FUMIKO_SELECT_KEY, character: Fumiko },
             { key: assets.SMOL_SELECT_KEY, character: Smol },
             { key: assets.FIREMAN_SELECT_KEY, character: Fireman },
-
         ];
     }
 
@@ -43,7 +41,10 @@ export default class CharacterSelect extends BaseScene {
 
     create() {
         super.create();
-        this.clicked = this.sound.add(assets.DMCMENU_KEY, { loop: false, volume: 0.53 })
+        this.clicked = this.sound.add(assets.DMCMENU_KEY, {
+            loop: false,
+            volume: 0.53,
+        });
         this.createCharacterMenu(this.menu, this.setupMenuEvents.bind(this));
 
         this.add.text(52, 50, "Select your character", {
@@ -126,18 +127,20 @@ export default class CharacterSelect extends BaseScene {
     }
 
     handleContinue() {
-        this.sound.add(assets.GUNCOCK_KEY, { loop: false, volume: 0.53 }).play()
-        this.cameras.main.fadeOut(1000, 0, 0, 0)
-        this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+        this.sound.add(assets.GUNCOCK_KEY, { loop: false, volume: 0.53 }).play();
+        this.cameras.main.fadeOut(1000, 0, 0, 0);
+        this.cameras.main.once(
+            Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
+            (cam, effect) => {
+                if (this.gameType === "endless") {
+                    this.scene.start("endless", { character: this.selection });
+                }
 
-            if (this.gameType === 'endless') {
-                this.scene.start('endless', { character: this.selection });
+                if (this.gameType === "single") {
+                    this.scene.start("game-scene", { character: this.selection });
+                }
             }
-
-            if (this.gameType === 'single') {
-                this.scene.start('game-scene', { character: this.selection });
-            }
-        })
+        );
     }
 }
 

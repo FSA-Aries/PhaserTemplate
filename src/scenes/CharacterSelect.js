@@ -9,124 +9,124 @@ import BaseScene from "./BaseScene";
 
 export default class CharacterSelect extends BaseScene {
 
-  constructor() {
-    super("characterSelect");
-    this.selection = undefined;
-    this.chosenCharacter = undefined;
-    this.startInstructions = undefined;
-    this.characterIntro = undefined;
-    this.gameType = undefined;
-    this.clicked = undefined;
+    constructor() {
+        super("characterSelect");
+        this.selection = undefined;
+        this.chosenCharacter = undefined;
+        this.startInstructions = undefined;
+        this.characterIntro = undefined;
+        this.gameType = undefined;
+        this.clicked = undefined;
 
-    this.menu = [
-      { key: assets.TANK_SELECT_KEY, character: Tank },
-      { key: assets.FUMIKO_SELECT_KEY, character: Fumiko },
-      { key: assets.SMOL_SELECT_KEY, character: Smol },
-      { key: assets.FIREMAN_SELECT_KEY, character: Fireman },
-      
-    ];
-  }
+        this.menu = [
+            { key: assets.TANK_SELECT_KEY, character: Tank },
+            { key: assets.FUMIKO_SELECT_KEY, character: Fumiko },
+            { key: assets.SMOL_SELECT_KEY, character: Smol },
+            { key: assets.FIREMAN_SELECT_KEY, character: Fireman },
 
-  init(data) {
-    this.gameType = data.gameType;
-  }
+        ];
+    }
 
-  preload() {
-    this.load.image(assets.FUMIKO_SELECT_KEY, assets.FUMIKO_SELECT_URL);
-    this.load.image(assets.TANK_SELECT_KEY, assets.TANK_SELECT_URL);
-    this.load.image(assets.SMOL_SELECT_KEY, assets.SMOL_SELECT_URL);
-    this.load.image(assets.FIREMAN_SELECT_KEY, assets.FIREMAN_SELECT_URL);
-    
-    this.load.audio(assets.DMCMENU_KEY, assets.DMCMENU_URL);
-    this.load.audio(assets.GUNCOCK_KEY, assets.GUNCOCK_URL);
-  }
+    init(data) {
+        this.gameType = data.gameType;
+    }
 
-  create() {
-    super.create();
-    this.clicked = this.sound.add(assets.DMCMENU_KEY, { loop: false, volume: 0.53 })
-    this.createCharacterMenu(this.menu, this.setupMenuEvents.bind(this));
+    preload() {
+        this.load.image(assets.FUMIKO_SELECT_KEY, assets.FUMIKO_SELECT_URL);
+        this.load.image(assets.TANK_SELECT_KEY, assets.TANK_SELECT_URL);
+        this.load.image(assets.SMOL_SELECT_KEY, assets.SMOL_SELECT_URL);
+        this.load.image(assets.FIREMAN_SELECT_KEY, assets.FIREMAN_SELECT_URL);
 
-    this.add.text(52, 50, "Select your character", {
-      fontSize: "40px",
-      color: "#FFFFFF",
-    });
+        this.load.audio(assets.DMCMENU_KEY, assets.DMCMENU_URL);
+        this.load.audio(assets.GUNCOCK_KEY, assets.GUNCOCK_URL);
+    }
 
-    this.chosenCharacter = this.add
-      .text(52, 195, "Selected", {
-        fontSize: "40px",
-        color: "#FFFFFF",
-      })
-      .setVisible(false);
+    create() {
+        super.create();
+        this.clicked = this.sound.add(assets.DMCMENU_KEY, { loop: false, volume: 0.53 })
+        this.createCharacterMenu(this.menu, this.setupMenuEvents.bind(this));
 
-    this.characterIntro = this.add
-      .text(52, 250, "", {
-        fontSize: "40px",
-        color: "#FFFFFF",
-      })
-      .setVisible(false);
+        this.add.text(52, 50, "Select your character", {
+            fontSize: "40px",
+            color: "#FFFFFF",
+        });
 
-    this.startInstructions = this.add
-      .text(52, 750, "Press Space to Start", {
-        fontSize: "40px",
-        color: "#FFFFFF",
-      })
-      .setVisible(false);
+        this.chosenCharacter = this.add
+            .text(52, 195, "Selected", {
+                fontSize: "40px",
+                color: "#FFFFFF",
+            })
+            .setVisible(false);
 
-    this.input.keyboard.once("keydown-SPACE", this.handleContinue, this);
-  }
+        this.characterIntro = this.add
+            .text(52, 250, "", {
+                fontSize: "40px",
+                color: "#FFFFFF",
+            })
+            .setVisible(false);
 
-  update() {}
+        this.startInstructions = this.add
+            .text(52, 750, "Press Space to Start", {
+                fontSize: "40px",
+                color: "#FFFFFF",
+            })
+            .setVisible(false);
 
-  setupMenuEvents(menuItem) {
-    const imageGO = menuItem.imageGO;
-    imageGO.setInteractive();
-    imageGO.setAlpha(0.8);
+        this.input.keyboard.once("keydown-SPACE", this.handleContinue, this);
+    }
 
-    imageGO.on("pointerover", () => {
-      imageGO.setAlpha(1);
-    });
+    update() { }
 
-    imageGO.on("pointerout", () => {
-      imageGO.setAlpha(0.8);
-    });
+    setupMenuEvents(menuItem) {
+        const imageGO = menuItem.imageGO;
+        imageGO.setInteractive();
+        imageGO.setAlpha(0.8);
 
-    imageGO.on("pointerdown", () => {
-      this.clicked.play();
-      this.selection = menuItem.character;
+        imageGO.on("pointerover", () => {
+            imageGO.setAlpha(1);
+        });
 
-      this.chosenCharacter.setText(`${menuItem.key} Selected`).setVisible(true);
-      if (menuItem.key === "Smol") {
-        this.characterIntro
-          .setText(
-            "Smol is great, Smol is tough, Smol is probably already dead"
-          )
-          .setVisible(true)
-          .setScale(0.5);
-      }
-      if (menuItem.key === "Tank") {
-        this.characterIntro
-          .setText("Tank will go where he pleases!")
-          .setVisible(true)
-          .setScale(1);
-      }
-      if (menuItem.key === "Fumiko") {
-        this.characterIntro
-          .setText("Out of sight, out of mind")
-          .setVisible(true)
-          .setScale(1);
-      }
-      if (menuItem.key === "Fireman") {
-        this.characterIntro
-          .setText("He's pretty hot")
-          .setVisible(true)
-          .setScale(0.5);
-      }
-      this.startInstructions.setVisible(true);
-    });
-  }
+        imageGO.on("pointerout", () => {
+            imageGO.setAlpha(0.8);
+        });
 
-  handleContinue() {
-   this.sound.add(assets.GUNCOCK_KEY, { loop: false, volume: 0.53 }).play()
+        imageGO.on("pointerdown", () => {
+            this.clicked.play();
+            this.selection = menuItem.character;
+
+            this.chosenCharacter.setText(`${menuItem.key} Selected`).setVisible(true);
+            if (menuItem.key === "Smol") {
+                this.characterIntro
+                    .setText(
+                        "Smol is great, Smol is tough, Smol is probably already dead"
+                    )
+                    .setVisible(true)
+                    .setScale(0.5);
+            }
+            if (menuItem.key === "Tank") {
+                this.characterIntro
+                    .setText("Tank will go where he pleases!")
+                    .setVisible(true)
+                    .setScale(1);
+            }
+            if (menuItem.key === "Fumiko") {
+                this.characterIntro
+                    .setText("Out of sight, out of mind")
+                    .setVisible(true)
+                    .setScale(1);
+            }
+            if (menuItem.key === "Fireman") {
+                this.characterIntro
+                    .setText("He's pretty hot")
+                    .setVisible(true)
+                    .setScale(0.5);
+            }
+            this.startInstructions.setVisible(true);
+        });
+    }
+
+    handleContinue() {
+        this.sound.add(assets.GUNCOCK_KEY, { loop: false, volume: 0.53 }).play()
         this.cameras.main.fadeOut(1000, 0, 0, 0)
         this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
 
@@ -139,5 +139,5 @@ export default class CharacterSelect extends BaseScene {
             }
         })
     }
-  }
 }
+

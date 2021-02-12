@@ -136,7 +136,7 @@ assets.TANK_SELECT_URL = "assets/characters/Select/TankSelect.png";
 assets.SMOL_SELECT_KEY = "Smol";
 assets.SMOL_SELECT_URL = "assets/characters/Select/smol guy.png";
 assets.FIREMAN_SELECT_KEY = "Fireman";
-assets.FIREMAN_SELECT_URL = "assets/characters/Select/Fireman-portrait.jpg";
+assets.FIREMAN_SELECT_URL = "assets/characters/Select/Fireman-portrait.png";
 
 
 //AUDIO

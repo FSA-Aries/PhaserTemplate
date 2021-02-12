@@ -1,12 +1,12 @@
-import Phaser from 'phaser';
-import assets from '../../public/assets';
-import HealthBar from '../hud/healthbar';
-import { config } from '../main';
-import EventEmmiter from '../events/Emitter';
+import Phaser from "phaser";
+import assets from "../../public/assets";
+import HealthBar from "../hud/healthbar";
+import { config } from "../main";
+import EventEmmiter from "../events/Emitter";
 
 class Smol extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
-    super(scene, x, y, 'player');
+    super(scene, x, y, "player");
     scene.add.existing(this);
     scene.physics.add.existing(this);
     scene.physics.world.enable(this);
@@ -44,7 +44,7 @@ class Smol extends Phaser.Physics.Arcade.Sprite {
     );
 
     this.anims.create({
-      key: 'left',
+      key: "left",
       frames: [
         { key: assets.SMOL_LEFTSTART_KEY },
         { key: assets.SMOL_LEFTONE_KEY },
@@ -54,7 +54,7 @@ class Smol extends Phaser.Physics.Arcade.Sprite {
     });
 
     this.anims.create({
-      key: 'right',
+      key: "right",
       frames: [
         { key: assets.SMOL_RIGHTSTART_KEY },
         { key: assets.SMOL_RIGHTONE_KEY },
@@ -63,7 +63,7 @@ class Smol extends Phaser.Physics.Arcade.Sprite {
       frameRate: 10,
     });
     this.anims.create({
-      key: 'up',
+      key: "up",
       frames: [
         { key: assets.SMOL_RIGHTSTART_KEY },
         { key: assets.SMOL_JUMPONE_KEY },
@@ -72,7 +72,7 @@ class Smol extends Phaser.Physics.Arcade.Sprite {
       frameRate: 10,
     });
     this.anims.create({
-      key: 'down',
+      key: "down",
       frames: [
         { key: assets.SMOL_RIGHTSTART_KEY },
         { key: assets.SMOL_JUMPONE_KEY },
@@ -104,13 +104,13 @@ class Smol extends Phaser.Physics.Arcade.Sprite {
     }
 
     if (this.cursors.left.isDown) {
-      this.anims.play('left', true);
+      this.anims.play("left", true);
     } else if (this.cursors.right.isDown) {
-      this.anims.play('right', true);
+      this.anims.play("right", true);
     } else if (this.cursors.up.isDown) {
-      this.anims.play('up', true);
+      this.anims.play("up", true);
     } else if (this.cursors.down.isDown) {
-      this.anims.play('down', true);
+      this.anims.play("down", true);
     } else {
       this.anims.stop();
 
@@ -150,10 +150,9 @@ class Smol extends Phaser.Physics.Arcade.Sprite {
       return;
     }
     if (this.health - monster.damage <= 0) {
-      EventEmmiter.emit('PLAYER_LOSE');
+      EventEmmiter.emit("PLAYER_LOSE");
       return;
     }
-    // this.body.checkCollision.none = true; ????
     this.hasBeenHit = true;
     this.bounceOff();
     const hitAnim = this.playDamageTween();

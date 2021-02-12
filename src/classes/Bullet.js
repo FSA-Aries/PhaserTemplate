@@ -1,11 +1,8 @@
 import Phaser from "phaser";
-import Fumiko from '../classes/Fumiko'
 
 export default class Bullet extends Phaser.Physics.Arcade.Sprite {
-  // Bullet Constructor
   constructor(scene) {
     super(scene, 0, 0, "bullet");
-    //Phaser.GameObjects.Image.call(this, scene, 0, 0, 'bullet');
 
     this.speed = 1;
     this.born = 0;
@@ -13,15 +10,7 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
     this.xSpeed = 0;
     this.ySpeed = 0;
     this.damage = 0;
-
-    //this.setSize(12, 12, true);
   }
-
-  /* init(data) {
-    this.player = data.character
-    this.damage = this.player.damage
-
-  } */
 
   //Fires a bullet from the player to the reticle
   fire(shooter, target) {
@@ -38,40 +27,16 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
     this.setVelocity(this.xSpeed * 1000, this.ySpeed * 1000);
     this.rotation = shooter.rotation; // angle bullet with shooters rotation
     this.born = 0; // Time since new bullet spawned
-
-
   }
 
-  /*fire: function (shooter, target)
-{
-    this.setPosition(shooter.x, shooter.y); // Initial position
-
-    // Calculate X and y velocity of bullet to moves it from shooter to target
-    ...
-
-    // set bullet's velocity
-    // a factor of 1000 seems to be similar to the example you gave
-    // you should probably omit that and edit this.speed in the constructor instead
-    this.setVelocity(this.xSpeed * 1000, this.ySpeed * 1000);
-
-    this.rotation = shooter.rotation; // angle bullet with shooters rotation
-    th
- */
   hitsEnemy(target) {
-    //target.setActive(false).setVisible(false);
     target.takesHit(this.damage);
-    //target.destroyEvents();
-    console.log(target.health);
-
     this.destroy();
-
-    //target.destroy();
   }
 
   setDamage(damage) {
-    this.damage = damage
+    this.damage = damage;
   }
-
 
   // Updates the position of the bullet each cycle
   update(time, delta) {

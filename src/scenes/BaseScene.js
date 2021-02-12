@@ -19,15 +19,8 @@ class BaseScene extends Phaser.Scene {
 
     this.load.audio("theme", "assets/audio/City-of-the-Disturbed_Looping.mp3");
 
-    this.load.image(
-      "arrow-keys",
-      // "https://thumbs.dreamstime.com/t/arrow-keys-black-3784132.jpg"
-      assets.WASD_URL
-    );
-    this.load.image(
-      "left-mouse-click",
-      "https://support.biodigital.com/hc/article_attachments/360038101893/mouse_click-left.jpg"
-    );
+    this.load.image("arrow-keys", assets.WASD_URL);
+    this.load.image("left-mouse-click", "https://i.imgur.com/OGWM7Jm.png");
   }
 
   create() {
@@ -90,7 +83,6 @@ class BaseScene extends Phaser.Scene {
         menuItem.key
       );
 
-      //lastMenuPositionY += this.lineHeight + 150;
       lastMenuPositionX += this.lineHeight + 150;
       setupMenuEvents(menuItem);
     });

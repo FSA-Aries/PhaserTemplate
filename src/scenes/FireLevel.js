@@ -1,22 +1,18 @@
-import Phaser from 'phaser';
-import Zombie from '../classes/Enemies/Zombie.js';
-import Skeleton from '../classes/Enemies/Skeleton.js';
-import Boss from '../classes/Enemies/Boss';
-import Player from '../classes/Player';
-import Bullet from '../classes/Bullet';
-import assets from '../../public/assets';
-import socket from '../socket/index.js';
-import Score from '../hud/score';
-import Imp from '../classes/Enemies/Imp';
+import Phaser from "phaser";
+import Zombie from "../classes/Enemies/Zombie.js";
+import Skeleton from "../classes/Enemies/Skeleton.js";
+import Bullet from "../classes/Bullet";
+import assets from "../../public/assets";
+import socket from "../socket/index.js";
+import Score from "../hud/score";
+import Imp from "../classes/Enemies/Imp";
 
-import EventEmitter from '../events/Emitter';
-import { config } from '../main';
-
-// import { getEnemyTypes } from "../types";
+import EventEmitter from "../events/Emitter";
+import { config } from "../main";
 
 export default class FireLevel extends Phaser.Scene {
   constructor() {
-    super('fire-level');
+    super("fire-level");
     this.selectedCharacter = undefined;
     this.player = undefined;
     this.cursors = undefined;
@@ -34,7 +30,7 @@ export default class FireLevel extends Phaser.Scene {
 
   ///// PRELOAD /////
   preload() {
-    this.load.audio('intro', 'assets/audio/Intro.mp3');
+    this.load.audio("intro", "assets/audio/Intro.mp3");
 
     this.game.scale.pageAlignHorizontally = true;
     this.game.scale.pageAlignVertically = true;
@@ -47,17 +43,11 @@ export default class FireLevel extends Phaser.Scene {
     this.load.image(assets.RETICLE_KEY, assets.RETICLE_URL);
     this.load.image(assets.FIRESET_KEY, assets.FIRESET_URL);
     this.load.tilemapTiledJSON(assets.FIREMAP_KEY, assets.FIREMAP_URL);
-
-    /* this.load.spritesheet(assets.PLAYER_KEY, assets.PLAYER_URL, {
-      frameWidth: 50,
-      frameHeight: 69,
-    }); */
-    console.log(this.selectedCharacter)
     this.selectedCharacter.loadSprite(this);
 
     this.load.audio(
-      'zombie-attack',
-      'assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3'
+      "zombie-attack",
+      "assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3"
     );
 
     //Enemies
@@ -75,31 +65,17 @@ export default class FireLevel extends Phaser.Scene {
       frameWidth: 30,
       frameHeight: 64,
     });
-    /* this.load.spritesheet(assets.BOSS_KEY, assets.BOSS_URL, {
-      frameWidth: 30,
-      frameHeight: 60,
-    });
-    this.load.spritesheet(assets.BOSS_RIGHT_KEY, assets.BOSS_RIGHT_URL, {
-      frameWidth: 30,
-      frameHeight: 60,
-    });
-    this.load.spritesheet(assets.BOSS_DOWN_KEY, assets.BOSS_DOWN_URL, {
-      frameWidth: 30,
-      frameHeight: 60,
-    }); */
   }
 
   ///// CREATE /////
   create({ gameStatus }) {
     let map = this.make.tilemap({ key: assets.FIREMAP_KEY });
-    let tileSet = map.addTilesetImage('Fireset', assets.FIRESET_KEY);
-    // map.createLayer("Underneath", tileSet, 0, 0);
-    map.createLayer('Floor', tileSet, 0, 0);
-    let lava = map.createLayer('Collision', tileSet, 0, 0);
+    let tileSet = map.addTilesetImage("Fireset", assets.FIRESET_KEY);
+    map.createLayer("Floor", tileSet, 0, 0);
+    let lava = map.createLayer("Collision", tileSet, 0, 0);
     lava.setCollisionByExclusion([-1]);
 
     this.player = this.createPlayer(this, { x: 200, y: 300 });
-    //this.player.setTexture(assets.PLAYER_KEY, 1);
 
     this.physics.add.collider(this.player, lava);
 
@@ -128,9 +104,6 @@ export default class FireLevel extends Phaser.Scene {
         },
         repeat: 3,
       });
-
-      //DON'T DELETE- TO HAVE SET AMOUNT OF ENEMIES INSTEAD OF ENDLESS
-      //repeat: 15
     }
     for (let i = 0; i < 2; i++) {
       this.time.addEvent({
@@ -202,17 +175,16 @@ export default class FireLevel extends Phaser.Scene {
     this.reticle.setDisplaySize(25, 25).setCollideWorldBounds(true);
 
     this.input.on(
-      'pointerdown',
+      "pointerdown",
       function () {
         if (this.player.active === false) return;
 
         // Get bullet from bullets group
         let bullet = playerBullets.get().setActive(true).setVisible(true);
-        bullet.setDamage(this.player.damage)
+        bullet.setDamage(this.player.damage);
 
         if (bullet) {
           bullet.fire(this.player, this.reticle);
-          //this.physics.add.collider(enemy, bullet, enemyHitCallback);
         }
       },
       this
@@ -221,9 +193,8 @@ export default class FireLevel extends Phaser.Scene {
     this.setupFollowupCameraOn(this.player);
 
     this.input.on(
-      'pointermove',
+      "pointermove",
       function (pointer) {
-        //console.log(this.input.mousePointer.x)
         const transformedPoint = this.cameras.main.getWorldPoint(
           pointer.x,
           pointer.y
@@ -231,14 +202,11 @@ export default class FireLevel extends Phaser.Scene {
 
         this.reticle.x = transformedPoint.x;
         this.reticle.y = transformedPoint.y;
-
-        //this.player.rotation = angle;
       },
       this
     );
-    // this.introText();
 
-    if (gameStatus === 'PLAYER_LOSE') {
+    if (gameStatus === "PLAYER_LOSE") {
       return;
     }
     this.createGameEvents();
@@ -312,7 +280,7 @@ export default class FireLevel extends Phaser.Scene {
     }
     return this.player.y * 2 + Math.floor(Math.random() * 201 + 100);
   }
-  createZombie(playerGroup) {
+  createZombie() {
     const randomizedPositionx = this.enemyXSpawn();
     const randomizedPositiony = this.enemyYSpawn();
 
@@ -322,11 +290,11 @@ export default class FireLevel extends Phaser.Scene {
       randomizedPositiony,
       assets.ZOMBIE_KEY,
       assets.ZOMBIE_URL,
-      this.playerGroup,
+      undefined,
       this.player
     );
   }
-  createImp(playerGroup) {
+  createImp() {
     const randomizedPositionx = this.enemyXSpawn();
     const randomizedPositiony = this.enemyYSpawn();
 
@@ -336,7 +304,7 @@ export default class FireLevel extends Phaser.Scene {
       randomizedPositiony,
       assets.IMP_KEY,
       assets.IMP_URL,
-      this.playerGroup,
+      undefined,
       this.player
     );
   }
@@ -356,8 +324,8 @@ export default class FireLevel extends Phaser.Scene {
   }
 
   createGameEvents() {
-    EventEmitter.on('PLAYER_LOSE', () => {
-      this.scene.start('game-over', { gameStatus: 'PLAYER_LOSE' });
+    EventEmitter.on("PLAYER_LOSE", () => {
+      this.scene.start("game-over", { gameStatus: "PLAYER_LOSE" });
     });
   }
   onPlayerCollision(player, monster) {
@@ -369,13 +337,11 @@ export default class FireLevel extends Phaser.Scene {
     let score = this.score.score;
 
     if (monster.health - bullet.damage <= 0) {
-      console.log('SCHENE', this.scene);
-      console.log(this);
       this.score.addPoints(1);
       if (this.score.score >= 30) {
-        this.scene.start('grassScene', {
+        this.scene.start("grassScene", {
           score: score,
-          character: this.selectedCharacter
+          character: this.selectedCharacter,
         });
       }
     }
@@ -384,7 +350,7 @@ export default class FireLevel extends Phaser.Scene {
   }
 
   createScoreLabel(x, y, score) {
-    const style = { fontSize: '32px', fill: '#ff0000', fontStyle: 'bold' };
+    const style = { fontSize: "32px", fill: "#ff0000", fontStyle: "bold" };
     const label = new Score(this, x, y, score, style);
     label.setScrollFactor(0, 0).setScale(1);
     this.add.existing(label);
@@ -397,14 +363,10 @@ export default class FireLevel extends Phaser.Scene {
     button.setScrollFactor(0, 0).setScale(1);
 
     button.on("pointerdown", () => {
-      console.log("clicked");
       if (button.texture.key === assets.SOUND_ON_KEY) {
-        console.log("sound off");
         button.setTexture(assets.SOUND_OFF_KEY);
         this.sound.mute = true;
       } else {
-        console.log("sound on");
-
         button.setTexture(assets.SOUND_ON_KEY);
         this.sound.mute = false;
       }

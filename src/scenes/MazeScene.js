@@ -1,12 +1,11 @@
-import Phaser from 'phaser';
-import assets from '../../public/assets';
-import { config } from '../main';
-import Zombie from '../classes/Enemies/Zombie.js';
-import Vampire from '../classes/Enemies/Vampire.js';
-import Tank from '../classes/Tank';
-import Score from '../hud/score';
-import TankAtk from '../classes/TankAtk';
-import EventEmitter from '../events/Emitter';
+import Phaser from "phaser";
+import assets from "../../public/assets";
+import { config } from "../main";
+import Zombie from "../classes/Enemies/Zombie.js";
+import Vampire from "../classes/Enemies/Vampire.js";
+import Score from "../hud/score";
+import EventEmitter from "../events/Emitter";
+import Bullet from "../classes/Bullet";
 
 export default class MazeScene extends Phaser.Scene {
   constructor() {
@@ -30,25 +29,21 @@ export default class MazeScene extends Phaser.Scene {
     this.game.scale.pageAlignHorizontally = true;
     this.game.scale.pageAlignVertically = true;
     this.game.scale.refresh();
-    this.load.image(assets.TANKATK_KEY, assets.TANKATK_URL);
-    this.load.image(assets.TANK_RETICLE_KEY, assets.TANK_RETICLE_URL);
-    this.load.image(assets.TILEMAZESET_KEY, assets.TILEMAZESET_URL);
+    this.load.image(assets.BULLET_KEY, assets.BULLET_URL);
+    this.load.image(assets.RETICLE_KEY, assets.RETICLE_URL);
 
     this.load.image(assets.SOUND_OFF_KEY, assets.SOUND_OFF_URL);
     this.load.image(assets.SOUND_ON_KEY, assets.SOUND_ON_URL);
 
+    this.load.image(assets.TILEMAZESET_KEY, assets.TILEMAZESET_URL);
     this.load.tilemapTiledJSON(assets.TILEMAZEMAP_KEY, assets.TILEMAZEMAP_URL);
     //LOAD AUDIO
     this.load.audio(
-      'zombie-attack',
-      'assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3'
+      "zombie-attack",
+      "assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3"
     );
 
     //LOAD SPRITE
-    /* this.load.spritesheet(assets.TANK_KEY, assets.TANK_URL, {
-      frameWidth: 61,
-      frameHeight: 86.75,
-    }); */
     this.selectedCharacter.loadSprite(this);
 
     //LOAD ENEMIES
@@ -66,25 +61,23 @@ export default class MazeScene extends Phaser.Scene {
     this.playerGroup = this.add.group();
     //CREATE TILEMAP
     let map = this.make.tilemap({ key: assets.TILEMAZEMAP_KEY });
-    let tileMaze = map.addTilesetImage('Tilemaze', assets.TILEMAZESET_KEY);
-    this.tileMaze = map.createLayer('Base', tileMaze, 0, 0);
-    let collisionLayer = map.createLayer('Colliders', tileMaze, 0, 0);
-    let collisionLayer2 = map.createLayer('Colliders 2', tileMaze, 0, 0);
+    let tileMaze = map.addTilesetImage("Tilemaze", assets.TILEMAZESET_KEY);
+    map.createLayer("Base", tileMaze, 0, 0);
+    let collisionLayer = map.createLayer("Colliders", tileMaze, 0, 0);
+    let collisionLayer2 = map.createLayer("Colliders 2", tileMaze, 0, 0);
 
     this.player = this.createPlayer(this, { x: 240, y: 50 });
-    //this.player.setTexture(assets.TANK_KEY, 0);
 
     collisionLayer.setCollisionByExclusion([-1]);
     this.physics.add.collider(this.player, collisionLayer);
     collisionLayer2.setCollisionByExclusion([-1]);
     this.physics.add.collider(this.player, collisionLayer2);
-    //CREATE PLAYER
 
     //CREATE SCORE LABEL
     this.score = this.createScoreLabel(
       config.rightTopCorner.x + 5,
       config.rightTopCorner.y,
-      0
+      this.getScore()
     );
 
     this.createSoundButton(
@@ -142,8 +135,12 @@ export default class MazeScene extends Phaser.Scene {
 
     //ADD WEAPON
     this.cursors = this.input.keyboard.createCursorKeys();
+    this.cursors = this.input.keyboard.addKeys({
+      esc: Phaser.Input.Keyboard.KeyCodes.ESC,
+    });
+
     let playerBullets = this.physics.add.group({
-      classType: TankAtk,
+      classType: Bullet,
       runChildUpdate: true,
     });
 
@@ -162,21 +159,18 @@ export default class MazeScene extends Phaser.Scene {
       this
     );
 
-    this.reticle = this.physics.add.sprite(0, 0, assets.TANK_RETICLE_KEY);
+    this.reticle = this.physics.add.sprite(0, 0, assets.RETICLE_KEY);
     this.reticle.setDisplaySize(25, 25).setCollideWorldBounds(true);
 
     this.input.on(
-      'pointerdown',
+      "pointerdown",
       function () {
         if (this.player.active === false) return;
-
-        // Get bullet from bullets group
         let bullet = playerBullets.get().setActive(true).setVisible(true);
-        bullet.setDamage(this.player.damage)
+        bullet.setDamage(this.player.damage);
 
         if (bullet) {
           bullet.fire(this.player, this.reticle);
-          //this.physics.add.collider(enemy, bullet, enemyHitCallback);
         }
       },
       this
@@ -184,9 +178,8 @@ export default class MazeScene extends Phaser.Scene {
     this.setupFollowupCameraOn(this.player);
 
     this.input.on(
-      'pointermove',
+      "pointermove",
       function (pointer) {
-        //console.log(this.input.mousePointer.x)
         const transformedPoint = this.cameras.main.getWorldPoint(
           pointer.x,
           pointer.y
@@ -194,13 +187,11 @@ export default class MazeScene extends Phaser.Scene {
 
         this.reticle.x = transformedPoint.x;
         this.reticle.y = transformedPoint.y;
-
-        //this.player.rotation = angle;
       },
       this
     );
 
-    if (gameStatus === 'PLAYER_LOSE') {
+    if (gameStatus === "PLAYER_LOSE") {
       return;
     }
     this.createGameEvents();
@@ -263,8 +254,6 @@ export default class MazeScene extends Phaser.Scene {
   createZombie() {
     const randomizedPositionx = this.enemyXSpawn();
     const randomizedPositiony = this.enemyYSpawn();
-    // const randomizedPositionx = Math.random() * 800 + this.player.x;
-    // const randomizedPositiony = Math.random() * 800 + this.player.y;
     return new Zombie(
       this,
       randomizedPositionx,
@@ -286,32 +275,41 @@ export default class MazeScene extends Phaser.Scene {
       this.player
     );
   }
+  getScore() {
+    if (this.scene.settings.data.score) {
+      return this.scene.settings.data.score;
+    } else {
+      0;
+    }
+  }
 
   createGameEvents() {
-    EventEmitter.on('PLAYER_LOSE', () => {
-      this.scene.start('game-over', { gameStatus: 'PLAYER_LOSE' });
+    EventEmitter.on("PLAYER_LOSE", () => {
+      this.scene.start("game-over", { gameStatus: "PLAYER_LOSE" });
     });
   }
   onPlayerCollision(player, monster) {
-    //It should be the bullet's damage but we will just set a default value for now to test
-    // monster.takesHit(player.damage);
-    //console.log(monster);
     player.takesHit(monster);
     if (monster.zombieAttackSound) monster.zombieAttackSound.play();
-    // player.setBounce(0.5, 0.5);
   }
 
   onBulletCollision(bullet, monster) {
+    let score = this.score.score;
     if (monster.health - bullet.damage <= 0) {
-      console.log(this.score);
       this.score.addPoints(1);
+      if (this.score.score >= 75) {
+        this.scene.start("LevelOne", {
+          score: score,
+          character: this.selectedCharacter,
+        });
+      }
     }
 
     bullet.hitsEnemy(monster);
   }
 
   createScoreLabel(x, y, score) {
-    const style = { fontSize: '32px', fill: '#ff0000', fontStyle: 'bold' };
+    const style = { fontSize: "32px", fill: "#ff0000", fontStyle: "bold" };
 
     const label = new Score(this, x, y, score, style);
     label.setScrollFactor(0, 0).setScale(1);
@@ -325,14 +323,10 @@ export default class MazeScene extends Phaser.Scene {
     button.setScrollFactor(0, 0).setScale(1);
 
     button.on("pointerdown", () => {
-      console.log("clicked");
       if (button.texture.key === assets.SOUND_ON_KEY) {
-        console.log("sound off");
         button.setTexture(assets.SOUND_OFF_KEY);
         this.sound.mute = true;
       } else {
-        console.log("sound on");
-
         button.setTexture(assets.SOUND_ON_KEY);
         this.sound.mute = false;
       }

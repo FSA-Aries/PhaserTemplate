@@ -10,13 +10,6 @@ class MenuScene extends BaseScene {
     ];
   }
 
-  // preload() {
-  //   this.load.image(
-  //     "arrow-keys",
-  //     "https://thumbs.dreamstime.com/t/arrow-keys-black-3784132.jpg"
-  //   );
-  // }
-
   create() {
     super.create();
 

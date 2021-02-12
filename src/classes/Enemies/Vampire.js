@@ -98,7 +98,6 @@ export default class Vampire extends Enemy {
     } else {
       this.anims.play("vampire-taunt", true);
     }
-    // }
 
     if (this.health <= 0) {
       this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.update, this);

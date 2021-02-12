@@ -1,80 +1,63 @@
-import BaseScene from "./BaseScene";
-import assets from "../../public/assets/index";
-import { config } from "../main";
+import BaseScene from './BaseScene';
+import assets from '../../public/assets/index';
+import { config } from '../main';
 
 class MenuScene extends BaseScene {
   constructor() {
-    super("menu-scene");
+    super('menu-scene');
 
     this.menu = [
-      { scene: "PlayScene", text: "Play" },
-      { scene: "LevelOne", text: "Level One" },
-      { scene: "LevelTwo", text: "Fire Level" },
-      { scene: "LevelThree", text: "Darkness Level" },
-      { scene: "WaitingRoom", text: "Multiplayer" },
-      { scene: "grassScene", text: "Grass Level" },
+      { scene: 'PlayScene', text: 'Campaign' },
+      { scene: 'WaitingRoom', text: 'Two-Player' },
+      { scene: 'endless', text: 'Endless' },
+
     ];
   }
-
-  // preload() {
-  //   this.load.image(
-  //     "arrow-keys",
-  //     "https://thumbs.dreamstime.com/t/arrow-keys-black-3784132.jpg"
-  //   );
-  // }
 
   create() {
     super.create();
 
     this.createSoundButton(
       config.rightTopCorner.x - 50,
-      config.rightTopCorner.y + 20
+      700
     ).setScale(0.25, 0.25);
 
     this.createMenu(this.menu, this.setupMenuEvents.bind(this));
 
-    this.add.text(52, 50, "Move", {
-      fontSize: "40px",
+    this.add.text(52, 600, 'Move', {
+      fontSize: '40px',
     });
-    this.add.image(100, 150, "arrow-keys").setDisplaySize(100, 100);
+    this.add.image(100, 700, 'arrow-keys').setDisplaySize(100, 100);
 
-    this.add.text(190, 50, "Shoot", {
-      fontSize: "40px",
+    this.add.text(190, 600, 'Shoot', {
+      fontSize: '40px',
     });
-    this.add.image(250, 150, "left-mouse-click").setDisplaySize(100, 100);
+    this.add.image(250, 700, 'left-mouse-click').setDisplaySize(100, 100);
   }
 
   setupMenuEvents(menuItem) {
     const textGO = menuItem.textGO;
     textGO.setInteractive();
 
-    textGO.on("pointerover", () => {
-      textGO.setStyle({ fill: "#ff0" });
+    textGO.on('pointerover', () => {
+      textGO.setStyle({ fill: '#ff0' });
     });
 
-    textGO.on("pointerout", () => {
-      textGO.setStyle({ fill: "#fff" });
+    textGO.on('pointerout', () => {
+      textGO.setStyle({ fill: '#fff' });
     });
 
-    textGO.on("pointerup", () => {
-      if (menuItem.text === "Play") {
-        menuItem.scene && this.scene.start("characterSelect");
-      }
-      if (menuItem.text === "Multiplayer") {
-        this.scene.start("WaitingRoom");
+    textGO.on('pointerup', () => {
+      if (menuItem.text === 'Campaign') {
+        menuItem.scene &&
+          this.scene.start('characterSelect', { gameType: 'single' });
       }
 
-      if (menuItem.text === "Darkness Level") {
-        menuItem.scene && this.scene.start("darkness-level");
+      if (menuItem.text === 'Two-Player') {
+        this.scene.start('WaitingRoom');
       }
-      if (menuItem.text === "Fire Level") {
-        menuItem.scene && this.scene.start("fire-level");
-      }
-      if (menuItem.text === "Grass Level") {
-        menuItem.scene && this.scene.start("characterSelect");
-      }
-      if (menuItem.text === "Level One") {
-        this.scene.start("LevelOne");
+      if (menuItem.text === 'Endless') {
+        this.scene.start('characterSelect', { gameType: 'endless' });
       }
     });
   }
@@ -84,14 +67,14 @@ class MenuScene extends BaseScene {
 
     button.setScrollFactor(0, 0).setScale(1);
 
-    button.on("pointerdown", () => {
-      console.log("clicked");
+    button.on('pointerdown', () => {
+      console.log('clicked');
       if (button.texture.key === assets.SOUND_ON_KEY) {
-        console.log("sound off");
+        console.log('sound off');
         button.setTexture(assets.SOUND_OFF_KEY);
         this.sound.mute = true;
       } else {
-        console.log("sound on");
+        console.log('sound on');
 
         button.setTexture(assets.SOUND_ON_KEY);
         this.sound.mute = false;

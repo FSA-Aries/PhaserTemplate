@@ -86,7 +86,7 @@ assets.TILEMAZESET_KEY = "tileMazeSet";
 assets.TILEMAZESET_URL = "assets/tilesets/TileMaze.png";
 //BACKGROUND
 assets.MENU_URL = "assets/backgrounds/SPMenuBackground.png";
-assets.WASD_URL = "assets/backgrounds/WASD.png";
+assets.WASD_URL = "assets/backgrounds/wasd.png";
 
 //SELECT
 assets.FUMIKO_SELECT_KEY = "Fumiko";

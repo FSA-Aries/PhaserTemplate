@@ -64,6 +64,7 @@ export default class LevelOne extends Phaser.Scene {
 
   ///// CREATE /////
   create({ gameStatus }) {
+    this.cameras.main.fadeIn(1000, 0, 0, 0)
     this.playerGroup = this.add.group();
     let map = this.make.tilemap({ key: assets.TILEMAP2_KEY });
     let tileSet = map.addTilesetImage("TiledSet2", assets.TILESET2_KEY);
@@ -322,11 +323,23 @@ export default class LevelOne extends Phaser.Scene {
     let score = this.score.score;
     if (monster.health - bullet.damage <= 0) {
       this.score.addPoints(1);
+
       if (this.score.score >= 100) {
-        this.scene.start("darkness-level", {
-          score: score,
-          character: this.selectedCharacter,
-        });
+        this.gameSceneNext();
+        this.time.addEvent({
+          delay: 9000,
+          callback: () => {
+            this.cameras.main.fadeOut(1000, 0, 0, 0)
+            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+
+              this.scene.start("darkness-level", {
+                score: score,
+                character: this.selectedCharacter,
+              });
+            })
+
+          }
+        })
       }
     }
 
@@ -359,4 +372,29 @@ export default class LevelOne extends Phaser.Scene {
     this.add.existing(button);
     return button;
   }
+
+  gameSceneNext() {
+
+    let text1 = this.add.text(310, 370, "Is this the right way?", {
+      fontSize: '10px',
+      color: 'white'
+    }).setScrollFactor(0)
+
+    this.time.addEvent({
+      delay: 3000,
+      callback: () => {
+        text1.setText("The monsters seem to be getting stronger the more I go.")
+
+        this.time.addEvent({
+          delay: 3000,
+          callback: () => {
+            text1.setText("Maybe I just have to keep going...")
+
+          }
+        })
+      }
+    })
+
+  }
+
 }

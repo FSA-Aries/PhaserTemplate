@@ -21,6 +21,8 @@ class BaseScene extends Phaser.Scene {
 
     this.load.image("arrow-keys", assets.WASD_URL);
     this.load.image("left-mouse-click", "https://i.imgur.com/OGWM7Jm.png");
+
+    this.load.audio(assets.MENUMOUSE_KEY, assets.MENUMOUSE_URL);
   }
 
   create() {

@@ -70,6 +70,7 @@ export default class DarknessLevel extends Phaser.Scene {
 
   ///// CREATE /////
   create({ gameStatus }) {
+    this.cameras.main.fadeIn(1000, 0, 0, 0)
     let map = this.make.tilemap({ key: assets.DARKMAP_KEY });
     let tileSet = map.addTilesetImage("darkness", assets.DARKSET_KEY);
     map.createLayer("Floor", tileSet, 0, 0);

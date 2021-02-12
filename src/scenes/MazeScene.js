@@ -58,6 +58,7 @@ export default class MazeScene extends Phaser.Scene {
   }
 
   create({ gameStatus }) {
+    this.cameras.main.fadeIn(1000, 0, 0, 0)
     this.playerGroup = this.add.group();
     //CREATE TILEMAP
     let map = this.make.tilemap({ key: assets.TILEMAZEMAP_KEY });
@@ -297,11 +298,24 @@ export default class MazeScene extends Phaser.Scene {
     let score = this.score.score;
     if (monster.health - bullet.damage <= 0) {
       this.score.addPoints(1);
+
+
       if (this.score.score >= 75) {
-        this.scene.start("LevelOne", {
-          score: score,
-          character: this.selectedCharacter,
-        });
+        this.gameSceneNext();
+
+        this.time.addEvent({
+          delay: 9000,
+          callback: () => {
+            this.cameras.main.fadeOut(1000, 0, 0, 0)
+            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+
+              this.scene.start("LevelOne", {
+                score: score,
+                character: this.selectedCharacter,
+              });
+            })
+          }
+        })
       }
     }
 
@@ -333,5 +347,29 @@ export default class MazeScene extends Phaser.Scene {
     });
     this.add.existing(button);
     return button;
+  }
+
+  gameSceneNext() {
+
+    let text1 = this.add.text(310, 370, "Vampires?! Really?!", {
+      fontSize: '10px',
+      color: 'white'
+    }).setScrollFactor(0)
+
+    this.time.addEvent({
+      delay: 3000,
+      callback: () => {
+        text1.setText("I'm starting to get tired.")
+
+        this.time.addEvent({
+          delay: 3000,
+          callback: () => {
+            text1.setText("If I don't get to safety soon.....")
+
+          }
+        })
+      }
+    })
+
   }
 }

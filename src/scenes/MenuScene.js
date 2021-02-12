@@ -14,8 +14,13 @@ class MenuScene extends BaseScene {
     ];
   }
 
+  /* preload() {
+    this.load.audio(assets.MENUMOUSE_KEY, assets.MENUMOUSE_URL);
+  } */
+
   create() {
     super.create();
+    this.cameras.main.fadeIn(1000, 0, 0, 0)
 
     this.createSoundButton(
       config.rightTopCorner.x - 50,
@@ -40,6 +45,7 @@ class MenuScene extends BaseScene {
     textGO.setInteractive();
 
     textGO.on('pointerover', () => {
+      this.sound.add(assets.MENUMOUSE_KEY, { loop: false, volume: 0.53 }).play();
       textGO.setStyle({ fill: '#ff0' });
     });
 
@@ -48,6 +54,7 @@ class MenuScene extends BaseScene {
     });
 
     textGO.on('pointerup', () => {
+
       if (menuItem.text === 'Campaign') {
         menuItem.scene &&
           this.scene.start('characterSelect', { gameType: 'single' });

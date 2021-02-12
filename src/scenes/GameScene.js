@@ -8,6 +8,7 @@ import Score from "../hud/score";
 import EventEmitter from "../events/Emitter";
 import { config } from "../main";
 
+
 export default class GameScene extends Phaser.Scene {
   constructor() {
     super("game-scene");
@@ -64,6 +65,7 @@ export default class GameScene extends Phaser.Scene {
 
   ///// CREATE /////
   create({ gameStatus }) {
+    this.cameras.main.fadeIn(1000, 0, 0, 0)
     this.playerGroup = this.add.group();
     let map = this.make.tilemap({ key: assets.TILEMAP_KEY });
 
@@ -376,10 +378,25 @@ export default class GameScene extends Phaser.Scene {
       this.score.addPoints(1);
 
       if (score === 15) {
-        this.scene.start("fire-level", {
+        this.gameSceneNext();
+        this.time.addEvent({
+          delay: 9000,
+          callback: () => {
+            this.cameras.main.fadeOut(1000, 0, 0, 0)
+            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+              this.scene.start("fire-level", {
+                score: score,
+                character: this.selectedCharacter,
+              });
+
+            })
+
+          }
+        })
+        /* this.scene.start("fire-level", {
           score: score,
           character: this.selectedCharacter,
-        });
+        }); */
       }
     }
 
@@ -410,5 +427,29 @@ export default class GameScene extends Phaser.Scene {
     });
     this.add.existing(button);
     return button;
+  }
+
+  gameSceneNext() {
+
+    let text1 = this.add.text(310, 370, "Guess this world been overrun by monsters", {
+      fontSize: '10px',
+      color: 'white'
+    }).setScrollFactor(0)
+
+    this.time.addEvent({
+      delay: 3000,
+      callback: () => {
+        text1.setText("That voice on the radio mentioned a safe place...")
+
+        this.time.addEvent({
+          delay: 3000,
+          callback: () => {
+            text1.setText("Guess I'd better head over and check it out.")
+
+          }
+        })
+      }
+    })
+
   }
 }

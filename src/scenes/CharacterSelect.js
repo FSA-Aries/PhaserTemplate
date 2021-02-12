@@ -14,6 +14,7 @@ export default class CharacterSelect extends BaseScene {
         this.startInstructions = undefined;
         this.characterIntro = undefined;
         this.gameType = undefined;
+        this.clicked = undefined
 
 
 
@@ -36,10 +37,14 @@ export default class CharacterSelect extends BaseScene {
         this.load.image(assets.FUMIKO_SELECT_KEY, assets.FUMIKO_SELECT_URL);
         this.load.image(assets.TANK_SELECT_KEY, assets.TANK_SELECT_URL);
         this.load.image(assets.SMOL_SELECT_KEY, assets.SMOL_SELECT_URL);
+
+        this.load.audio(assets.DMCMENU_KEY, assets.DMCMENU_URL);
+        this.load.audio(assets.GUNCOCK_KEY, assets.GUNCOCK_URL);
     }
 
     create() {
         super.create();
+        this.clicked = this.sound.add(assets.DMCMENU_KEY, { loop: false, volume: 0.53 })
 
         this.createCharacterMenu(this.menu, this.setupMenuEvents.bind(this));
 
@@ -91,6 +96,7 @@ export default class CharacterSelect extends BaseScene {
 
         imageGO.on('pointerdown', () => {
             this.selection = menuItem.character;
+            this.clicked.play();
 
             this.chosenCharacter.setText(`${menuItem.key} Selected`).setVisible(true);
 
@@ -123,12 +129,17 @@ export default class CharacterSelect extends BaseScene {
     }
 
     handleContinue() {
-        if (this.gameType === 'endless') {
-            this.scene.start('endless', { character: this.selection });
-        }
+        this.sound.add(assets.GUNCOCK_KEY, { loop: false, volume: 0.53 }).play()
+        this.cameras.main.fadeOut(1000, 0, 0, 0)
+        this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
 
-        if (this.gameType === 'single') {
-            this.scene.start('game-scene', { character: this.selection });
-        }
+            if (this.gameType === 'endless') {
+                this.scene.start('endless', { character: this.selection });
+            }
+
+            if (this.gameType === 'single') {
+                this.scene.start('game-scene', { character: this.selection });
+            }
+        })
     }
 }

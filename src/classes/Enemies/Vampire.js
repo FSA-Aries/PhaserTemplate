@@ -7,7 +7,7 @@ export default class Vampire extends Enemy {
   constructor(scene, x, y, key, type, player) {
     super(scene, x, y, key, type);
 
-    this.health = 300;
+    this.health = 400;
     this.damage = 75;
     this.init();
     this.player = player;

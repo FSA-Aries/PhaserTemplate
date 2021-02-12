@@ -19,7 +19,6 @@ class Fumiko extends Phaser.Physics.Arcade.Sprite {
 
     this.init();
     this.initEvents();
-    this.oldPosition = { x: this.x, y: this.y, rotation: this.rotation };
   }
 
   init() {

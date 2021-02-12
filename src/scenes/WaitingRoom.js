@@ -52,7 +52,7 @@ export default class WaitingRoom extends Phaser.Scene {
     //right popup
     scene.boxes.strokeRect(425, 200, 275, 100);
     scene.boxes.fillRect(425, 200, 275, 100);
-    scene.inputElement = scene.add.dom(562.5, 250).createFromCache("codeform");
+    scene.inputElement = scene.add.dom(562.5, 350).createFromCache("codeform");
     scene.inputElement.addListener("click");
     scene.inputElement.on("click", function (event) {
       console.log("Enter room -->", event.target.name);

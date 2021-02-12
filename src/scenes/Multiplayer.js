@@ -84,10 +84,8 @@ export default class Multiplayer extends Phaser.Scene {
     });
 
     socket.on("currentPlayers", function (playerInfo) {
-      console.log("Playerinfo ->", playerInfo);
       const { player, numPlayers } = playerInfo;
       scene.state.numPlayers = numPlayers;
-      console.log("keys ->", Object.keys(player));
       Object.keys(player).forEach(function (id) {
         if (player[id].playerId === socket.id) {
           scene.player.roomKey = scene.state.roomKey;
@@ -170,7 +168,6 @@ export default class Multiplayer extends Phaser.Scene {
     //Zombie and Skeleton Groups
     let zombieGroup = this.physics.add.group();
     let skeletonGroup = this.physics.add.group();
-    this.zombieGroup = zombieGroup;
 
     for (let i = 0; i < 4; i++) {
       this.time.addEvent({
@@ -178,7 +175,7 @@ export default class Multiplayer extends Phaser.Scene {
         callback: () => {
           zombieGroup.add(this.createZombie(this.playerGroup));
         },
-        repeat: 25,
+        repeat: 20,
       });
     }
 
@@ -248,13 +245,10 @@ export default class Multiplayer extends Phaser.Scene {
 
         // Get bullet from bullets group
         let bullet = playerBullets.get().setActive(true).setVisible(true);
+        bullet.setDamage(this.player.damage);
 
         if (bullet) {
           bullet.fire(this.player, this.reticle);
-
-          socket.emit("bulletFire", {
-            roomKey: this.state.roomKey,
-          });
         }
       },
       this
@@ -370,7 +364,7 @@ export default class Multiplayer extends Phaser.Scene {
       randomizedPositiony,
       assets.ZOMBIE_KEY,
       assets.ZOMBIE_URL,
-      this.playerGroup,
+      playerGroup,
       this.player
     );
   }
@@ -427,14 +421,10 @@ export default class Multiplayer extends Phaser.Scene {
     button.setScrollFactor(0, 0).setScale(1);
 
     button.on("pointerdown", () => {
-      console.log("clicked");
       if (button.texture.key === assets.SOUND_ON_KEY) {
-        console.log("sound off");
         button.setTexture(assets.SOUND_OFF_KEY);
         this.sound.mute = true;
       } else {
-        console.log("sound on");
-
         button.setTexture(assets.SOUND_ON_KEY);
         this.sound.mute = false;
       }

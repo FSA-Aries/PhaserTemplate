@@ -7,8 +7,12 @@ class MenuScene extends BaseScene {
     super("menu-scene");
 
     this.menu = [
-      { scene: "PlayScene", text: "Campaign" },
-      { scene: "WaitingRoom", text: "Two-Player" },
+      { scene: "PlayScene", text: "Play" },
+      { scene: "LevelOne", text: "Level One" },
+      { scene: "LevelTwo", text: "Fire Level" },
+      { scene: "LevelThree", text: "Darkness Level" },
+      { scene: "WaitingRoom", text: "Multiplayer" },
+      { scene: "grassScene", text: "Grass Level" },
     ];
   }
 
@@ -24,20 +28,20 @@ class MenuScene extends BaseScene {
 
     this.createSoundButton(
       config.rightTopCorner.x - 50,
-      config.rightTopCorner.y + 20
+      config.rightTopCorner.y - 20
     ).setScale(0.25, 0.25);
 
     this.createMenu(this.menu, this.setupMenuEvents.bind(this));
 
-    this.add.text(52, 50, "Move", {
+    this.add.text(52, 600, "Move", {
       fontSize: "40px",
     });
-    this.add.image(100, 150, "arrow-keys").setDisplaySize(100, 100);
+    this.add.image(100, 700, "arrow-keys").setDisplaySize(100, 100);
 
-    this.add.text(190, 50, "Shoot", {
+    this.add.text(190, 600, "Shoot", {
       fontSize: "40px",
     });
-    this.add.image(250, 150, "left-mouse-click").setDisplaySize(100, 100);
+    this.add.image(250, 700, "left-mouse-click").setDisplaySize(100, 100);
   }
 
   setupMenuEvents(menuItem) {
@@ -53,11 +57,24 @@ class MenuScene extends BaseScene {
     });
 
     textGO.on("pointerup", () => {
-      if (menuItem.text === "Campaign") {
+      if (menuItem.text === "Play") {
         menuItem.scene && this.scene.start("characterSelect");
       }
-      if (menuItem.text === "Two-Player") {
+      if (menuItem.text === "Multiplayer") {
         this.scene.start("WaitingRoom");
+      }
+
+      if (menuItem.text === "Darkness Level") {
+        menuItem.scene && this.scene.start("darkness-level");
+      }
+      if (menuItem.text === "Fire Level") {
+        menuItem.scene && this.scene.start("fire-level");
+      }
+      if (menuItem.text === "Grass Level") {
+        menuItem.scene && this.scene.start("characterSelect");
+      }
+      if (menuItem.text === "Level One") {
+        this.scene.start("LevelOne");
       }
     });
   }

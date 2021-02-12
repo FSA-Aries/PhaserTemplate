@@ -83,7 +83,7 @@ assets.TILESET2_URL = "assets/tilesets/TileSet2.png";
 assets.TILEMAZEMAP_KEY = "tileMazeMap";
 assets.TILEMAZEMAP_URL = "assets/tilesets/TileMaze.json";
 assets.TILEMAZESET_KEY = "tileMazeSet";
-assets.TILEMAZESET_URL = "assets/tilesets/Tilemaze.png";
+assets.TILEMAZESET_URL = "assets/tilesets/TileMaze.png";
 //BACKGROUND
 assets.MENU_URL = "assets/backgrounds/SPMenuBackground.png";
 assets.WASD_URL = "assets/backgrounds/WASD.png";

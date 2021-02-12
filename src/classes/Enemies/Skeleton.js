@@ -1,9 +1,7 @@
-import Phaser from 'phaser';
-import Enemy from './Enemy';
+import Phaser from "phaser";
+import Enemy from "./Enemy";
 
-const SKELETON_KEY = 'skeleton';
-
-//set this to just skeleton
+const SKELETON_KEY = "skeleton";
 
 export default class Skeleton extends Enemy {
   constructor(scene, x, y, key, type, player) {
@@ -17,7 +15,7 @@ export default class Skeleton extends Enemy {
     this.setBodySize(32, 48, true);
 
     this.anims.create({
-      key: 'skeleton-idleFront',
+      key: "skeleton-idleFront",
       frames: this.anims.generateFrameNumbers(SKELETON_KEY, {
         start: 0,
         end: 2,
@@ -25,7 +23,7 @@ export default class Skeleton extends Enemy {
       frameRate: 10,
     });
     this.anims.create({
-      key: 'skeleton-left',
+      key: "skeleton-left",
       frames: this.anims.generateFrameNumbers(SKELETON_KEY, {
         start: 3,
         end: 5,
@@ -33,7 +31,7 @@ export default class Skeleton extends Enemy {
       frameRate: 10,
     }),
       this.anims.create({
-        key: 'skeleton-right',
+        key: "skeleton-right",
         frames: this.anims.generateFrameNumbers(SKELETON_KEY, {
           start: 6,
           end: 8,
@@ -41,7 +39,7 @@ export default class Skeleton extends Enemy {
         frameRate: 10,
       }),
       this.anims.create({
-        key: 'skeleton-idleBack',
+        key: "skeleton-idleBack",
         frames: this.anims.generateFrameNumbers(SKELETON_KEY, {
           start: 9,
           end: 11,
@@ -49,7 +47,7 @@ export default class Skeleton extends Enemy {
         frameRate: 10,
       });
     this.anims.create({
-      key: 'skeletonHit',
+      key: "skeletonHit",
       frames: this.anims.generateFrameNumbers(SKELETON_KEY, {
         start: 12,
         end: 14,
@@ -66,20 +64,18 @@ export default class Skeleton extends Enemy {
       if (Math.abs(this.x - this.player.x) > Math.abs(this.y - this.player.y)) {
         if (this.player.x < this.x) {
           this.setVelocityX(-50);
-          this.anims.play('skeleton-left', true);
-          //Add skeletonhit for now for demo purposes but revert back to above after
-          //this.anims.play("skeletonHit", true);
+          this.anims.play("skeleton-left", true);
         } else {
           this.setVelocityX(50);
-          this.anims.play('skeleton-right', true);
+          this.anims.play("skeleton-right", true);
         }
       } else {
         if (this.player.y < this.y) {
           this.setVelocityY(-50);
-          this.anims.play('skeleton-idleBack', true);
+          this.anims.play("skeleton-idleBack", true);
         } else {
           this.setVelocityY(50);
-          this.anims.play('skeleton-idleFront', true);
+          this.anims.play("skeleton-idleFront", true);
         }
       }
     }

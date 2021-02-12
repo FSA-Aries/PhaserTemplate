@@ -1,15 +1,10 @@
-import Phaser, { Scene } from "phaser";
+import Phaser from "phaser";
 import Zombie from "../classes/Enemies/Zombie.js";
 import Skeleton from "../classes/Enemies/Skeleton.js";
-import Player from "../classes/Player";
-import Fumiko from "../classes/Fumiko";
-import OtherPlayerSprite from "../classes/OtherPlayers";
 import Bullet from "../classes/Bullet";
 import assets from "../../public/assets";
 import socket from "../socket/index.js";
 import Score from "../hud/score";
-import CharacterSelect from "./CharacterSelect";
-
 import EventEmitter from "../events/Emitter";
 import { config } from "../main";
 
@@ -199,7 +194,6 @@ export default class GrassScene extends Phaser.Scene {
     this.input.on(
       "pointermove",
       function (pointer) {
-        //console.log(this.input.mousePointer.x)
         const transformedPoint = this.cameras.main.getWorldPoint(
           pointer.x,
           pointer.y
@@ -207,8 +201,6 @@ export default class GrassScene extends Phaser.Scene {
 
         this.reticle.x = transformedPoint.x;
         this.reticle.y = transformedPoint.y;
-
-        //this.player.rotation = angle;
       },
       this
     );
@@ -219,29 +211,11 @@ export default class GrassScene extends Phaser.Scene {
     this.createGameEvents();
   }
 
-  //       this
-  //     );
-  //   }
   update() {
     if (this.cursors.esc.isDown) {
       this.scene.pause();
       this.scene.launch("pause-scene", { key: this.name });
     }
-    /* const scene = this;
-        var x = scene.player.x;
-        var y = scene.player.y;
-        if (x !== scene.player.oldPosition.x || y !== scene.player.oldPosition.y) {
-            scene.player.moving = true;
-            socket.emit("playerMovement", {
-                x: scene.player.x,
-                y: scene.player.y,
-                roomKey: scene.state.roomKey,
-            });
-        }
-        scene.player.oldPosition = {
-            x: scene.player.x,
-            y: scene.player.y,
-        }; */
   }
 
   ///// HELPER FUNCTIONS /////
@@ -257,17 +231,6 @@ export default class GrassScene extends Phaser.Scene {
     this.player.createTexture();
     return this.player;
   }
-
-  /* createOtherPlayer(player, playerInfo) {
-        console.log("createOtherPlayer -->", playerInfo);
-        this.otherPlayer = new OtherPlayerSprite(
-            player,
-            playerInfo.x + 40,
-            playerInfo.y + 40
-        );
-        this.otherPlayer.playerId = playerInfo.playerId;
-        // playerGroup.add(this.otherPlayer)
-    } */
 
   setupFollowupCameraOn(player) {
     this.physics.world.setBounds(0, 0, config.width, config.height);
@@ -311,8 +274,6 @@ export default class GrassScene extends Phaser.Scene {
   createZombie() {
     const randomizedPositionx = this.enemyXSpawn();
     const randomizedPositiony = this.enemyYSpawn();
-    // const randomizedPositionx = Math.random() * 800 + this.player.x;
-    // const randomizedPositiony = Math.random() * 800 + this.player.y;
     return new Zombie(
       this,
       randomizedPositionx,
@@ -327,8 +288,6 @@ export default class GrassScene extends Phaser.Scene {
   createSkeleton() {
     const randomizedPositionx = this.enemyXSpawn();
     const randomizedPositiony = this.enemyYSpawn();
-    // const randomizedPositionx = Math.random() * 800 + this.player.x;
-    // const randomizedPositiony = Math.random() * 800 + this.player.y;
     return new Skeleton(
       this,
       randomizedPositionx,
@@ -387,14 +346,10 @@ export default class GrassScene extends Phaser.Scene {
     button.setScrollFactor(0, 0).setScale(1);
 
     button.on("pointerdown", () => {
-      console.log("clicked");
       if (button.texture.key === assets.SOUND_ON_KEY) {
-        console.log("sound off");
         button.setTexture(assets.SOUND_OFF_KEY);
         this.sound.mute = true;
       } else {
-        console.log("sound on");
-
         button.setTexture(assets.SOUND_ON_KEY);
         this.sound.mute = false;
       }

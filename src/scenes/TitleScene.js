@@ -10,7 +10,6 @@ class TitleScene extends Phaser.Scene {
   }
   create() {
     this.add.image(400, 400, "title-photo");
-    // title.setDisplaySize(800, 800);
     this.input.keyboard.once("keydown", this.handleContinue, this);
   }
   handleContinue() {

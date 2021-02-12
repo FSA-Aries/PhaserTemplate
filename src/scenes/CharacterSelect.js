@@ -16,6 +16,7 @@ export default class CharacterSelect extends BaseScene {
         this.gameType = undefined;
 
 
+
         this.menu = [
             { key: assets.TANK_SELECT_KEY, character: Tank },
             { key: assets.FUMIKO_SELECT_KEY, character: Fumiko },
@@ -92,6 +93,7 @@ export default class CharacterSelect extends BaseScene {
             this.selection = menuItem.character;
 
             this.chosenCharacter.setText(`${menuItem.key} Selected`).setVisible(true);
+
             if (menuItem.key === 'Smol') {
                 this.characterIntro
                     .setText(
@@ -99,6 +101,7 @@ export default class CharacterSelect extends BaseScene {
                     )
                     .setVisible(true)
                     .setScale(0.5);
+
             }
 
             if (menuItem.key === 'Tank') {
@@ -106,12 +109,14 @@ export default class CharacterSelect extends BaseScene {
                     .setText('Tank will go where he pleases!')
                     .setVisible(true)
                     .setScale(1);
+
             }
             if (menuItem.key === 'Fumiko') {
                 this.characterIntro
                     .setText('Out of sight, out of mind')
                     .setVisible(true)
                     .setScale(1);
+
             }
             this.startInstructions.setVisible(true);
         });

@@ -340,7 +340,6 @@ export default class LevelOne extends Phaser.Scene {
 
           }
         })
-
       }
     }
 
@@ -348,7 +347,11 @@ export default class LevelOne extends Phaser.Scene {
   }
 
   createScoreLabel(x, y, score) {
-    const style = { fontSize: "32px", fill: "#ff0000", fontStyle: "bold" };
+    const style = {
+      fontSize: "32px",
+      fill: "#ffffff",
+      fontStyle: "bold",
+    };
     const label = new Score(this, x, y, score, style);
     label.setScrollFactor(0, 0).setScale(1);
     this.add.existing(label);

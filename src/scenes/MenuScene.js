@@ -55,7 +55,8 @@ class MenuScene extends BaseScene {
 
     textGO.on('pointerup', () => {
       if (menuItem.text === 'Campaign') {
-        menuItem.scene && this.scene.start('characterSelect');
+        menuItem.scene &&
+          this.scene.start('characterSelect', { gameType: 'single' });
       }
       if (menuItem.text === 'Two-Player') {
         this.scene.start('WaitingRoom');

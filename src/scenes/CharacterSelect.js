@@ -112,10 +112,12 @@ export default class CharacterSelect extends BaseScene {
   }
 
   handleContinue() {
-    if (this.gameType) {
+    if (this.gameType === 'endless') {
       this.scene.start('endless', { character: this.selection });
     }
 
-    this.scene.start('game-scene', { character: this.selection });
+    if (this.gameType === 'single') {
+      this.scene.start('game-scene', { character: this.selection });
+    }
   }
 }

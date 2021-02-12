@@ -33,10 +33,6 @@ class PauseScene extends BaseScene {
         this.scene.stop("pause-scene");
       }
       if (menuItem.text === "End Game") {
-        // this.registry.destroy();
-        // this.events.off();
-        // this.scene.restart();
-        // this.scene.start("menu-scene");
         this.scene.stop("pause-scene");
         this.scene.stop(this.name);
         this.scene.start("menu-scene");

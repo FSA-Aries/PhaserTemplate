@@ -1,4 +1,3 @@
-
 import Phaser from "phaser";
 import Zombie from "../classes/Enemies/Zombie.js";
 import Skeleton from "../classes/Enemies/Skeleton.js";
@@ -13,10 +12,9 @@ import Score from "../hud/score";
 import EventEmitter from "../events/Emitter";
 import { config } from "../main";
 
-
 export default class DarknessLevel extends Phaser.Scene {
   constructor() {
-    super('darkness-level');
+    super("darkness-level");
     this.selectedCharacter = undefined;
     this.player = undefined;
     this.cursors = undefined;
@@ -25,7 +23,7 @@ export default class DarknessLevel extends Phaser.Scene {
     this.score = undefined;
     //Setup Sockets
     this.socket = socket;
-    this.name = 'darkness-level';
+    this.name = "darkness-level";
   }
 
   init(data) {
@@ -76,7 +74,7 @@ export default class DarknessLevel extends Phaser.Scene {
     let tileSet = map.addTilesetImage("darkness", assets.DARKSET_KEY);
 
     map.createLayer("Floor", tileSet, 0, 0);
-    let darkness = map.createLayer("Collision", tileSet, 0, 0)
+    let darkness = map.createLayer("Collision", tileSet, 0, 0);
     darkness.setCollisionByExclusion([-1]);
 
     this.player = this.createPlayer(this, { x: 200, y: 300 });
@@ -196,14 +194,13 @@ export default class DarknessLevel extends Phaser.Scene {
       return;
     }
     this.createGameEvents();
-
-
+  }
+  update() {
     if (this.cursors.esc.isDown) {
       this.scene.pause();
-      this.scene.launch('pause-scene', { key: this.name });
+      this.scene.launch("pause-scene", { key: this.name });
     }
   }
-
 
   ///// HELPER FUNCTIONS /////
 
@@ -394,8 +391,6 @@ export default class DarknessLevel extends Phaser.Scene {
     });
   }
   onPlayerCollision(player, monster) {
-
-
     player.takesHit(monster);
     if (monster.zombieAttackSound) monster.zombieAttackSound.play();
   }

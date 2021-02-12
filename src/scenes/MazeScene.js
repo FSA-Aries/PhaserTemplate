@@ -3,9 +3,7 @@ import assets from "../../public/assets";
 import { config } from "../main";
 import Zombie from "../classes/Enemies/Zombie.js";
 import Vampire from "../classes/Enemies/Vampire.js";
-import Tank from "../classes/Tank";
 import Score from "../hud/score";
-import TankAtk from "../classes/TankAtk";
 import EventEmitter from "../events/Emitter";
 import Bullet from "../classes/Bullet";
 
@@ -46,10 +44,6 @@ export default class MazeScene extends Phaser.Scene {
     );
 
     //LOAD SPRITE
-    /* this.load.spritesheet(assets.TANK_KEY, assets.TANK_URL, {
-      frameWidth: 61,
-      frameHeight: 86.75,
-    }); */
     this.selectedCharacter.loadSprite(this);
 
     //LOAD ENEMIES
@@ -73,19 +67,17 @@ export default class MazeScene extends Phaser.Scene {
     let collisionLayer2 = map.createLayer("Colliders 2", tileMaze, 0, 0);
 
     this.player = this.createPlayer(this, { x: 240, y: 50 });
-    //this.player.setTexture(assets.TANK_KEY, 0);
 
     collisionLayer.setCollisionByExclusion([-1]);
     this.physics.add.collider(this.player, collisionLayer);
     collisionLayer2.setCollisionByExclusion([-1]);
     this.physics.add.collider(this.player, collisionLayer2);
-    //CREATE PLAYER
 
     //CREATE SCORE LABEL
     this.score = this.createScoreLabel(
       config.rightTopCorner.x + 5,
       config.rightTopCorner.y,
-      0
+      this.getScore()
     );
 
     this.createSoundButton(
@@ -174,14 +166,11 @@ export default class MazeScene extends Phaser.Scene {
       "pointerdown",
       function () {
         if (this.player.active === false) return;
-
-        // Get bullet from bullets group
         let bullet = playerBullets.get().setActive(true).setVisible(true);
         bullet.setDamage(this.player.damage);
 
         if (bullet) {
           bullet.fire(this.player, this.reticle);
-          //this.physics.add.collider(enemy, bullet, enemyHitCallback);
         }
       },
       this
@@ -191,7 +180,6 @@ export default class MazeScene extends Phaser.Scene {
     this.input.on(
       "pointermove",
       function (pointer) {
-        //console.log(this.input.mousePointer.x)
         const transformedPoint = this.cameras.main.getWorldPoint(
           pointer.x,
           pointer.y
@@ -199,8 +187,6 @@ export default class MazeScene extends Phaser.Scene {
 
         this.reticle.x = transformedPoint.x;
         this.reticle.y = transformedPoint.y;
-
-        //this.player.rotation = angle;
       },
       this
     );
@@ -268,8 +254,6 @@ export default class MazeScene extends Phaser.Scene {
   createZombie() {
     const randomizedPositionx = this.enemyXSpawn();
     const randomizedPositiony = this.enemyYSpawn();
-    // const randomizedPositionx = Math.random() * 800 + this.player.x;
-    // const randomizedPositiony = Math.random() * 800 + this.player.y;
     return new Zombie(
       this,
       randomizedPositionx,
@@ -291,6 +275,13 @@ export default class MazeScene extends Phaser.Scene {
       this.player
     );
   }
+  getScore() {
+    if (this.scene.settings.data.score) {
+      return this.scene.settings.data.score;
+    } else {
+      0;
+    }
+  }
 
   createGameEvents() {
     EventEmitter.on("PLAYER_LOSE", () => {
@@ -298,18 +289,13 @@ export default class MazeScene extends Phaser.Scene {
     });
   }
   onPlayerCollision(player, monster) {
-    //It should be the bullet's damage but we will just set a default value for now to test
-    // monster.takesHit(player.damage);
-    //console.log(monster);
     player.takesHit(monster);
     if (monster.zombieAttackSound) monster.zombieAttackSound.play();
-    // player.setBounce(0.5, 0.5);
   }
 
   onBulletCollision(bullet, monster) {
     let score = this.score.score;
     if (monster.health - bullet.damage <= 0) {
-      console.log(this.score);
       this.score.addPoints(1);
       if (this.score.score >= 75) {
         this.scene.start("LevelOne", {

@@ -15,6 +15,7 @@ export default class CharacterSelect extends BaseScene {
     this.characterIntro = undefined;
     this.gameType = undefined;
 
+
     this.menu = [
       { key: assets.TANK_SELECT_KEY, character: Tank },
       { key: assets.FUMIKO_SELECT_KEY, character: Fumiko },
@@ -23,10 +24,12 @@ export default class CharacterSelect extends BaseScene {
     ];
   }
 
+
   init(data) {
     //console.log('DATA', data);
     this.gameType = data.gameType;
   }
+
 
   preload() {
     this.load.image(assets.FUMIKO_SELECT_KEY, assets.FUMIKO_SELECT_URL);
@@ -38,6 +41,7 @@ export default class CharacterSelect extends BaseScene {
     super.create();
 
     this.createCharacterMenu(this.menu, this.setupMenuEvents.bind(this));
+
 
     this.add.text(52, 50, 'Select your character', {
       fontSize: '40px',
@@ -75,6 +79,7 @@ export default class CharacterSelect extends BaseScene {
     imageGO.setInteractive();
     imageGO.setAlpha(0.8);
 
+
     imageGO.on('pointerover', () => {
       imageGO.setAlpha(1);
     });
@@ -95,6 +100,7 @@ export default class CharacterSelect extends BaseScene {
           .setVisible(true)
           .setScale(0.5);
       }
+
       if (menuItem.key === 'Tank') {
         this.characterIntro
           .setText('Tank will go where he pleases!')

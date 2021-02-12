@@ -1,9 +1,4 @@
 const gameRooms = {
-  // [roomKey]: {
-  //   users: [],
-  //   scores: [],
-  //   players: {},
-  // },
 };
 
 module.exports = (io) => {
@@ -79,15 +74,6 @@ module.exports = (io) => {
         score: score,
       });
     });
-
-    // socket.on("playerDied", function (data) {
-    //   const { roomKey } = data;
-    //   gameRooms[roomKey].players[socket.id];
-    //   console.log("THIS FIRES CHECKING");
-    //   socket.to(roomKey).emit("declareVictor", {
-    //     playerInfo: gameRooms[roomKey].players[socket.id],
-    //   });
-    // });
 
     socket.on("disconnect", function () {
       let roomKey = "";

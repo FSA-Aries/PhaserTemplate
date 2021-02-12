@@ -9,9 +9,7 @@ class TitleScene extends Phaser.Scene {
     this.load.image("title-photo", "assets/backgrounds/SPTitleScreen.png");
   }
   create() {
-    let title = this.add.image(400, 400, "title-photo");
-    // title.setDisplaySize(800, 800);
-    title.setScale(0.55, 1);
+    this.add.image(400, 400, "title-photo");
     this.input.keyboard.once("keydown", this.handleContinue, this);
   }
   handleContinue() {

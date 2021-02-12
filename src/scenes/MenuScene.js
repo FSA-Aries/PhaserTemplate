@@ -10,22 +10,16 @@ class MenuScene extends BaseScene {
       { scene: 'PlayScene', text: 'Campaign' },
       { scene: 'WaitingRoom', text: 'Two-Player' },
       { scene: 'endless', text: 'Endless' },
+
     ];
   }
-
-  // preload() {
-  //   this.load.image(
-  //     "arrow-keys",
-  //     "https://thumbs.dreamstime.com/t/arrow-keys-black-3784132.jpg"
-  //   );
-  // }
 
   create() {
     super.create();
 
     this.createSoundButton(
       config.rightTopCorner.x - 50,
-      config.rightTopCorner.y + 20
+      config.rightTopCorner.y - 20
     ).setScale(0.25, 0.25);
 
     this.createMenu(this.menu, this.setupMenuEvents.bind(this));
@@ -58,6 +52,7 @@ class MenuScene extends BaseScene {
         menuItem.scene &&
           this.scene.start('characterSelect', { gameType: 'single' });
       }
+
       if (menuItem.text === 'Two-Player') {
         this.scene.start('WaitingRoom');
       }

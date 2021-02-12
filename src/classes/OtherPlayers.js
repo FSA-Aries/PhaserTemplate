@@ -82,20 +82,6 @@ class OtherPlayerSprite extends Phaser.Physics.Arcade.Sprite {
     if (this.hasBeenHit || !this.body) {
       return;
     }
-    // var x = this.x;
-    // var y = this.y;
-    // if (x !== this.oldPosition.x || y !== this.oldPosition.y)
-    //   this.moving = true;
-    // socket.emit("playerMovement", {
-    //   x: this.x,
-    //   y: this.y,
-    // });
-
-    // this.oldPosition = {
-    //   x: this.x,
-    //   y: this.y,
-    //   rotation: this.rotation,
-    // };
   }
 
   playDamageTween() {
@@ -143,46 +129,7 @@ class OtherPlayerSprite extends Phaser.Physics.Arcade.Sprite {
       hitAnim.stop();
       this.clearTint();
     });
-
-    // this.scene.time.addEvent({
-    //   //controls how far and for how long the bounce happens
-    //   delay: 250,
-    //   callback: () => {
-    //     this.hasBeenHit = false;
-    //   },
-    //   loop: false,
-    // });
   }
-  // bounceBack(monster) {
-  //   // 1) Animation that we play
-  //   // 2) The velocity that moves
-  //   let direction;
-  //   if (this.body.touching.right) {
-  //     direction = "right";
-  //   } else if (this.body.touching.left) {
-  //     direction = "left";
-  //   } else if (this.body.touching.up) {
-  //     direction = "up";
-  //   } else if (this.body.touching.down) {
-  //     direction = "down";
-  //   }
-
-  //   console.log("DIRECTION ->", direction);
-  //   console.log("VELOCITY ->", this.body.velocity);
-  //   if (direction === "left") {
-  //     // this.anims.play("right", true);
-  //     this.setVelocityX(-600);
-  //   } else if (direction === "right") {
-  //     // this.anims.play("left", true);
-  //     this.setVelocityX(600);
-  //   } else if (direction === "up") {
-  //     // this.anims.play("down", true);
-  //     this.setVelocityY(-600);
-  //   } else if (direction === "down") {
-  //     // this.anims.play("up", true);
-  //     this.setVelocityY(600);
-  //   }
-  // }
 }
 
 export default OtherPlayerSprite;

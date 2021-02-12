@@ -13,7 +13,7 @@ class Fireman extends Phaser.Physics.Arcade.Sprite {
     this.cursors = undefined;
     this.playerId = undefined;
 
-    this.damage = 50;
+    this.damage = 150;
     this.x = x;
     this.y = y;
 

@@ -194,7 +194,8 @@ export default class DarknessLevel extends Phaser.Scene {
       return;
     }
     this.createGameEvents();
-  }
+
+  
   update() {
     if (this.cursors.esc.isDown) {
       this.scene.pause();
@@ -400,8 +401,8 @@ export default class DarknessLevel extends Phaser.Scene {
 
     if (monster.health - bullet.damage <= 0) {
       this.score.addPoints(1);
-      if (score === 100) {
-        this.scene.start("LevelOne", {
+      if (score >= 399) {
+        this.scene.start("grassScene", {
           score: score,
         });
       }

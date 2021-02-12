@@ -90,23 +90,23 @@ export default class GameScene extends Phaser.Scene {
     let skeletonGroup = this.physics.add.group();
     this.zombieGroup = zombieGroup;
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 3; i++) {
       this.time.addEvent({
-        delay: 2000,
+        delay: 3000,
         callback: () => {
           zombieGroup.add(this.createZombie());
         },
-        repeat: 25,
+        repeat: 24,
       });
     }
-
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 1; i++) {
       this.time.addEvent({
-        delay: 5000,
+        delay: 3000,
         callback: () => {
           skeletonGroup.add(this.createSkeleton());
         },
-        repeat: 3,
+
+        repeat: 24,
       });
     }
 
@@ -312,7 +312,7 @@ export default class GameScene extends Phaser.Scene {
               fontSize: "25px",
               color: "red",
             });
-            this.zombieGroup.add(this.createZombie());
+            // this.zombieGroup.add(this.createZombie());
             this.time.addEvent({
               delay: 5000,
               callback: () => {
@@ -375,8 +375,8 @@ export default class GameScene extends Phaser.Scene {
     if (monster.health - bullet.damage <= 0) {
       this.score.addPoints(1);
 
-      if (score === 15) {
-        this.scene.start("fire-level", {
+      if (score >= 99) {
+        this.scene.start("LevelOne", {
           score: score,
           character: this.selectedCharacter,
         });

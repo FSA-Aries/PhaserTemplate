@@ -1,5 +1,4 @@
-const gameRooms = {
-};
+const gameRooms = {};
 
 module.exports = (io) => {
   console.log("Socket.io is now listening!");
@@ -9,10 +8,8 @@ module.exports = (io) => {
     );
 
     socket.on("joinRoom", (roomKey) => {
-      console.log("Joined room -->", roomKey);
       socket.join(roomKey);
       const roomInfo = gameRooms[roomKey];
-      console.log("roomInfo before -->", roomInfo);
       roomInfo.players[socket.id] = {
         rotation: 0,
         x: 400,
@@ -21,7 +18,6 @@ module.exports = (io) => {
       };
       roomInfo.numPlayers = Object.keys(roomInfo.players).length;
       socket.emit("setState", roomInfo);
-      console.log("roomInfo after ->", roomInfo);
       socket.emit("currentPlayers", {
         player: roomInfo.players,
         numPlayers: roomInfo.numPlayers,
@@ -39,7 +35,6 @@ module.exports = (io) => {
     });
     socket.on("getRoomCode", async function () {
       let key = codeGenerator();
-      console.log("key -->", key);
       Object.keys(gameRooms).includes(key) ? (key = codeGenerator()) : key;
       gameRooms[key] = {
         roomKey: key,

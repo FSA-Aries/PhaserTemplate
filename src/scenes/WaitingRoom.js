@@ -7,6 +7,8 @@ export default class WaitingRoom extends Phaser.Scene {
     this.state = {};
     this.hasBeenSet = false;
     this.roomKey = "";
+    this.cursors = undefined;
+    this.name = "WaitingRoom";
   }
 
   preload() {
@@ -15,6 +17,11 @@ export default class WaitingRoom extends Phaser.Scene {
 
   create() {
     const scene = this;
+
+    this.cursors = this.input.keyboard.createCursorKeys();
+    this.cursors = this.input.keyboard.addKeys({
+      esc: Phaser.Input.Keyboard.KeyCodes.ESC,
+    });
 
     scene.popUp = scene.add.graphics();
     scene.boxes = scene.add.graphics();
@@ -52,7 +59,7 @@ export default class WaitingRoom extends Phaser.Scene {
     //right popup
     scene.boxes.strokeRect(425, 200, 275, 100);
     scene.boxes.fillRect(425, 200, 275, 100);
-    scene.inputElement = scene.add.dom(562.5, 250).createFromCache("codeform");
+    scene.inputElement = scene.add.dom(562.5, 350).createFromCache("codeform");
     scene.inputElement.addListener("click");
     scene.inputElement.on("click", function (event) {
       console.log("Enter room -->", event.target.name);
@@ -67,8 +74,8 @@ export default class WaitingRoom extends Phaser.Scene {
       socket.emit("getRoomCode");
     });
 
-    scene.notValidText = scene.add.text(670, 295, "", {
-      color: "#273043",
+    scene.notValidText = scene.add.text(500, 275, "", {
+      color: "#00ff00",
       fontSize: "15px",
       fontFamily: "Stencil Std, fantasy",
     });
@@ -92,5 +99,10 @@ export default class WaitingRoom extends Phaser.Scene {
       scene.scene.start("Multiplayer", { input: input });
     });
   }
-  update() {}
+  update() {
+    if (this.cursors.esc.isDown) {
+      this.scene.pause();
+      this.scene.launch("pause-scene", { key: this.name });
+    }
+  }
 }

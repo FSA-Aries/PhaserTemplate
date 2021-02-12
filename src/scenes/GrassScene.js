@@ -98,25 +98,30 @@ export default class GrassScene extends Phaser.Scene {
 
     // Enemy Creation
 
-    for (let i = 0; i < 4; i++) {
-      this.time.addEvent({
-        delay: 2000,
-        callback: () => {
-          zombieGroup.add(this.createZombie().setTint(0x3fbf3f));
-        },
-        repeat: 25,
-      });
-    }
-    for (let i = 0; i < 2; i++) {
-      this.time.addEvent({
-        delay: 5000,
-        callback: () => {
-          skeletonGroup.add(this.createSkeleton().setTint(0x3fbf3f));
-        },
+    this.time.addEvent({
+      delay: 15000,
+      callback: () => {
+        for (let i = 0; i < 5; i++) {
+          this.time.addEvent({
+            delay: 2000,
+            callback: () => {
+              zombieGroup.add(this.createZombie().setTint(0x3fbf3f));
+            },
+            loop: true,
+          });
+        }
+        for (let i = 0; i < 5; i++) {
+          this.time.addEvent({
+            delay: 5000,
+            callback: () => {
+              skeletonGroup.add(this.createSkeleton().setTint(0x3fbf3f));
+            },
 
-        loop: true,
-      });
-    }
+            loop: true,
+          });
+        }
+      },
+    });
     //1) We need to create a player group and add it to colliders
     //2) We need to refactor how we create the enemy classes (specify which player zombie follows)
     ////Can add a method that takes in array of zombies and all of the players and for each monster --> checks distance and points towards player
@@ -313,12 +318,12 @@ export default class GrassScene extends Phaser.Scene {
 
     if (monster.health - bullet.damage <= 0) {
       this.score.addPoints(1);
-      if (this.score.score >= 50) {
-        this.scene.start("maze-scene", {
-          score: score,
-          character: this.selectedCharacter,
-        });
-      }
+      // if (this.score.score >= 50) {
+      //   this.scene.start("maze-scene", {
+      //     score: score,
+      //     character: this.selectedCharacter,
+      //   });
+      // }
     }
 
     bullet.hitsEnemy(monster);

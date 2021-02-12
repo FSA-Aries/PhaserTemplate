@@ -28,12 +28,13 @@ class PauseScene extends BaseScene {
       textGO.setStyle({ fill: "#fff" });
     });
     textGO.on("pointerup", () => {
-      console.log(this.game);
       if (menuItem.text === "Continue") {
         this.scene.resume(this.name);
         this.scene.stop("pause-scene");
       }
       if (menuItem.text === "End Game") {
+        this.scene.stop("pause-scene");
+        this.scene.stop(this.name);
         this.scene.start("menu-scene");
       }
     });

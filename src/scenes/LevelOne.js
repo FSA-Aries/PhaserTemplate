@@ -97,23 +97,23 @@ export default class LevelOne extends Phaser.Scene {
 
     // Enemy Creation
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 3; i++) {
       this.time.addEvent({
-        delay: 2000,
+        delay: 3000,
         callback: () => {
           zombieGroup.add(this.createZombie().setTint(0x0000ff));
         },
-        repeat: 25,
+        repeat: 24,
       });
     }
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 1; i++) {
       this.time.addEvent({
-        delay: 5000,
+        delay: 3000,
         callback: () => {
           skeletonGroup.add(this.createSkeleton().setTint(0xea0909));
         },
 
-        loop: true,
+        repeat: 24,
       });
     }
 
@@ -240,7 +240,7 @@ export default class LevelOne extends Phaser.Scene {
 
     this.cameras.main
       .setBounds(0, 0, config.width, config.height)
-      .setZoom(config.zoomFactor + 0.5);
+      .setZoom(config.zoomFactor);
     this.cameras.main.startFollow(player);
   }
 
@@ -324,15 +324,15 @@ export default class LevelOne extends Phaser.Scene {
     if (monster.health - bullet.damage <= 0) {
       this.score.addPoints(1);
 
-      if (this.score.score >= 100) {
+
+      if (this.score.score >= 199) {
         this.gameSceneNext();
         this.time.addEvent({
           delay: 9000,
           callback: () => {
             this.cameras.main.fadeOut(1000, 0, 0, 0)
             this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
-
-              this.scene.start("darkness-level", {
+              this.scene.start("maze-scene", {
                 score: score,
                 character: this.selectedCharacter,
               });
@@ -340,6 +340,7 @@ export default class LevelOne extends Phaser.Scene {
 
           }
         })
+
       }
     }
 
@@ -348,7 +349,6 @@ export default class LevelOne extends Phaser.Scene {
 
   createScoreLabel(x, y, score) {
     const style = { fontSize: "32px", fill: "#ff0000", fontStyle: "bold" };
-
     const label = new Score(this, x, y, score, style);
     label.setScrollFactor(0, 0).setScale(1);
     this.add.existing(label);

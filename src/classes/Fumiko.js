@@ -13,13 +13,12 @@ class Fumiko extends Phaser.Physics.Arcade.Sprite {
     this.cursors = undefined;
     this.playerId = undefined;
 
-    this.damage = 50;
+    this.damage = 100;
     this.x = x;
     this.y = y;
 
     this.init();
     this.initEvents();
-    this.oldPosition = { x: this.x, y: this.y, rotation: this.rotation };
   }
 
   init() {
@@ -95,7 +94,6 @@ class Fumiko extends Phaser.Physics.Arcade.Sprite {
       return;
     }
     this.setVelocity(0);
-
 
     if (this.cursors.left.isDown) {
       this.setVelocityX(-300);
@@ -176,8 +174,6 @@ class Fumiko extends Phaser.Physics.Arcade.Sprite {
   }
 
   static loadSprite(scene) {
-
-
     scene.load.image(assets.FUMIKO_UP1_KEY, assets.FUMIKO_UP1_URL);
     scene.load.image(assets.FUMIKO_UP2_KEY, assets.FUMIKO_UP2_URL);
     scene.load.image(assets.FUMIKO_UP3_KEY, assets.FUMIKO_UP3_URL);

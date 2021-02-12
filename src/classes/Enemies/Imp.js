@@ -13,8 +13,8 @@ export default class Imp extends Phaser.Physics.Arcade.Sprite {
     this.scene.physics.world.enable(this);
     this.scene.add.existing(this);
     this.player = player;
-    this.health = 30;
-    this.damage = 27;
+    this.health = 300;
+    this.damage = 50;
 
     this.init();
     this.initEvents();

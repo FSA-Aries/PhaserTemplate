@@ -97,31 +97,31 @@ export default class FireLevel extends Phaser.Scene {
     let impGroup = this.physics.add.group();
 
     // Enemy Creation
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 2; i++) {
       this.time.addEvent({
-        delay: 5000,
+        delay: 3000,
         callback: () => {
           zombieGroup.add(this.createZombie().setTint(0xff0000));
         },
-        repeat: 3,
-      });
-    }
-    for (let i = 0; i < 2; i++) {
-      this.time.addEvent({
-        delay: 2000,
-        callback: () => {
-          impGroup.add(this.createImp());
-        },
-        repeat: 3,
+        repeat: 24,
       });
     }
     for (let i = 0; i < 1; i++) {
       this.time.addEvent({
-        delay: 20000,
+        delay: 3000,
+        callback: () => {
+          impGroup.add(this.createImp());
+        },
+        repeat: 24,
+      });
+    }
+    for (let i = 0; i < 1; i++) {
+      this.time.addEvent({
+        delay: 3000,
         callback: () => {
           skeletonGroup.add(this.createSkeleton().setTint(0xff0000));
         },
-        repeat: 3,
+        repeat: 24,
       });
     }
 
@@ -222,11 +222,7 @@ export default class FireLevel extends Phaser.Scene {
 
   // PLAYER ANIMATION
   createPlayer(player, playerInfo) {
-    this.player = new this.selectedCharacter(
-      player,
-      playerInfo.x,
-      playerInfo.y
-    );
+    this.player = new this.selectedCharacter(player, 400, 400);
     this.player.createTexture();
     return this.player;
   }
@@ -341,7 +337,8 @@ export default class FireLevel extends Phaser.Scene {
       this.score.addPoints(1);
 
 
-      if (this.score.score >= 30) {
+
+      if (this.score.score >= 399) {
         this.gameSceneNext();
 
         this.time.addEvent({
@@ -349,7 +346,7 @@ export default class FireLevel extends Phaser.Scene {
           callback: () => {
             this.cameras.main.fadeOut(1000, 0, 0, 0)
             this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
-              this.scene.start("grassScene", {
+              this.scene.start("darkness-level", {
                 score: score,
                 character: this.selectedCharacter,
               });
@@ -357,6 +354,7 @@ export default class FireLevel extends Phaser.Scene {
             })
           }
         })
+
       }
     }
 

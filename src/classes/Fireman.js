@@ -4,7 +4,7 @@ import HealthBar from "../hud/healthbar";
 import { config } from "../main";
 import EventEmmiter from "../events/Emitter";
 
-class Player extends Phaser.Physics.Arcade.Sprite {
+class Fireman extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
     super(scene, x, y, "player");
     scene.add.existing(this);
@@ -13,7 +13,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.cursors = undefined;
     this.playerId = undefined;
 
-    this.damage = 50;
+    this.damage = 150;
     this.x = x;
     this.y = y;
 
@@ -24,7 +24,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
   init() {
     this.hasBeenHit = false;
-    this.bounceVelocity = 250;
+    this.bounceVelocity = 50;
     this.setCollideWorldBounds(true);
     this.cursors = this.scene.input.keyboard.createCursorKeys();
     this.cursors = this.scene.input.keyboard.addKeys({
@@ -33,7 +33,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       left: Phaser.Input.Keyboard.KeyCodes.A,
       right: Phaser.Input.Keyboard.KeyCodes.D,
     });
-    this.health = 100;
+    this.health = 500;
+
+    this.setBodySize(50, 61, false);
 
     this.hp = new HealthBar(
       this.scene,
@@ -44,21 +46,30 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     );
 
     this.anims.create({
+      key: "down",
+      frames: this.anims.generateFrameNumbers(assets.FIREMAN_KEY, {
+        // start: 3,
+        // end: 5,
+        start: 0,
+        end: 2,
+      }),
+      frameRate: 10,
+    });
+    this.anims.create({
       key: "left",
-      frames: this.anims.generateFrameNumbers(assets.PLAYER_KEY, {
+      frames: this.anims.generateFrameNumbers(assets.FIREMAN_KEY, {
+        // start: 15,
+        // end: 17,
         start: 3,
         end: 5,
       }),
       frameRate: 10,
     });
     this.anims.create({
-      key: "turn",
-      frames: [{ key: assets.PLAYER_KEY, frame: 1 }],
-      frameRate: 10,
-    });
-    this.anims.create({
       key: "right",
-      frames: this.anims.generateFrameNumbers(assets.PLAYER_KEY, {
+      frames: this.anims.generateFrameNumbers(assets.FIREMAN_KEY, {
+        // start: 27,
+        // end: 29,
         start: 6,
         end: 8,
       }),
@@ -66,17 +77,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     });
     this.anims.create({
       key: "up",
-      frames: this.anims.generateFrameNumbers(assets.PLAYER_KEY, {
+      frames: this.anims.generateFrameNumbers(assets.FIREMAN_KEY, {
+        // start: 39,
+        // end: 41,
         start: 9,
         end: 11,
-      }),
-      frameRate: 10,
-    });
-    this.anims.create({
-      key: "down",
-      frames: this.anims.generateFrameNumbers(assets.PLAYER_KEY, {
-        start: 0,
-        end: 2,
       }),
       frameRate: 10,
     });
@@ -113,11 +118,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       this.anims.play("down", true);
     } else {
       this.anims.stop();
-
-      if (prevVelocity.x < 0) this.setTexture(assets.PLAYER_KEY, 4);
-      else if (prevVelocity.x > 0) this.setTexture(assets.PLAYER_KEY, 8);
-      else if (prevVelocity.y < 0) this.setTexture(assets.PLAYER_KEY, 10);
-      else if (prevVelocity.y > 0) this.setTexture(assets.PLAYER_KEY, 1);
     }
   }
 
@@ -167,17 +167,17 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       this.clearTint();
     });
   }
-
-  // static loadSprite(scene) {
-  //   scene.load.spritesheet(assets.PLAYER_KEY, assets.PLAYER_URL, {
-  //     frameWidth: 50,
-  //     frameHeight: 69,
-  //   });
-  // }
+  static loadSprite(scene) {
+    scene.load.spritesheet(assets.FIREMAN_KEY, assets.FIREMAN_URL, {
+      frameWidth: 50,
+      frameHeight: 61,
+    });
+  }
 
   createTexture() {
-    this.setTexture(assets.PLAYER_KEY, 1);
+    // this.setTexture(assets.FIREMAN_KEY, 4);
+    this.setTexture(assets.FIREMAN_KEY, 1);
   }
 }
 
-export default Player;
+export default Fireman;

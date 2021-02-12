@@ -23,6 +23,7 @@ class Tank extends Phaser.Physics.Arcade.Sprite {
   }
 
   init() {
+    this.setBodySize(60, 90, false);
     this.hasBeenHit = false;
     this.bounceVelocity = 50;
     this.setCollideWorldBounds(true);

@@ -8,7 +8,11 @@ export default class Score extends Phaser.GameObjects.Text {
     x,
     y,
     score,
-    style = { fontSize: "32px", fill: "#999" },
+    style = {
+      fontSize: "32px",
+      strokeThickness: 6,
+      color: "#E3E3E3",
+    },
     scale = 1
   ) {
     super(scene, x, y, formatScore(score), style);

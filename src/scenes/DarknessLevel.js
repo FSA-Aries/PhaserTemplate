@@ -194,8 +194,8 @@ export default class DarknessLevel extends Phaser.Scene {
       return;
     }
     this.createGameEvents();
+  }
 
-  
   update() {
     if (this.cursors.esc.isDown) {
       this.scene.pause();

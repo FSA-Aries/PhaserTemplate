@@ -13,8 +13,8 @@ export default class Boss extends Enemy {
     this.scene.physics.world.enable(this);
     this.scene.add.existing(this);
     this.player = player;
-    this.health = 1000;
-    this.damage = 50;
+    this.health = 10000;
+    this.damage = 150;
 
     this.init();
     this.initEvents();
@@ -85,18 +85,18 @@ export default class Boss extends Enemy {
     if (Phaser.Math.Distance.BetweenPoints(this.player, this) < 400) {
       if (Math.abs(this.x - this.player.x) > Math.abs(this.y - this.player.y)) {
         if (this.player.x < this.x) {
-          this.setVelocityX(-50);
+          this.setVelocityX(-100);
           this.anims.play("boss-left", true);
         } else {
-          this.setVelocityX(50);
+          this.setVelocityX(100);
           this.anims.play("boss-right", true);
         }
       } else {
         if (this.player.y < this.y) {
-          this.setVelocityY(-50);
+          this.setVelocityY(-100);
           this.anims.play("boss-idleBack", true);
         } else {
-          this.setVelocityY(50);
+          this.setVelocityY(100);
           this.anims.play("boss-idleFront", true);
         }
       }

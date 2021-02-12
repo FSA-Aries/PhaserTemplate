@@ -70,6 +70,7 @@ export default class DarknessLevel extends Phaser.Scene {
 
   ///// CREATE /////
   create({ gameStatus }) {
+    this.cameras.main.fadeIn(1000, 0, 0, 0)
     let map = this.make.tilemap({ key: assets.DARKMAP_KEY });
     let tileSet = map.addTilesetImage("darkness", assets.DARKSET_KEY);
 
@@ -195,6 +196,7 @@ export default class DarknessLevel extends Phaser.Scene {
     }
     this.createGameEvents();
   }
+
   update() {
     if (this.cursors.esc.isDown) {
       this.scene.pause();
@@ -400,8 +402,8 @@ export default class DarknessLevel extends Phaser.Scene {
 
     if (monster.health - bullet.damage <= 0) {
       this.score.addPoints(1);
-      if (score === 100) {
-        this.scene.start("LevelOne", {
+      if (score >= 399) {
+        this.scene.start("grassScene", {
           score: score,
         });
       }

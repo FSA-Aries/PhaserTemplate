@@ -69,6 +69,7 @@ export default class FireLevel extends Phaser.Scene {
 
   ///// CREATE /////
   create({ gameStatus }) {
+    this.cameras.main.fadeIn(1000, 0, 0, 0)
     let map = this.make.tilemap({ key: assets.FIREMAP_KEY });
     let tileSet = map.addTilesetImage("Fireset", assets.FIRESET_KEY);
     map.createLayer("Floor", tileSet, 0, 0);
@@ -96,31 +97,31 @@ export default class FireLevel extends Phaser.Scene {
     let impGroup = this.physics.add.group();
 
     // Enemy Creation
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 2; i++) {
       this.time.addEvent({
-        delay: 5000,
+        delay: 3000,
         callback: () => {
           zombieGroup.add(this.createZombie().setTint(0xff0000));
         },
-        repeat: 3,
-      });
-    }
-    for (let i = 0; i < 2; i++) {
-      this.time.addEvent({
-        delay: 2000,
-        callback: () => {
-          impGroup.add(this.createImp());
-        },
-        repeat: 3,
+        repeat: 24,
       });
     }
     for (let i = 0; i < 1; i++) {
       this.time.addEvent({
-        delay: 20000,
+        delay: 3000,
+        callback: () => {
+          impGroup.add(this.createImp());
+        },
+        repeat: 24,
+      });
+    }
+    for (let i = 0; i < 1; i++) {
+      this.time.addEvent({
+        delay: 3000,
         callback: () => {
           skeletonGroup.add(this.createSkeleton().setTint(0xff0000));
         },
-        repeat: 3,
+        repeat: 24,
       });
     }
 
@@ -334,11 +335,26 @@ export default class FireLevel extends Phaser.Scene {
 
     if (monster.health - bullet.damage <= 0) {
       this.score.addPoints(1);
-      if (this.score.score >= 30) {
-        this.scene.start("grassScene", {
-          score: score,
-          character: this.selectedCharacter,
-        });
+
+
+
+      if (this.score.score >= 399) {
+        this.gameSceneNext();
+
+        this.time.addEvent({
+          delay: 9000,
+          callback: () => {
+            this.cameras.main.fadeOut(1000, 0, 0, 0)
+            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+              this.scene.start("darkness-level", {
+                score: score,
+                character: this.selectedCharacter,
+              });
+
+            })
+          }
+        })
+
       }
     }
 
@@ -373,5 +389,29 @@ export default class FireLevel extends Phaser.Scene {
     });
     this.add.existing(button);
     return button;
+  }
+
+  gameSceneNext() {
+
+    let text1 = this.add.text(310, 370, "I'm definitely in hell....", {
+      fontSize: '10px',
+      color: 'white'
+    }).setScrollFactor(0)
+
+    this.time.addEvent({
+      delay: 3000,
+      callback: () => {
+        text1.setText("I shouldn't have listened to the voice on the radio.")
+
+        this.time.addEvent({
+          delay: 3000,
+          callback: () => {
+            text1.setText("I have a bad feeling about this next room....")
+
+          }
+        })
+      }
+    })
+
   }
 }

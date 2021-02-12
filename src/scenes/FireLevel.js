@@ -223,8 +223,8 @@ export default class FireLevel extends Phaser.Scene {
   createPlayer(player, playerInfo) {
     this.player = new this.selectedCharacter(
       player,
-      playerInfo.x,
-      playerInfo.y
+      400,
+      400
     );
     this.player.createTexture();
     return this.player;

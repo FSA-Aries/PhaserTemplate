@@ -1,21 +1,20 @@
-import Phaser from 'phaser';
-import Zombie from '../classes/Enemies/Zombie.js';
-import Skeleton from '../classes/Enemies/Skeleton.js';
+import Phaser from "phaser";
+import Zombie from "../classes/Enemies/Zombie.js";
+import Skeleton from "../classes/Enemies/Skeleton.js";
 
-import Player from '../classes/Player';
-import OtherPlayerSprite from '../classes/OtherPlayers';
-import Bullet from '../classes/Bullet';
-import assets from '../../public/assets';
-import socket from '../socket/index.js';
-import Score from '../hud/score';
+import Player from "../classes/Player";
+import OtherPlayerSprite from "../classes/OtherPlayers";
+import Bullet from "../classes/Bullet";
+import assets from "../../public/assets";
+import socket from "../socket/index.js";
+import Score from "../hud/score";
 
-import EventEmitter from '../events/Emitter';
-import { config } from '../main';
+import EventEmitter from "../events/Emitter";
+import { config } from "../main";
 
 export default class Multiplayer extends Phaser.Scene {
   constructor() {
-
-    super('Multiplayer');
+    super("Multiplayer");
     this.cursors = undefined;
     this.game = undefined;
     this.reticle = undefined;
@@ -50,7 +49,6 @@ export default class Multiplayer extends Phaser.Scene {
     this.load.audio(
       "zombie-attack",
       "assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3"
-
     );
 
     //Enemies
@@ -71,14 +69,13 @@ export default class Multiplayer extends Phaser.Scene {
     this.playerGroup = this.add.group();
     let map = this.make.tilemap({ key: assets.TILEMAP_KEY });
 
-
-    let tileSet = map.addTilesetImage('TiledSet', assets.TILESET_KEY);
-    map.createLayer('Ground', tileSet, 0, 0);
-    let walls = map.createLayer('Walls', tileSet, 0, 0);
+    let tileSet = map.addTilesetImage("TiledSet", assets.TILESET_KEY);
+    map.createLayer("Ground", tileSet, 0, 0);
+    let walls = map.createLayer("Walls", tileSet, 0, 0);
     walls.setCollisionByExclusion([-1]);
 
     //Sockets
-    socket.on('setState', function (state) {
+    socket.on("setState", function (state) {
       const { roomKey, players, numPlayers } = state;
 
       scene.state.roomKey = roomKey;
@@ -86,12 +83,9 @@ export default class Multiplayer extends Phaser.Scene {
       scene.state.numPlayers = numPlayers;
     });
 
-
-    socket.on('currentPlayers', function (playerInfo) {
-      console.log('Playerinfo ->', playerInfo);
+    socket.on("currentPlayers", function (playerInfo) {
       const { player, numPlayers } = playerInfo;
       scene.state.numPlayers = numPlayers;
-      console.log('keys ->', Object.keys(player));
       Object.keys(player).forEach(function (id) {
         if (player[id].playerId === socket.id) {
           scene.player.roomKey = scene.state.roomKey;
@@ -101,14 +95,13 @@ export default class Multiplayer extends Phaser.Scene {
       });
     });
 
-    socket.on('newPlayer', function (arg) {
+    socket.on("newPlayer", function (arg) {
       const { playerInfo, numPlayers } = arg;
       scene.createOtherPlayer(scene, playerInfo);
       scene.state.numPlayers = numPlayers;
     });
 
-
-    socket.on('playerMoved', function (playerInfo) {
+    socket.on("playerMoved", function (playerInfo) {
       //Grab all members of the group
       if (scene.playerGroup.getChildren().length > 1) {
         scene.playerGroup.getChildren().forEach(function () {
@@ -119,8 +112,7 @@ export default class Multiplayer extends Phaser.Scene {
       }
     });
 
-
-    socket.on('bulletFired', function (playerInfo) {
+    socket.on("bulletFired", function (playerInfo) {
       scene.playerGroup.getChildren().forEach(function () {
         if (playerInfo.playerId === scene.otherPlayer.playerId) {
           let bullet = playerBullets.get().setActive(true).setVisible(true);
@@ -129,8 +121,7 @@ export default class Multiplayer extends Phaser.Scene {
       });
     });
 
-
-    socket.on('scoreChanges', function ({ playerInfo, score }) {
+    socket.on("scoreChanges", function ({ playerInfo, score }) {
       scene.playerGroup.getChildren().forEach(function () {
         if (playerInfo.playerId === scene.otherPlayer.playerId) {
           if (scene.secondScore === undefined) {
@@ -146,8 +137,7 @@ export default class Multiplayer extends Phaser.Scene {
       });
     });
 
-
-    socket.on('disconnected', function (arg) {
+    socket.on("disconnected", function (arg) {
       const { playerId, numPlayers } = arg;
       scene.state.numPlayers = numPlayers;
       scene.playerGroup.getChildren().forEach(function () {
@@ -157,8 +147,7 @@ export default class Multiplayer extends Phaser.Scene {
       });
     });
 
-
-    socket.emit('joinRoom', input);
+    socket.emit("joinRoom", input);
     //Create player and playerGroup
     this.player = this.createPlayer(this, { x: 200, y: 300 });
     this.playerGroup.add(this.player);
@@ -179,7 +168,6 @@ export default class Multiplayer extends Phaser.Scene {
     //Zombie and Skeleton Groups
     let zombieGroup = this.physics.add.group();
     let skeletonGroup = this.physics.add.group();
-    this.zombieGroup = zombieGroup;
 
     for (let i = 0; i < 4; i++) {
       this.time.addEvent({
@@ -187,9 +175,8 @@ export default class Multiplayer extends Phaser.Scene {
         callback: () => {
           zombieGroup.add(this.createZombie(this.playerGroup));
         },
-        repeat: 25,
+        repeat: 20,
       });
-
     }
 
     for (let i = 0; i < 2; i++) {
@@ -252,20 +239,16 @@ export default class Multiplayer extends Phaser.Scene {
     this.reticle.setDisplaySize(25, 25).setCollideWorldBounds(true);
 
     this.input.on(
-
-      'pointerdown',
+      "pointerdown",
       function () {
         if (this.player.active === false) return;
 
         // Get bullet from bullets group
         let bullet = playerBullets.get().setActive(true).setVisible(true);
+        bullet.setDamage(this.player.damage);
 
         if (bullet) {
           bullet.fire(this.player, this.reticle);
-
-          socket.emit('bulletFire', {
-            roomKey: this.state.roomKey,
-          });
         }
       },
       this
@@ -274,14 +257,12 @@ export default class Multiplayer extends Phaser.Scene {
     this.setupFollowupCameraOn(this.player);
 
     this.input.on(
-
-      'pointermove',
+      "pointermove",
       function (pointer) {
         const transformedPoint = this.cameras.main.getWorldPoint(
           pointer.x,
           pointer.y
         );
-
 
         this.reticle.x = transformedPoint.x;
         this.reticle.y = transformedPoint.y;
@@ -289,9 +270,7 @@ export default class Multiplayer extends Phaser.Scene {
       this
     );
 
-    if (gameStatus === 'PLAYER_LOSE') {
-      // socket.emit("playerDied", { roomKey: scene.state.roomKey });
-
+    if (gameStatus === "PLAYER_LOSE") {
       return;
     }
 
@@ -303,7 +282,7 @@ export default class Multiplayer extends Phaser.Scene {
     var y = scene.player.y;
     if (x !== scene.player.oldPosition.x || y !== scene.player.oldPosition.y) {
       scene.player.moving = true;
-      socket.emit('playerMovement', {
+      socket.emit("playerMovement", {
         x: scene.player.x,
         y: scene.player.y,
         roomKey: scene.state.roomKey,
@@ -385,7 +364,7 @@ export default class Multiplayer extends Phaser.Scene {
       randomizedPositiony,
       assets.ZOMBIE_KEY,
       assets.ZOMBIE_URL,
-      this.playerGroup,
+      playerGroup,
       this.player
     );
   }
@@ -405,8 +384,8 @@ export default class Multiplayer extends Phaser.Scene {
   }
 
   createGameEvents() {
-    EventEmitter.on('PLAYER_LOSE', () => {
-      this.scene.start('game-over', { gameStatus: 'PLAYER_LOSE' });
+    EventEmitter.on("PLAYER_LOSE", () => {
+      this.scene.start("game-over", { gameStatus: "PLAYER_LOSE" });
     });
   }
 
@@ -418,7 +397,7 @@ export default class Multiplayer extends Phaser.Scene {
   onBulletCollision(bullet, monster) {
     if (monster.health - bullet.damage <= 0) {
       this.score.addPoints(1);
-      socket.emit('scoreChanged', {
+      socket.emit("scoreChanged", {
         roomKey: this.state.roomKey,
         score: this.score.score,
       });
@@ -428,7 +407,7 @@ export default class Multiplayer extends Phaser.Scene {
   }
 
   createScoreLabel(x, y, score) {
-    const style = { fontSize: '32px', fill: '#ff0000', fontStyle: 'bold' };
+    const style = { fontSize: "32px", fill: "#ff0000", fontStyle: "bold" };
     const label = new Score(this, x, y, score, style);
     label.setScrollFactor(0, 0).setScale(1);
     this.add.existing(label);
@@ -442,14 +421,10 @@ export default class Multiplayer extends Phaser.Scene {
     button.setScrollFactor(0, 0).setScale(1);
 
     button.on("pointerdown", () => {
-      console.log("clicked");
       if (button.texture.key === assets.SOUND_ON_KEY) {
-        console.log("sound off");
         button.setTexture(assets.SOUND_OFF_KEY);
         this.sound.mute = true;
       } else {
-        console.log("sound on");
-
         button.setTexture(assets.SOUND_ON_KEY);
         this.sound.mute = false;
       }
@@ -457,5 +432,4 @@ export default class Multiplayer extends Phaser.Scene {
     this.add.existing(button);
     return button;
   }
-
 }

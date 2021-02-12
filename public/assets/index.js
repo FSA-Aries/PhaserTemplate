@@ -18,6 +18,7 @@ assets.TANK_URL = "assets/characters/tank.png";
 assets.FIREMAN_KEY = "fireman";
 assets.FIREMAN_URL = "assets/characters/Fireman.png";
 
+
 assets.FUMIKO_LEFT_KEY = "fumikoLeft";
 assets.FUMIKO_LEFT_URL = "assets/characters/Fumiko/FumikoLeft.png";
 assets.FUMIKO_RIGHT_KEY = "fumikoRight";
@@ -26,6 +27,42 @@ assets.FUMIKO_UP_KEY = "fumikoUp";
 assets.FUMIKO_UP_URL = "assets/characters/Fumiko/FumikoUp.png";
 assets.FUMIKO_DOWN_KEY = "fumikoDown";
 assets.FUMIKO_DOWN_URL = "assets/characters/Fumiko/FumikoDown.png";
+
+assets.FUMIKO_DOWN1_KEY = "fumikoDown1";
+assets.FUMIKO_DOWN1_URL = "assets/characters/Fumiko/SingleFrames/FumikoDown1.png";
+assets.FUMIKO_DOWN2_KEY = "fumikoDown2";
+assets.FUMIKO_DOWN2_URL = "assets/characters/Fumiko/SingleFrames/FumikoDown2.png";
+assets.FUMIKO_DOWN3_KEY = "fumikoDown3";
+assets.FUMIKO_DOWN3_URL = "assets/characters/Fumiko/SingleFrames/FumikoDown3.png";
+assets.FUMIKO_DOWN4_KEY = "fumikoDown4";
+assets.FUMIKO_DOWN4_URL = "assets/characters/Fumiko/SingleFrames/FumikoDown4.png";
+
+assets.FUMIKO_LEFT1_KEY = "fumikoLeft1";
+assets.FUMIKO_LEFT1_URL = "assets/characters/Fumiko/SingleFrames/FumikoLeft1.png";
+assets.FUMIKO_LEFT2_KEY = "fumikoLeft2";
+assets.FUMIKO_LEFT2_URL = "assets/characters/Fumiko/SingleFrames/FumikoLeft2.png";
+assets.FUMIKO_LEFT3_KEY = "fumikoLeft3";
+assets.FUMIKO_LEFT3_URL = "assets/characters/Fumiko/SingleFrames/FumikoLeft3.png";
+assets.FUMIKO_LEFT4_KEY = "fumikoLeft4";
+assets.FUMIKO_LEFT4_URL = "assets/characters/Fumiko/SingleFrames/FumikoLeft4.png";
+
+assets.FUMIKO_RIGHT1_KEY = "fumikoRight1";
+assets.FUMIKO_RIGHT1_URL = "assets/characters/Fumiko/SingleFrames/FumikoRight1.png";
+assets.FUMIKO_RIGHT2_KEY = "fumikoRight2";
+assets.FUMIKO_RIGHT2_URL = "assets/characters/Fumiko/SingleFrames/FumikoRight2.png";
+assets.FUMIKO_RIGHT3_KEY = "fumikoRight3";
+assets.FUMIKO_RIGHT3_URL = "assets/characters/Fumiko/SingleFrames/FumikoRight3.png";
+assets.FUMIKO_RIGHT4_KEY = "fumikoRight4";
+assets.FUMIKO_RIGHT4_URL = "assets/characters/Fumiko/SingleFrames/FumikoRight4.png";
+
+assets.FUMIKO_UP1_KEY = "fumikoUp1";
+assets.FUMIKO_UP1_URL = "assets/characters/Fumiko/SingleFrames/FumikoUp1.png";
+assets.FUMIKO_UP2_KEY = "fumikoUp2";
+assets.FUMIKO_UP2_URL = "assets/characters/Fumiko/SingleFrames/FumikoUp2.png";
+assets.FUMIKO_UP3_KEY = "fumikoUp3";
+assets.FUMIKO_UP3_URL = "assets/characters/Fumiko/SingleFrames/FumikoUp3.png";
+assets.FUMIKO_UP4_KEY = "fumikoUp4";
+assets.FUMIKO_UP4_URL = "assets/characters/Fumiko/SingleFrames/FumikoUp4.png";
 
 assets.SMOL_LEFTSTART_KEY = "LeftStart";
 assets.SMOL_LEFTSTART_URL = "assets/characters/Smol/LeftStart.png";
@@ -85,10 +122,11 @@ assets.TILESET2_URL = "assets/tilesets/TileSet2.png";
 assets.TILEMAZEMAP_KEY = "tileMazeMap";
 assets.TILEMAZEMAP_URL = "assets/tilesets/TileMaze.json";
 assets.TILEMAZESET_KEY = "tileMazeSet";
-assets.TILEMAZESET_URL = "assets/tilesets/Tilemaze.png";
+
+assets.TILEMAZESET_URL = "assets/tilesets/TileMaze.png";
 //BACKGROUND
-assets.MENU_URL = "assets/backgrounds/Hello_World_Menu_Background.png";
-assets.WASD_URL = "assets/backgrounds/WASD.png";
+assets.MENU_URL = "assets/backgrounds/SPMenuBackground.png";
+assets.WASD_URL = "assets/backgrounds/wasd.png";
 
 //SELECT
 assets.FUMIKO_SELECT_KEY = "Fumiko";
@@ -99,6 +137,7 @@ assets.SMOL_SELECT_KEY = "Smol";
 assets.SMOL_SELECT_URL = "assets/characters/Select/smol guy.png";
 assets.FIREMAN_SELECT_KEY = "Fireman";
 assets.FIREMAN_SELECT_URL = "assets/characters/Select/Fireman-portrait.jpg";
+
 
 //AUDIO
 assets.SOUND_ON_KEY = "sound-on";

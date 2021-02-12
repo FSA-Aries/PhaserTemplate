@@ -117,4 +117,5 @@ export default class CharacterSelect extends BaseScene {
   handleContinue() {
     this.scene.start("game-scene", { character: this.selection });
   }
+
 }

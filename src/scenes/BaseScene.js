@@ -1,6 +1,6 @@
-import Phaser from 'phaser';
-import { config } from '../main';
-import assets from '../../public/assets';
+import Phaser from "phaser";
+import { config } from "../main";
+import assets from "../../public/assets";
 
 class BaseScene extends Phaser.Scene {
   constructor(key) {
@@ -8,54 +8,47 @@ class BaseScene extends Phaser.Scene {
     this.screenCenter = [config.width / 2, config.height / 2];
     this.fontSize = 34;
     this.lineHeight = 42;
-    this.fontOptions = { fontSize: `${this.fontSize}px`, fill: '#fff' };
+    this.fontOptions = { fontSize: `${this.fontSize}px`, fill: "#fff" };
   }
 
   preload() {
-    this.load.image('menu-bg', assets.MENU_URL);
+    this.load.image("menu-bg", assets.MENU_URL);
 
     this.load.image(assets.SOUND_OFF_KEY, assets.SOUND_OFF_URL);
     this.load.image(assets.SOUND_ON_KEY, assets.SOUND_ON_URL);
 
-    this.load.audio('theme', 'assets/audio/City-of-the-Disturbed_Looping.mp3');
+    this.load.audio("theme", "assets/audio/City-of-the-Disturbed_Looping.mp3");
 
-    this.load.image(
-      'arrow-keys',
-      // "https://thumbs.dreamstime.com/t/arrow-keys-black-3784132.jpg"
-      assets.WASD_URL
-    );
-    this.load.image(
-      'left-mouse-click',
-      'https://support.biodigital.com/hc/article_attachments/360038101893/mouse_click-left.jpg'
-    );
+    this.load.image("arrow-keys", assets.WASD_URL);
+    this.load.image("left-mouse-click", "https://i.imgur.com/OGWM7Jm.png");
   }
 
   create() {
     this.playBgMusic();
 
-    this.background = this.add.image(0, 0, 'menu-bg').setOrigin(0, 0);
+    this.background = this.add.image(0, 0, "menu-bg").setOrigin(0, 0);
     // Based on your game size, it may "stretch" and distort.
     this.background.displayWidth = this.sys.canvas.width;
     this.background.displayHeight = this.sys.canvas.height;
 
     if (config.canGoBack) {
       const backButton = this.add
-        .image(config.width - 10, config.height - 10, 'back')
+        .image(config.width - 10, config.height - 10, "back")
         .setOrigin(1)
         .setScale(2)
         .setInteractive();
 
-      backButton.on('pointerup', () => {
-        this.scene.start('MenuScene');
+      backButton.on("pointerup", () => {
+        this.scene.start("MenuScene");
       });
     }
   }
 
   playBgMusic() {
-    if (this.sound.get('theme')) {
+    if (this.sound.get("theme")) {
       return;
     }
-    this.sound.add('theme', { loop: true, volume: 0.13 }).play();
+    this.sound.add("theme", { loop: true, volume: 0.13 }).play();
   }
 
   createMenu(menu, setupMenuEvents) {
@@ -74,9 +67,7 @@ class BaseScene extends Phaser.Scene {
     });
   }
 
-
   createCharacterMenu(menu, setupMenuEvents) {
-    //let lastMenuPositionY = 0;
     let lastMenuPositionX = -200;
 
     menu.forEach((menuItem) => {
@@ -85,11 +76,12 @@ class BaseScene extends Phaser.Scene {
         this.screenCenter[1],
       ];
 
-      menuItem.imageGO = this.add
-        .image(menuPosition[0], menuPosition[1], menuItem.key)
+      menuItem.imageGO = this.add.image(
+        menuPosition[0],
+        menuPosition[1],
+        menuItem.key
+      );
 
-
-      //lastMenuPositionY += this.lineHeight + 150;
       lastMenuPositionX += this.lineHeight + 150;
       setupMenuEvents(menuItem);
     });

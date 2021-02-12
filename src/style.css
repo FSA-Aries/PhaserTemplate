@@ -25,7 +25,8 @@
   display: flex;
   justify-content: center;
   align-content: center;
-  background-image: url("https://i.imgur.com/k525Cyb.png");
+  background-image: url('https://i.imgur.com/k525Cyb.png');
+  background-size: cover;
   height: 100vh;
 }
 body {

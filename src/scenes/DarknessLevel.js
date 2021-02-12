@@ -3,6 +3,8 @@ import Phaser from "phaser";
 import Zombie from "../classes/Enemies/Zombie.js";
 import Skeleton from "../classes/Enemies/Skeleton.js";
 import Boss from "../classes/Enemies/Boss";
+
+import Player from "../classes/Player";
 import Bullet from "../classes/Bullet";
 import assets from "../../public/assets";
 import socket from "../socket/index.js";
@@ -32,7 +34,7 @@ export default class DarknessLevel extends Phaser.Scene {
 
   ///// PRELOAD /////
   preload() {
-    this.load.audio('intro', 'assets/audio/Intro.mp3');
+    this.load.audio("intro", "assets/audio/Intro.mp3");
 
     this.game.scale.pageAlignHorizontally = true;
     this.game.scale.pageAlignVertically = true;
@@ -49,8 +51,8 @@ export default class DarknessLevel extends Phaser.Scene {
     this.selectedCharacter.loadSprite(this);
 
     this.load.audio(
-      'zombie-attack',
-      'assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3'
+      "zombie-attack",
+      "assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3"
     );
 
     //Enemies
@@ -72,6 +74,7 @@ export default class DarknessLevel extends Phaser.Scene {
   create({ gameStatus }) {
     let map = this.make.tilemap({ key: assets.DARKMAP_KEY });
     let tileSet = map.addTilesetImage("darkness", assets.DARKSET_KEY);
+
     map.createLayer("Floor", tileSet, 0, 0);
     let darkness = map.createLayer("Collision", tileSet, 0, 0)
     darkness.setCollisionByExclusion([-1]);
@@ -158,7 +161,7 @@ export default class DarknessLevel extends Phaser.Scene {
     this.reticle.setDisplaySize(25, 25).setCollideWorldBounds(true);
 
     this.input.on(
-      'pointerdown',
+      "pointerdown",
       function () {
         if (this.player.active === false) return;
 
@@ -176,7 +179,7 @@ export default class DarknessLevel extends Phaser.Scene {
     this.setupFollowupCameraOn(this.player);
 
     this.input.on(
-      'pointermove',
+      "pointermove",
       function (pointer) {
         const transformedPoint = this.cameras.main.getWorldPoint(
           pointer.x,
@@ -189,16 +192,18 @@ export default class DarknessLevel extends Phaser.Scene {
       this
     );
 
-    if (gameStatus === 'PLAYER_LOSE') {
+    if (gameStatus === "PLAYER_LOSE") {
       return;
     }
     this.createGameEvents();
+
 
     if (this.cursors.esc.isDown) {
       this.scene.pause();
       this.scene.launch('pause-scene', { key: this.name });
     }
   }
+
 
   ///// HELPER FUNCTIONS /////
 
@@ -286,28 +291,28 @@ export default class DarknessLevel extends Phaser.Scene {
     this.time.addEvent({
       delay: 3000,
       callback: () => {
-        let text1 = this.add.text(328, 365, 'Welcome To', {
-          fontSize: '25px',
-          color: 'red',
+        let text1 = this.add.text(328, 365, "Welcome To", {
+          fontSize: "25px",
+          color: "red",
         });
         this.time.addEvent({
           delay: 3000,
           callback: () => {
             text1.destroy();
-            let text2 = this.add.text(310, 370, 'Senior Phaser', {
-              fontSize: '25px',
-              color: 'red',
+            let text2 = this.add.text(310, 370, "Senior Phaser", {
+              fontSize: "25px",
+              color: "red",
             });
             this.time.addEvent({
               delay: 3000,
               callback: () => {
                 text2.destroy();
-                let text3 = this.add.text(350, 290, 'WASD to Move', {
-                  fontSize: '25px',
-                  color: 'red',
+                let text3 = this.add.text(350, 290, "WASD to Move", {
+                  fontSize: "25px",
+                  color: "red",
                 });
                 let arrowImage = this.add
-                  .image(450, 400, 'arrow-keys')
+                  .image(450, 400, "arrow-keys")
                   .setScale(0.6);
                 this.time.addEvent({
                   delay: 2500,
@@ -315,35 +320,35 @@ export default class DarknessLevel extends Phaser.Scene {
                     text3.destroy();
                     arrowImage.destroy();
                     let mouseImage = this.add
-                      .image(430, 400, 'left-mouse-click')
+                      .image(430, 400, "left-mouse-click")
                       .setScale(0.4);
-                    let text4 = this.add.text(400, 280, 'Shoot', {
-                      fontSize: '25px',
-                      color: 'red',
+                    let text4 = this.add.text(400, 280, "Shoot", {
+                      fontSize: "25px",
+                      color: "red",
                     });
                     this.zombieGroup.add(this.createZombie());
                     this.time.addEvent({
                       delay: 5000,
                       callback: () => {
-                        let createdBy = this.add.text(310, 370, 'Created By', {
-                          fontSize: '40px',
-                          color: 'red',
+                        let createdBy = this.add.text(310, 370, "Created By", {
+                          fontSize: "40px",
+                          color: "red",
                         });
-                        let morgan = this.add.text(40, 40, 'Morgan Hu', {
-                          fontSize: '35px',
-                          color: 'red',
+                        let morgan = this.add.text(40, 40, "Morgan Hu", {
+                          fontSize: "35px",
+                          color: "red",
                         });
-                        let juan = this.add.text(40, 600, 'Juan Velazquez', {
-                          fontSize: '35px',
-                          color: 'red',
+                        let juan = this.add.text(40, 600, "Juan Velazquez", {
+                          fontSize: "35px",
+                          color: "red",
                         });
-                        let kelvin = this.add.text(520, 40, 'Kelvin Lin', {
-                          fontSize: '35px',
-                          color: 'red',
+                        let kelvin = this.add.text(520, 40, "Kelvin Lin", {
+                          fontSize: "35px",
+                          color: "red",
                         });
-                        let brandon = this.add.text(520, 600, 'Brandon Fox', {
-                          fontSize: '35px',
-                          color: 'red',
+                        let brandon = this.add.text(520, 600, "Brandon Fox", {
+                          fontSize: "35px",
+                          color: "red",
                         });
                         text4.destroy();
                         mouseImage.destroy();
@@ -384,11 +389,13 @@ export default class DarknessLevel extends Phaser.Scene {
   }
 
   createGameEvents() {
-    EventEmitter.on('PLAYER_LOSE', () => {
-      this.scene.start('game-over', { gameStatus: 'PLAYER_LOSE' });
+    EventEmitter.on("PLAYER_LOSE", () => {
+      this.scene.start("game-over", { gameStatus: "PLAYER_LOSE" });
     });
   }
   onPlayerCollision(player, monster) {
+
+
     player.takesHit(monster);
     if (monster.zombieAttackSound) monster.zombieAttackSound.play();
   }
@@ -399,7 +406,7 @@ export default class DarknessLevel extends Phaser.Scene {
     if (monster.health - bullet.damage <= 0) {
       this.score.addPoints(1);
       if (score === 100) {
-        this.scene.start('LevelOne', {
+        this.scene.start("LevelOne", {
           score: score,
         });
       }
@@ -408,7 +415,7 @@ export default class DarknessLevel extends Phaser.Scene {
   }
 
   createScoreLabel(x, y, score) {
-    const style = { fontSize: '32px', fill: '#ff0000', fontStyle: 'bold' };
+    const style = { fontSize: "32px", fill: "#ff0000", fontStyle: "bold" };
     const label = new Score(this, x, y, score, style);
     label.setScrollFactor(0, 0).setScale(1);
     this.add.existing(label);

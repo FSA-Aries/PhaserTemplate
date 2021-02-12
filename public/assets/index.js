@@ -15,6 +15,9 @@ assets.PLAYER_KEY = "player";
 assets.PLAYER_URL = "assets/characters/PokemonDude.png";
 assets.TANK_KEY = "tank";
 assets.TANK_URL = "assets/characters/tank.png";
+assets.FIREMAN_KEY = "fireman";
+assets.FIREMAN_URL = "assets/characters/Fireman.png";
+
 
 assets.FUMIKO_LEFT_KEY = "fumikoLeft";
 assets.FUMIKO_LEFT_URL = "assets/characters/Fumiko/FumikoLeft.png";
@@ -119,6 +122,7 @@ assets.TILESET2_URL = "assets/tilesets/TileSet2.png";
 assets.TILEMAZEMAP_KEY = "tileMazeMap";
 assets.TILEMAZEMAP_URL = "assets/tilesets/TileMaze.json";
 assets.TILEMAZESET_KEY = "tileMazeSet";
+
 assets.TILEMAZESET_URL = "assets/tilesets/TileMaze.png";
 //BACKGROUND
 assets.MENU_URL = "assets/backgrounds/SPMenuBackground.png";
@@ -131,6 +135,9 @@ assets.TANK_SELECT_KEY = "Tank";
 assets.TANK_SELECT_URL = "assets/characters/Select/TankSelect.png";
 assets.SMOL_SELECT_KEY = "Smol";
 assets.SMOL_SELECT_URL = "assets/characters/Select/smol guy.png";
+assets.FIREMAN_SELECT_KEY = "Fireman";
+assets.FIREMAN_SELECT_URL = "assets/characters/Select/Fireman-portrait.jpg";
+
 
 //AUDIO
 assets.SOUND_ON_KEY = "sound-on";

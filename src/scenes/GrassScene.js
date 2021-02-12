@@ -353,10 +353,9 @@ export default class GrassScene extends Phaser.Scene {
     let score = this.score.score;
 
     if (monster.health - bullet.damage <= 0) {
-      console.log(this.score);
       this.score.addPoints(1);
       if (this.score.score >= 50) {
-        this.scene.start("maze-scene", {
+        this.scene.start("darkness-level", {
           score: score,
           character: this.selectedCharacter,
         });

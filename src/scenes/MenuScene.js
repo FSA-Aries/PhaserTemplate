@@ -19,20 +19,20 @@ class MenuScene extends BaseScene {
 
     this.createSoundButton(
       config.rightTopCorner.x - 50,
-      config.rightTopCorner.y - 20
+      700
     ).setScale(0.25, 0.25);
 
     this.createMenu(this.menu, this.setupMenuEvents.bind(this));
 
-    this.add.text(52, 50, 'Move', {
+    this.add.text(52, 600, 'Move', {
       fontSize: '40px',
     });
-    this.add.image(100, 150, 'arrow-keys').setDisplaySize(100, 100);
+    this.add.image(100, 700, 'arrow-keys').setDisplaySize(100, 100);
 
-    this.add.text(190, 50, 'Shoot', {
+    this.add.text(190, 600, 'Shoot', {
       fontSize: '40px',
     });
-    this.add.image(250, 150, 'left-mouse-click').setDisplaySize(100, 100);
+    this.add.image(250, 700, 'left-mouse-click').setDisplaySize(100, 100);
   }
 
   setupMenuEvents(menuItem) {

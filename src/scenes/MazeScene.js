@@ -91,23 +91,23 @@ export default class MazeScene extends Phaser.Scene {
 
     // Enemy Creation
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 3; i++) {
       this.time.addEvent({
-        delay: 2000,
+        delay: 3000,
         callback: () => {
           zombieGroup.add(this.createZombie());
         },
-        repeat: 25,
+        repeat: 24,
       });
     }
     for (let i = 0; i < 1; i++) {
       this.time.addEvent({
-        delay: 5000,
+        delay: 3000,
         callback: () => {
           vampireGroup.add(this.createVampire());
         },
 
-        loop: true,
+        repeat: 24,
       });
     }
 
@@ -297,8 +297,8 @@ export default class MazeScene extends Phaser.Scene {
     let score = this.score.score;
     if (monster.health - bullet.damage <= 0) {
       this.score.addPoints(1);
-      if (this.score.score >= 75) {
-        this.scene.start("LevelOne", {
+      if (this.score.score >= 299) {
+        this.scene.start("fire-level", {
           score: score,
           character: this.selectedCharacter,
         });

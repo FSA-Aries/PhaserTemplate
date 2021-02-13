@@ -16,6 +16,7 @@ export default class CharacterSelect extends BaseScene {
         this.characterIntro = undefined;
         this.gameType = undefined;
         this.clicked = undefined;
+        this.backButton = undefined
 
         this.menu = [
             { key: assets.TANK_SELECT_KEY, character: Tank },
@@ -34,6 +35,7 @@ export default class CharacterSelect extends BaseScene {
         this.load.image(assets.TANK_SELECT_KEY, assets.TANK_SELECT_URL);
         this.load.image(assets.SMOL_SELECT_KEY, assets.SMOL_SELECT_URL);
         this.load.image(assets.FIREMAN_SELECT_KEY, assets.FIREMAN_SELECT_URL);
+        this.load.image(assets.BACKBUTTON_KEY, assets.BACKBUTTON_URL)
 
         this.load.audio(assets.DMCMENU_KEY, assets.DMCMENU_URL);
         this.load.audio(assets.GUNCOCK_KEY, assets.GUNCOCK_URL);
@@ -46,6 +48,16 @@ export default class CharacterSelect extends BaseScene {
             volume: 0.53,
         });
         this.createCharacterMenu(this.menu, this.setupMenuEvents.bind(this));
+
+        this.backButton = this.add.image(700, 72, assets.BACKBUTTON_KEY).setScale(.05, .05)
+        this.backButton.setInteractive();
+        this.backButton.on('pointerover', () => {
+            this.backButton.setScale(.07, .07)
+        })
+        this.backButton.on('pointerout', () => {
+            this.backButton.setScale(.05, .05)
+        })
+        this.backButton.on('pointerdown', this.handleClick, this)
 
         this.add.text(52, 50, "Select your character", {
             fontSize: "40px",
@@ -142,5 +154,22 @@ export default class CharacterSelect extends BaseScene {
             }
         );
     }
+
+    handleClick() {
+        this.clicked.play();
+
+        this.cameras.main.fadeOut(1000, 0, 0, 0);
+
+        this.cameras.main.once(
+            Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
+            (cam, effect) => {
+                this.scene.start('menu-scene')
+            }
+        );
+    }
 }
+
+
+
+
 

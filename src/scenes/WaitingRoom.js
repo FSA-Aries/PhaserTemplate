@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import socket from "../socket/index.js";
+import assets from '../../public/assets/index'
 
 export default class WaitingRoom extends Phaser.Scene {
   constructor() {
@@ -9,14 +10,31 @@ export default class WaitingRoom extends Phaser.Scene {
     this.roomKey = "";
     this.cursors = undefined;
     this.name = "WaitingRoom";
+    this.clicked = undefined;
   }
 
   preload() {
     this.load.html("codeform", "assets/text/codeform.html");
+    this.load.image(assets.BACKBUTTON_KEY, assets.BACKBUTTON_URL)
+    this.load.audio(assets.DMCMENU_KEY, assets.DMCMENU_URL);
   }
 
   create() {
     const scene = this;
+    this.clicked = this.sound.add(assets.DMCMENU_KEY, {
+      loop: false,
+      volume: 0.53,
+    });
+
+    this.backButton = this.add.image(700, 72, assets.BACKBUTTON_KEY).setScale(.05, .05)
+    this.backButton.setInteractive();
+    this.backButton.on('pointerover', () => {
+      this.backButton.setScale(.07, .07)
+    })
+    this.backButton.on('pointerout', () => {
+      this.backButton.setScale(.05, .05)
+    })
+    this.backButton.on('pointerdown', this.handleClick, this)
 
     this.cursors = this.input.keyboard.createCursorKeys();
     this.cursors = this.input.keyboard.addKeys({
@@ -104,5 +122,17 @@ export default class WaitingRoom extends Phaser.Scene {
       this.scene.pause();
       this.scene.launch("pause-scene", { key: this.name });
     }
+  }
+  handleClick() {
+    this.clicked.play();
+
+    this.cameras.main.fadeOut(1000, 0, 0, 0);
+
+    this.cameras.main.once(
+      Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
+      (cam, effect) => {
+        this.scene.start('menu-scene')
+      }
+    );
   }
 }

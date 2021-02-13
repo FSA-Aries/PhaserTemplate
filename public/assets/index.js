@@ -139,6 +139,9 @@ assets.TILEMAZESET_URL = "assets/tilesets/TileMaze.png";
 assets.MENU_URL = "assets/backgrounds/SPMenuBackground.png";
 assets.WASD_URL = "assets/backgrounds/wasd.png";
 
+assets.BACKBUTTON_KEY = 'backbutton'
+assets.BACKBUTTON_URL = 'assets/backgrounds/cargill-organic-food-whole-foods-market-breakfast-back-button-955a31b8a0abcb0292f7aa38a622896a.png'
+
 //SELECT
 assets.FUMIKO_SELECT_KEY = "Fumiko";
 assets.FUMIKO_SELECT_URL = "assets/characters/Select/FumikoSelect.png";

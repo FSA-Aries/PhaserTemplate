@@ -12,6 +12,7 @@ class Fumiko extends Phaser.Physics.Arcade.Sprite {
     scene.physics.world.enable(this);
     this.cursors = undefined;
     this.playerId = undefined;
+    this.hidden = false;
 
     this.damage = 100;
     this.x = x;
@@ -128,25 +129,26 @@ class Fumiko extends Phaser.Physics.Arcade.Sprite {
       }
     }
 
-    if (this.cursors.shift.isDown) {
-      this.ability();
+    if (this.scene.input.keyboard.checkDown(this.cursors.shift, 9000)) {
+      if (this.hidden === false) {
+        this.ability();
+        this.scene.time.addEvent({
+          delay: 3000,
+          callback: () => {
+            this.hidden = false;
+            this.body.checkCollision.none = false;
+            this.setAlpha(1)
+          }
+        })
+      }
     }
   }
 
   ability() {
-    /* if (!this.hidden) {
-            this.body.checkCollision.none = !this.body.checkCollision.none
+    this.hidden = true;
+    this.body.checkCollision.none = true
+    this.setAlpha(.5)
 
-
-        }
-        if (this.body.checkCollision.none) {
-            this.setAlpha(.5)
-            setTimeout(function () {
-                this.body.checkCollision.none = !this.body.checkCollision.none
-                this.setAlpha(1)
-            }, 3000)
-
-        } */
   }
 
   playDamageTween() {

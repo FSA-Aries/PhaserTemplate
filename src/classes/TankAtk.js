@@ -11,8 +11,6 @@ export default class TankAtk extends Phaser.Physics.Arcade.Sprite {
     this.xSpeed = 0;
     this.ySpeed = 0;
     this.damage = 15;
-
-    //this.setSize(12, 12, true);
   }
 
   //Fires a bullet from the player to the reticle
@@ -48,20 +46,13 @@ export default class TankAtk extends Phaser.Physics.Arcade.Sprite {
     th
  */
   hitsEnemy(target) {
-    //target.setActive(false).setVisible(false);
     target.takesHit(this.damage);
-    //target.destroyEvents();
-    console.log(target.health);
 
     this.destroy();
-
-    //target.destroy();
   }
 
   // Updates the position of the bullet each cycle
   update(time, delta) {
-    //this.x += this.xSpeed * delta;
-    //this.y += this.ySpeed * delta;
     this.born += delta;
     if (this.born > 1800) {
       this.setActive(false);

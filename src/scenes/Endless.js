@@ -396,14 +396,10 @@ export default class Endless extends Phaser.Scene {
     button.setScrollFactor(0, 0).setScale(1);
 
     button.on('pointerdown', () => {
-      console.log('clicked');
       if (button.texture.key === assets.SOUND_ON_KEY) {
-        console.log('sound off');
         button.setTexture(assets.SOUND_OFF_KEY);
         this.sound.mute = true;
       } else {
-        console.log('sound on');
-
         button.setTexture(assets.SOUND_ON_KEY);
         this.sound.mute = false;
       }

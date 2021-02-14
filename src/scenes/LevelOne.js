@@ -212,6 +212,7 @@ export default class LevelOne extends Phaser.Scene {
     }
   }
 
+  
   ///// HELPER FUNCTIONS /////
 
   // PLAYER ANIMATION

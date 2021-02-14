@@ -48,6 +48,7 @@ class Fireman extends Phaser.Physics.Arcade.Sprite {
     this.anims.create({
       key: "down",
       frames: this.anims.generateFrameNumbers(assets.FIREMAN_KEY, {
+        //keep these incase there's a switch to elemental.png
         // start: 3,
         // end: 5,
         start: 0,
@@ -153,7 +154,6 @@ class Fireman extends Phaser.Physics.Arcade.Sprite {
       EventEmmiter.emit("PLAYER_LOSE");
       return;
     }
-    // this.body.checkCollision.none = true; ????
     this.hasBeenHit = true;
     this.bounceOff();
     const hitAnim = this.playDamageTween();
@@ -175,6 +175,7 @@ class Fireman extends Phaser.Physics.Arcade.Sprite {
   }
 
   createTexture() {
+    //keep these incase there's a switch to elemental.png
     // this.setTexture(assets.FIREMAN_KEY, 4);
     this.setTexture(assets.FIREMAN_KEY, 1);
   }

@@ -153,7 +153,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       EventEmmiter.emit("PLAYER_LOSE");
       return;
     }
-    // this.body.checkCollision.none = true; ????
     this.hasBeenHit = true;
     this.bounceOff();
     const hitAnim = this.playDamageTween();

@@ -59,13 +59,11 @@ export default class GrassScene extends Phaser.Scene {
       frameHeight: 64,
     });
 
-    // this.physics.add.sprite(400, 375, assets.PLAYER_KEY);
   }
 
   ///// CREATE /////
   create({ gameStatus }) {
     this.playerGroup = this.add.group();
-    //const scene = this;
     let map = this.make.tilemap({ key: assets.SCALEDSPMAP_KEY });
     let tileSet = map.addTilesetImage("Terrain", assets.SCALEDSPSET_KEY);
     map.createLayer("Floor", tileSet, 0, 0);
@@ -122,10 +120,6 @@ export default class GrassScene extends Phaser.Scene {
         }
       },
     });
-    //1) We need to create a player group and add it to colliders
-    //2) We need to refactor how we create the enemy classes (specify which player zombie follows)
-    ////Can add a method that takes in array of zombies and all of the players and for each monster --> checks distance and points towards player
-    //Add method to each monster and velocity updates
 
     this.physics.add.collider(
       this.playerGroup,
@@ -188,7 +182,6 @@ export default class GrassScene extends Phaser.Scene {
 
         if (bullet) {
           bullet.fire(this.player, this.reticle);
-          //this.physics.add.collider(enemy, bullet, enemyHitCallback);
         }
       },
       this

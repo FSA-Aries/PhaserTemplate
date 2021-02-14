@@ -13,10 +13,7 @@ export default class Vampire extends Enemy {
     this.player = player;
   }
 
-  ENEMY_KEY(monster) {
-    let x = getEnemyTypes()[monster].toLowerCase();
-    return x;
-  }
+
 
   init() {
     this.setCollideWorldBounds(true);

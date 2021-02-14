@@ -40,8 +40,6 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
 
   // Updates the position of the bullet each cycle
   update(time, delta) {
-    //this.x += this.xSpeed * delta;
-    //this.y += this.ySpeed * delta;
     this.born += delta;
     if (this.born > 1800) {
       this.setActive(false);

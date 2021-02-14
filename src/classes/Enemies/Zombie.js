@@ -14,11 +14,6 @@ export default class Zombie extends Enemy {
     this.playerGroup = playerGroup;
   }
 
-  ENEMY_KEY(monster) {
-    let x = getEnemyTypes()[monster].toLowerCase();
-    return x;
-  }
-
   init() {
     this.setBodySize(27, 35, true);
     this.setCollideWorldBounds(true);
@@ -100,7 +95,6 @@ export default class Zombie extends Enemy {
           }
         }
       });
-      // }
     } else {
       if (Phaser.Math.Distance.BetweenPoints(this.player, this) < 2000) {
         if (

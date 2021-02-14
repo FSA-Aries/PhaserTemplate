@@ -43,6 +43,10 @@ export default class MazeScene extends Phaser.Scene {
       "assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3"
     );
     this.load.audio("skeleton-attack", "assets/audio/skeleton-attack.wav");
+    this.load.audio(
+      "vampire-attack",
+      "assets/audio/008681096-vampire-hiss-05.m4a"
+    );
 
     //LOAD SPRITE
     this.selectedCharacter.loadSprite(this);
@@ -297,6 +301,7 @@ export default class MazeScene extends Phaser.Scene {
     player.takesHit(monster);
     if (monster.zombieAttackSound) monster.zombieAttackSound.play();
     if (monster.skeletonAttackSound) monster.skeletonAttackSound.play();
+    if (monster.vampireAttackSound) monster.vampireAttackSound.play();
   }
 
   onBulletCollision(bullet, monster) {

@@ -23,6 +23,9 @@ export default class Imp extends Phaser.Physics.Arcade.Sprite {
 
   init() {
     this.setCollideWorldBounds(true);
+    this.impAttackSound = this.scene.sound.add("imp-attack", {
+      volume: 0.4,
+    });
 
     this.anims.create({
       key: "imp-idleFront",

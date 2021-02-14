@@ -51,6 +51,7 @@ export default class FireLevel extends Phaser.Scene {
       "assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3"
     );
     this.load.audio("skeleton-attack", "assets/audio/skeleton-attack.wav");
+    this.load.audio("imp-attack", "assets/audio/Imp Sound.mp3");
 
     //Enemies
     this.load.spritesheet(assets.ZOMBIE_KEY, assets.ZOMBIE_URL, {
@@ -332,6 +333,7 @@ export default class FireLevel extends Phaser.Scene {
     player.takesHit(monster);
     if (monster.zombieAttackSound) monster.zombieAttackSound.play();
     if (monster.skeletonAttackSound) monster.skeletonAttackSound.play();
+    if (monster.impAttackSound) monster.impAttackSound.play();
   }
 
   onBulletCollision(bullet, monster) {

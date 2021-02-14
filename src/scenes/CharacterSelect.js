@@ -88,8 +88,6 @@ export default class CharacterSelect extends BaseScene {
         this.input.keyboard.once("keydown-SPACE", this.handleContinue, this);
     }
 
-    update() { }
-
     setupMenuEvents(menuItem) {
         const imageGO = menuItem.imageGO;
         imageGO.setInteractive();

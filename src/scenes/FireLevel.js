@@ -19,6 +19,7 @@ export default class FireLevel extends Phaser.Scene {
     this.game = undefined;
     this.reticle = undefined;
     this.score = undefined;
+    
     //Setup Sockets
     this.socket = socket;
     this.name = "fire-level";

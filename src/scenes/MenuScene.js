@@ -13,10 +13,6 @@ class MenuScene extends BaseScene {
     ];
   }
 
-  /* preload() {
-    this.load.audio(assets.MENUMOUSE_KEY, assets.MENUMOUSE_URL);
-  } */
-
   create() {
     super.create();
     this.cameras.main.fadeIn(1000, 0, 0, 0)

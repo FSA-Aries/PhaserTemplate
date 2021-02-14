@@ -70,7 +70,6 @@ class BaseScene extends Phaser.Scene {
   }
 
   createCharacterMenu(menu, setupMenuEvents) {
-    //let lastMenuPositionY = 0;
     let lastMenuPositionX = -300;
 
     menu.forEach((menuItem) => {

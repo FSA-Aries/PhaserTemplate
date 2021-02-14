@@ -215,11 +215,7 @@ export default class DarknessLevel extends Phaser.Scene {
 
   // PLAYER ANIMATION
   createPlayer(player, playerInfo) {
-    this.player = new this.selectedCharacter(
-      player,
-      playerInfo.x,
-      playerInfo.y
-    );
+    this.player = new this.selectedCharacter(player, 750, 750);
     this.player.createTexture();
     return this.player;
   }
@@ -409,7 +405,7 @@ export default class DarknessLevel extends Phaser.Scene {
 
     if (monster.health - bullet.damage <= 0) {
       this.score.addPoints(1);
-      if (score >= 395) {
+      if (score >= 390) {
         this.scene.start("grassScene", {
           score: score,
           character: this.selectedCharacter,

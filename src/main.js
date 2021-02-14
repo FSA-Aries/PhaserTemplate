@@ -17,7 +17,6 @@ import Endless from './scenes/Endless';
 
 const WIDTH = 800;
 
-// const MAP_WIDTH = document.body.offsetWidth;
 const MAP_WIDTH = document.body.offsetWidth;
 const HEIGHT = 800;
 const ZOOM_FACTOR = 1.5;

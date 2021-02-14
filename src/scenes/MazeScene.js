@@ -102,6 +102,8 @@ export default class MazeScene extends Phaser.Scene {
       });
     }
 
+    //////Fix Enemy Class then replace one zombie per for loop with Vampire///
+
     // for (let i = 0; i < 1; i++) {
     //   this.time.addEvent({
     //     delay: 3000,

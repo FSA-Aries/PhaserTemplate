@@ -64,7 +64,6 @@ export default class Boss extends Enemy {
   }
 
   takesHit(damage) {
-    console.log(this.health);
     if (this.health > 0) {
       this.health -= damage;
     }

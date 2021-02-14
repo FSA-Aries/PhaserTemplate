@@ -1,6 +1,6 @@
 # Senior Phaser
 
-Senior Phaser is a free to play survival shooter with multiplayer functionality. As one of the last few survivors on Earth, you're given the nearly impossible task of taking down an endless swarm of monsters. Team up with as many as three allies and get to work, the fate of humanity is in your hands!
+Senior Phaser is a free to play survival shooter with multiplayer functionality. As one of the last few survivors on Earth, you're given the nearly impossible task of taking down an endless swarm of monsters. Battle against another player or defeat enemies on your own. Get to work, the fate of humanity is in your hands!
 
 # Team Members
 

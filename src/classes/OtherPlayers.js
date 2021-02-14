@@ -12,7 +12,6 @@ class OtherPlayerSprite extends Phaser.Physics.Arcade.Sprite {
     scene.physics.world.enable(this);
     this.playerId = undefined;
 
-    //Mixins
     this.damage = 50;
     this.x = x;
     this.y = y;
@@ -116,7 +115,6 @@ class OtherPlayerSprite extends Phaser.Physics.Arcade.Sprite {
       EventEmmiter.emit("PLAYER_LOSE");
       return;
     }
-    // this.body.checkCollision.none = true; ????
     this.hasBeenHit = true;
     this.bounceOff();
     const hitAnim = this.playDamageTween();

@@ -148,9 +148,11 @@ export default class Multiplayer extends Phaser.Scene {
     });
 
     socket.emit("joinRoom", input);
+    
     //Create player and playerGroup
     this.player = this.createPlayer(this, { x: 200, y: 300 });
     this.playerGroup.add(this.player);
+
     //CREATE OTHER PLAYERS GROUP
     this.player.setTexture(assets.PLAYER_KEY, 1);
 

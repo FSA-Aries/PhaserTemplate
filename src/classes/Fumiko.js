@@ -129,9 +129,8 @@ class Fumiko extends Phaser.Physics.Arcade.Sprite {
       }
     }
 
-    if (this.cursors.shift.isDown) {
+    if (this.scene.input.keyboard.checkDown(this.cursors.shift, 9000)) {
       if (this.hidden === false) {
-        console.log('hidden:', this.hidden)
         this.ability();
         this.scene.time.addEvent({
           delay: 3000,

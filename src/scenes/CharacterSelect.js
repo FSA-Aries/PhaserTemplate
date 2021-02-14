@@ -124,15 +124,15 @@ export default class CharacterSelect extends BaseScene {
             }
             if (menuItem.key === "Fumiko") {
                 this.characterIntro
-                    .setText("Out of sight, out of mind")
+                    .setText("Out of sight, out of mind... (SHIFT key available)")
                     .setVisible(true)
-                    .setScale(1);
+                    .setScale(.6);
             }
             if (menuItem.key === "Fireman") {
                 this.characterIntro
                     .setText("He's pretty hot")
                     .setVisible(true)
-                    .setScale(0.5);
+                    .setScale(1);
             }
             this.startInstructions.setVisible(true);
         });

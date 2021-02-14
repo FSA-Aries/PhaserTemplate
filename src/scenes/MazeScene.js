@@ -146,6 +146,9 @@ export default class MazeScene extends Phaser.Scene {
       runChildUpdate: true,
     });
 
+    this.physics.add.collider(playerBullets, collisionLayer, this.bulletWallCollision, null, this);
+    this.physics.add.collider(playerBullets, collisionLayer2, this.bulletWallCollision, null, this);
+
     this.physics.add.collider(
       playerBullets,
       zombieGroup,
@@ -326,6 +329,10 @@ export default class MazeScene extends Phaser.Scene {
     }
 
     bullet.hitsEnemy(monster);
+  }
+
+  bulletWallCollision(bullet, map) {
+    bullet.destroy();
   }
 
   createScoreLabel(x, y, score) {

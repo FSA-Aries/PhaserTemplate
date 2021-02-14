@@ -147,6 +147,8 @@ export default class Endless extends Phaser.Scene {
       runChildUpdate: true,
     });
 
+    this.physics.add.collider(playerBullets, walls, this.bulletWallCollision, null, this);
+
     this.physics.add.collider(
       playerBullets,
       zombieGroup,
@@ -385,6 +387,10 @@ export default class Endless extends Phaser.Scene {
     }
 
     bullet.hitsEnemy(monster);
+  }
+
+  bulletWallCollision(bullet, map) {
+    bullet.destroy();
   }
 
   createScoreLabel(x, y, score) {

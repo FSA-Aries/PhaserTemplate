@@ -53,6 +53,8 @@ export default class DarknessLevel extends Phaser.Scene {
       "assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3"
     );
 
+    this.load.audio("skeleton-attack", "assets/audio/skeleton-attack.wav");
+
     //Enemies
     this.load.spritesheet(assets.ZOMBIE_KEY, assets.ZOMBIE_URL, {
       frameWidth: 30,
@@ -391,6 +393,7 @@ export default class DarknessLevel extends Phaser.Scene {
   onPlayerCollision(player, monster) {
     player.takesHit(monster);
     if (monster.zombieAttackSound) monster.zombieAttackSound.play();
+    if (monster.skeletonAttackSound) monster.skeletonAttackSound.play();
   }
 
   onBulletCollision(bullet, monster) {

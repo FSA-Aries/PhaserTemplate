@@ -19,7 +19,7 @@ export default class FireLevel extends Phaser.Scene {
     this.game = undefined;
     this.reticle = undefined;
     this.score = undefined;
-    
+
     //Setup Sockets
     this.socket = socket;
     this.name = "fire-level";
@@ -50,6 +50,7 @@ export default class FireLevel extends Phaser.Scene {
       "zombie-attack",
       "assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3"
     );
+    this.load.audio("skeleton-attack", "assets/audio/skeleton-attack.wav");
 
     //Enemies
     this.load.spritesheet(assets.ZOMBIE_KEY, assets.ZOMBIE_URL, {
@@ -330,6 +331,7 @@ export default class FireLevel extends Phaser.Scene {
   onPlayerCollision(player, monster) {
     player.takesHit(monster);
     if (monster.zombieAttackSound) monster.zombieAttackSound.play();
+    if (monster.skeletonAttackSound) monster.skeletonAttackSound.play();
   }
 
   onBulletCollision(bullet, monster) {

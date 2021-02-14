@@ -112,7 +112,7 @@ class OtherPlayerSprite extends Phaser.Physics.Arcade.Sprite {
       return;
     }
     if (this.health <= 0) {
-      EventEmmiter.emit("PLAYER_LOSE");
+      this.destroy();
       return;
     }
     this.hasBeenHit = true;

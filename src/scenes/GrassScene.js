@@ -190,6 +190,11 @@ export default class GrassScene extends Phaser.Scene {
           bullet.fire(this.player, this.reticle);
           //this.physics.add.collider(enemy, bullet, enemyHitCallback);
         }
+        if (this.player.hidden === true) {
+          this.player.hidden = false;
+          this.player.body.checkCollision.none = false;
+          this.player.setAlpha(1)
+        }
       },
       this
     );

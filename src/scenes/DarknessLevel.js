@@ -171,6 +171,11 @@ export default class DarknessLevel extends Phaser.Scene {
         if (bullet) {
           bullet.fire(this.player, this.reticle);
         }
+        if (this.player.hidden === true) {
+          this.player.hidden = false;
+          this.player.body.checkCollision.none = false;
+          this.player.setAlpha(1)
+        }
       },
       this
     );

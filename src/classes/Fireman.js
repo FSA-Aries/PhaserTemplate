@@ -13,7 +13,7 @@ class Fireman extends Phaser.Physics.Arcade.Sprite {
     this.cursors = undefined;
     this.playerId = undefined;
 
-    this.damage = 150;
+    this.damage = 100;
     this.x = x;
     this.y = y;
 
@@ -33,7 +33,7 @@ class Fireman extends Phaser.Physics.Arcade.Sprite {
       left: Phaser.Input.Keyboard.KeyCodes.A,
       right: Phaser.Input.Keyboard.KeyCodes.D,
     });
-    this.health = 500;
+    this.health = 150;
 
     this.setBodySize(50, 61, false);
 

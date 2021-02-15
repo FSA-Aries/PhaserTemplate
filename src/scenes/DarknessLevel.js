@@ -470,6 +470,7 @@ export default class DarknessLevel extends Phaser.Scene {
 
     if (monster.health - bullet.damage <= 0) {
       this.score.addPoints(1);
+      this.gameSceneNext();
       this.time.addEvent({
         delay: 9000,
         callback: () => {

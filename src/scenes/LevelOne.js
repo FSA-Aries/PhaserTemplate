@@ -103,7 +103,7 @@ export default class LevelOne extends Phaser.Scene {
     let skeletonGroup = this.physics.add.group();
 
     // Enemy Creation
-
+    zombieGroup.add(this.createZombie().setTint(0x0000ff));
     for (let i = 0; i < 3; i++) {
       this.time.addEvent({
         delay: 3000,

@@ -29,8 +29,8 @@ class OtherPlayerSprite extends Phaser.Physics.Arcade.Sprite {
 
     this.hp = new HealthBar(
       this.scene,
-      config.rightTopCorner.x - 5,
-      config.rightTopCorner.y - 5,
+      config.rightTopCorner.x + 5,
+      config.rightTopCorner.y + 5,
       3,
       this.health
     );

@@ -52,6 +52,10 @@ export default class MazeScene extends Phaser.Scene {
     //LOAD SPRITE
     this.selectedCharacter.loadSprite(this);
 
+    this.load.audio(assets.FUMIKOSKILL_KEY, assets.FUMIKOSKILL_URL)
+    this.load.audio(assets.TANKSKILL_KEY, assets.TANKSKILL_URL)
+    this.load.audio(assets.FIREMANSKILL_KEY, assets.FIREMANSKILL_URL)
+
     //LOAD ENEMIES
     this.load.spritesheet(assets.VAMPIRE_KEY, assets.VAMPIRE_URL, {
       frameWidth: 53.7,

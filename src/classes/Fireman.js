@@ -130,6 +130,8 @@ class Fireman extends Phaser.Physics.Arcade.Sprite {
 
     if (this.scene.input.keyboard.checkDown(this.cursors.shift, 9000)) {
       if (this.cursors.shift.isDown && this.flameCounter <= 1) {
+
+
         this.burning = true;
 
         if (this.burning === true) {
@@ -162,8 +164,12 @@ class Fireman extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
-  ability() {
 
+  ability() {
+    this.scene.sound.add(assets.FIREMANSKILL_KEY, {
+      loop: false,
+      volume: 0.3
+    }).play();
     this.flameAttack.setVisible(true)
   }
 

@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import Zombie from "../classes/Enemies/Zombie.js";
 import Skeleton from "../classes/Enemies/Skeleton.js";
 import Boss from "../classes/Enemies/Boss";
-
+import Flame from '../classes/Flame'
 import Player from "../classes/Player";
 import Bullet from "../classes/Bullet";
 import assets from "../../public/assets";
@@ -47,6 +47,10 @@ export default class DarknessLevel extends Phaser.Scene {
     this.load.tilemapTiledJSON(assets.DARKMAP_KEY, assets.DARKMAP_URL);
 
     this.selectedCharacter.loadSprite(this);
+
+    this.load.audio(assets.FUMIKOSKILL_KEY, assets.FUMIKOSKILL_URL)
+    this.load.audio(assets.TANKSKILL_KEY, assets.TANKSKILL_URL)
+    this.load.audio(assets.FIREMANSKILL_KEY, assets.FIREMANSKILL_URL)
 
     this.load.audio(
       "zombie-attack",
@@ -136,6 +140,19 @@ export default class DarknessLevel extends Phaser.Scene {
       runChildUpdate: true,
     });
 
+    if (this.player.flame) {
+      let playerFlame = this.physics.add.group({
+        classType: Flame,
+        runChildUpdate: true,
+      });
+
+      this.player.flameAttack = playerFlame.get().setVisible(false).setScale(.6, .4);
+
+      this.physics.add.overlap(this.player.flameAttack, skeletonGroup, this.onBulletCollision, null, this);
+      this.physics.add.overlap(this.player.flameAttack, zombieGroup, this.onBulletCollision, null, this);
+      this.physics.add.overlap(this.player.flameAttack, bossGroup, this.onBulletCollision, null, this);
+    }
+
     this.physics.add.collider(
       playerBullets,
       darkness,
@@ -219,6 +236,7 @@ export default class DarknessLevel extends Phaser.Scene {
       this.scene.launch("pause-scene", { key: this.name });
     }
 
+    //Tank ability check
     if (this.cursors.shift.isDown && this.player.abilityCounter <= 3) {
       this.player.usingAbility = true;
 
@@ -227,7 +245,7 @@ export default class DarknessLevel extends Phaser.Scene {
         this.player.usingAbility = false;
       }
 
-    } else if (this.cursors.shift.isDown && this.player.abilityCounter > 3) {
+    } else if (this.cursors.shift.isDown && this.player.abilityCounter >= 4) {
       let cantHeal = this.add
         .text(310, 370, "Out of heals", {
           fontSize: "13px",
@@ -240,6 +258,20 @@ export default class DarknessLevel extends Phaser.Scene {
           cantHeal.destroy();
         }
       })
+    }
+
+    //Fireman Ability check
+    if (this.player.flame) {
+
+      this.player.flameAttack.setX(this.player.x)
+      this.player.flameAttack.setY(this.player.y)
+
+      if (this.player.flameAttack.visible) {
+        this.player.flameAttack.body.checkCollision.none = false;
+      } else if (this.player.flameAttack.visible !== true) {
+        this.player.flameAttack.body.checkCollision.none = true;
+      }
+
     }
   }
 
@@ -457,7 +489,11 @@ export default class DarknessLevel extends Phaser.Scene {
       })
     }
 
-    bullet.hitsEnemy(monster);
+    if (bullet.texture.key === 'bullet') {
+      bullet.hitsEnemy(monster);
+    } else if (bullet.texture.key === 'fireKey') {
+      bullet.flameHit(monster);
+    }
   }
 
   bulletWallCollision(bullet, map) {

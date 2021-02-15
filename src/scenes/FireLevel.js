@@ -47,6 +47,10 @@ export default class FireLevel extends Phaser.Scene {
     this.load.tilemapTiledJSON(assets.FIREMAP_KEY, assets.FIREMAP_URL);
     this.selectedCharacter.loadSprite(this);
 
+    this.load.audio(assets.FUMIKOSKILL_KEY, assets.FUMIKOSKILL_URL)
+    this.load.audio(assets.TANKSKILL_KEY, assets.TANKSKILL_URL)
+    this.load.audio(assets.FIREMANSKILL_KEY, assets.FIREMANSKILL_URL)
+
     this.load.audio(
       "zombie-attack",
       "assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3"

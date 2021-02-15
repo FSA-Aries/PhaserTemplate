@@ -42,10 +42,15 @@ export default class LevelOne extends Phaser.Scene {
     // SMOL
     this.selectedCharacter.loadSprite(this);
 
+    this.load.audio(assets.FUMIKOSKILL_KEY, assets.FUMIKOSKILL_URL)
+    this.load.audio(assets.TANKSKILL_KEY, assets.TANKSKILL_URL)
+    this.load.audio(assets.FIREMANSKILL_KEY, assets.FIREMANSKILL_URL)
+
     this.load.image(assets.BULLET_KEY, assets.BULLET_URL);
     this.load.image(assets.RETICLE_KEY, assets.RETICLE_URL);
     this.load.image(assets.TILESET2_KEY, assets.TILESET2_URL);
     this.load.tilemapTiledJSON(assets.TILEMAP2_KEY, assets.TILEMAP2_URL);
+
 
     this.load.audio(
       "zombie-attack",

@@ -176,4 +176,16 @@ assets.FALSEWIN_URL = 'assets/audio/final-fantasy-vii-victory-fanfare-hq-sound.m
 assets.MENUMOUSE_KEY = 'menuMouse'
 assets.MENUMOUSE_URL = 'assets/audio/final-fantasy-viii-sound-effects-cursor-move.mp3'
 
+assets.FUMIKOSKILL_KEY = 'fumikoSkill'
+assets.FUMIKOSKILL_URL = 'assets/audio/judgement-cut-sfx.mp3'
+
+assets.FUMIKOSKILL_KEY = 'fumikoSkill'
+assets.FUMIKOSKILL_URL = 'assets/audio/judgement-cut-sfx.mp3'
+
+assets.TANKSKILL_KEY = 'tankSkill'
+assets.TANKSKILL_URL = 'assets/audio/final-fantasy-vii-sound-effects-limit-break.mp3'
+
+assets.FIREMANSKILL_KEY = 'firemanSkill'
+assets.FIREMANSKILL_URL = 'assets/audio/rpreplay-final1602121945-online-audio-converter.mp3'
+
 export default assets;

@@ -135,7 +135,13 @@ export default class DarknessLevel extends Phaser.Scene {
       runChildUpdate: true,
     });
 
-    this.physics.add.collider(playerBullets, darkness, this.bulletWallCollision, null, this);
+    this.physics.add.collider(
+      playerBullets,
+      darkness,
+      this.bulletWallCollision,
+      null,
+      this
+    );
 
     this.physics.add.collider(
       playerBullets,
@@ -178,7 +184,7 @@ export default class DarknessLevel extends Phaser.Scene {
         if (this.player.hidden === true) {
           this.player.hidden = false;
           this.player.body.checkCollision.none = false;
-          this.player.setAlpha(1)
+          this.player.setAlpha(1);
         }
       },
       this
@@ -415,6 +421,7 @@ export default class DarknessLevel extends Phaser.Scene {
         });
       }
     }
+
     bullet.hitsEnemy(monster);
   }
 

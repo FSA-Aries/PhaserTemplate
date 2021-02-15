@@ -6,6 +6,7 @@ import assets from "../../public/assets";
 import socket from "../socket/index.js";
 import Score from "../hud/score";
 import Imp from "../classes/Enemies/Imp";
+import Flame from "../classes/Flame"
 
 import EventEmitter from "../events/Emitter";
 import { config } from "../main";
@@ -155,6 +156,20 @@ export default class FireLevel extends Phaser.Scene {
       runChildUpdate: true,
     });
 
+    if (this.player.flame) {
+      let playerFlame = this.physics.add.group({
+        classType: Flame,
+        runChildUpdate: true,
+      });
+
+      this.player.flameAttack = playerFlame.get().setVisible(false).setScale(.6, .4);
+
+
+      this.physics.add.overlap(this.player.flameAttack, skeletonGroup, this.onBulletCollision, null, this);
+      this.physics.add.overlap(this.player.flameAttack, zombieGroup, this.onBulletCollision, null, this);
+      this.physics.add.overlap(this.player.flameAttack, impGroup, this.onBulletCollision, null, this);
+    }
+
     this.physics.add.collider(playerBullets, lava, this.bulletWallCollision, null, this);
 
     this.physics.add.collider(
@@ -231,6 +246,7 @@ export default class FireLevel extends Phaser.Scene {
       this.scene.launch("pause-scene", { key: this.name });
     }
 
+    //Tank ability check
     if (this.cursors.shift.isDown && this.player.abilityCounter <= 3) {
       this.player.usingAbility = true;
 
@@ -239,7 +255,7 @@ export default class FireLevel extends Phaser.Scene {
         this.player.usingAbility = false;
       }
 
-    } else if (this.cursors.shift.isDown && this.player.abilityCounter > 3) {
+    } else if (this.cursors.shift.isDown && this.player.abilityCounter >= 4) {
       let cantHeal = this.add
         .text(310, 370, "Out of heals", {
           fontSize: "13px",
@@ -252,6 +268,20 @@ export default class FireLevel extends Phaser.Scene {
           cantHeal.destroy();
         }
       })
+    }
+
+    //Fireman Ability check
+    if (this.player.flame) {
+
+      this.player.flameAttack.setX(this.player.x)
+      this.player.flameAttack.setY(this.player.y)
+
+      if (this.player.flameAttack.visible) {
+        this.player.flameAttack.body.checkCollision.none = false;
+      } else if (this.player.flameAttack.visible !== true) {
+        this.player.flameAttack.body.checkCollision.none = true;
+      }
+
     }
   }
 
@@ -394,8 +424,14 @@ export default class FireLevel extends Phaser.Scene {
       }
     }
 
-    bullet.hitsEnemy(monster);
+    if (bullet.texture.key === 'bullet') {
+      bullet.hitsEnemy(monster);
+    } else if (bullet.texture.key === 'fireKey') {
+      bullet.flameHit(monster);
+    }
   }
+
+
 
   bulletWallCollision(bullet, map) {
     bullet.destroy();

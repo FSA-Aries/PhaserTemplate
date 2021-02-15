@@ -4,6 +4,7 @@ import HealthBar from "../hud/healthbar";
 import { config } from "../main";
 import EventEmmiter from "../events/Emitter";
 
+
 class Fireman extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
     super(scene, x, y, "player");
@@ -12,7 +13,8 @@ class Fireman extends Phaser.Physics.Arcade.Sprite {
     scene.physics.world.enable(this);
     this.cursors = undefined;
     this.playerId = undefined;
-
+    this.flame = true;
+    this.flameAttack = undefined
     this.damage = 100;
     this.x = x;
     this.y = y;
@@ -32,6 +34,7 @@ class Fireman extends Phaser.Physics.Arcade.Sprite {
       down: Phaser.Input.Keyboard.KeyCodes.S,
       left: Phaser.Input.Keyboard.KeyCodes.A,
       right: Phaser.Input.Keyboard.KeyCodes.D,
+      shift: Phaser.Input.Keyboard.KeyCodes.SHIFT,
     });
     this.health = 150;
 
@@ -86,7 +89,9 @@ class Fireman extends Phaser.Physics.Arcade.Sprite {
       }),
       frameRate: 10,
     });
+
   }
+
   initEvents() {
     this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
   }
@@ -120,7 +125,24 @@ class Fireman extends Phaser.Physics.Arcade.Sprite {
     } else {
       this.anims.stop();
     }
+
+    if (this.scene.input.keyboard.checkDown(this.cursors.shift, 9000)) {
+      this.ability();
+
+      this.scene.time.addEvent({
+        delay: 3000,
+        callback: () => {
+          this.flameAttack.setVisible(false)
+        }
+      })
+    }
   }
+
+  ability() {
+
+    this.flameAttack.setVisible(true)
+  }
+
 
   playDamageTween() {
     return this.scene.tweens.add({
@@ -172,12 +194,16 @@ class Fireman extends Phaser.Physics.Arcade.Sprite {
       frameWidth: 50,
       frameHeight: 61,
     });
+
+    scene.load.image(assets.FIRE_KEY, assets.FIRE_URL)
   }
 
   createTexture() {
     //keep these incase there's a switch to elemental.png
     // this.setTexture(assets.FIREMAN_KEY, 4);
     this.setTexture(assets.FIREMAN_KEY, 1);
+    //this.flame = new Flame(this.scene)
+
   }
 }
 

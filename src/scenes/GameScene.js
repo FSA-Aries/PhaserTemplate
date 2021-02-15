@@ -3,6 +3,7 @@ import Zombie from "../classes/Enemies/Zombie.js";
 import Skeleton from "../classes/Enemies/Skeleton.js";
 import Player from "../classes/Player";
 import Bullet from "../classes/Bullet";
+import Flame from "../classes/Flame"
 import assets from "../../public/assets";
 import Score from "../hud/score";
 import EventEmitter from "../events/Emitter";
@@ -140,6 +141,18 @@ export default class GameScene extends Phaser.Scene {
     this.physics.add.collider(zombieGroup, zombieGroup, null);
     this.physics.add.collider(skeletonGroup, skeletonGroup, null);
 
+    if (this.player.flame) {
+      let playerFlame = this.physics.add.group({
+        classType: Flame,
+        runChildUpdate: true,
+      });
+
+      this.player.flameAttack = playerFlame.get().setVisible(false).setScale(.60, .40);
+
+      this.physics.add.overlap(this.player.flameAttack, skeletonGroup, this.onBulletCollision, null, this);
+      this.physics.add.overlap(this.player.flameAttack, zombieGroup, this.onBulletCollision, null, this);
+    }
+
     this.cursors = this.input.keyboard.createCursorKeys();
     //PAUSE MENU
     this.cursors = this.input.keyboard.addKeys({
@@ -227,6 +240,7 @@ export default class GameScene extends Phaser.Scene {
       this.scene.launch("pause-scene", { key: this.name });
     }
 
+    //Tank Heal ability check
     if (this.cursors.shift.isDown && this.player.abilityCounter <= 3) {
       this.player.usingAbility = true;
 
@@ -235,7 +249,7 @@ export default class GameScene extends Phaser.Scene {
         this.player.usingAbility = false;
       }
 
-    } else if (this.cursors.shift.isDown && this.player.abilityCounter > 3) {
+    } else if (this.cursors.shift.isDown && this.player.abilityCounter >= 4) {
       let cantHeal = this.add
         .text(310, 370, "Out of heals", {
           fontSize: "13px",
@@ -250,6 +264,19 @@ export default class GameScene extends Phaser.Scene {
       })
     }
 
+    //Fireman Ability check
+    if (this.player.flame) {
+
+      this.player.flameAttack.setX(this.player.x)
+      this.player.flameAttack.setY(this.player.y)
+
+      if (this.player.flameAttack.visible) {
+        this.player.flameAttack.body.checkCollision.none = false;
+      } else if (this.player.flameAttack.visible !== true) {
+        this.player.flameAttack.body.checkCollision.none = true;
+      }
+
+    }
 
   }
 
@@ -414,6 +441,7 @@ export default class GameScene extends Phaser.Scene {
     if (monster.skeletonAttackSound) monster.skeletonAttackSound.play();
   }
 
+
   onBulletCollision(bullet, monster) {
     let score = this.score.score;
     if (monster.health - bullet.damage <= 0) {
@@ -437,8 +465,11 @@ export default class GameScene extends Phaser.Scene {
         });
       }
     }
-
-    bullet.hitsEnemy(monster);
+    if (bullet.texture.key === 'bullet') {
+      bullet.hitsEnemy(monster);
+    } else if (bullet.texture.key === 'fireKey') {
+      bullet.flameHit(monster);
+    }
   }
 
   bulletWallCollision(bullet, map) {

@@ -26,6 +26,7 @@ class Tank extends Phaser.Physics.Arcade.Sprite {
   init() {
     this.setBodySize(60, 90, false);
     this.hasBeenHit = false;
+    this.hasBeenHealed = false;
     this.bounceVelocity = 50;
     this.setCollideWorldBounds(true);
     this.cursors = this.scene.input.keyboard.createCursorKeys();
@@ -118,18 +119,23 @@ class Tank extends Phaser.Physics.Arcade.Sprite {
       else if (prevVelocity.y > 0) this.setTexture(assets.PLAYER_KEY, 1);
     }
     if (this.scene.input.keyboard.checkDown(this.cursors.shift, 9000)) {
-      //this.ability();
+
       this.abilityCounter++;
     }
   }
 
   ability() {
+    if (this.hasBeenHealed) {
+      return
+    }
+    this.hasBeenHealed = true;
     this.health += 100
     if (this.health > 600) {
       this.health = 600
     }
     let healAnim = this.playHealTween();
-    this.scene.time.delayedCall(1000, () => {
+    this.scene.time.delayedCall(300, () => {
+      this.hasBeenHealed = false;
       healAnim.stop();
       this.clearTint();
     });
@@ -148,9 +154,12 @@ class Tank extends Phaser.Physics.Arcade.Sprite {
   playHealTween() {
     return this.scene.tweens.add({
       targets: this,
-      duration: 1000,
+      duration: 100,
       repeat: -1,
-      tint: 5 * 0xffffff
+      tint: 0x228B22
+
+
+
     });
 
   }

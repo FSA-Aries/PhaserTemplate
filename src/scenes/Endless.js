@@ -30,7 +30,7 @@ export default class Endless extends Phaser.Scene {
 
   ///// PRELOAD /////
   preload() {
-    this.load.audio("intro", "assets/audio/Intro.mp3");
+    // this.load.audio("intro", "assets/audio/Intro.mp3");
 
     this.game.scale.pageAlignHorizontally = true;
     this.game.scale.pageAlignVertically = true;
@@ -144,7 +144,13 @@ export default class Endless extends Phaser.Scene {
       runChildUpdate: true,
     });
 
-    this.physics.add.collider(playerBullets, walls, this.bulletWallCollision, null, this);
+    this.physics.add.collider(
+      playerBullets,
+      walls,
+      this.bulletWallCollision,
+      null,
+      this
+    );
 
     this.physics.add.collider(
       playerBullets,
@@ -182,7 +188,7 @@ export default class Endless extends Phaser.Scene {
         if (this.player.hidden === true) {
           this.player.hidden = false;
           this.player.body.checkCollision.none = false;
-          this.player.setAlpha(1)
+          this.player.setAlpha(1);
         }
       },
       this
@@ -224,9 +230,9 @@ export default class Endless extends Phaser.Scene {
   // PLAYER ANIMATION
 
   createPlayer(player, playerInfo) {
-    this.sound.add("intro", { loop: false, volume: 0.53 }).play();
+    // this.sound.add("intro", { loop: false, volume: 0.53 }).play();
 
-    this.sound.add("intro", { loop: false, volume: 0.53 }).play();
+    // this.sound.add("intro", { loop: false, volume: 0.53 }).play();
     this.player = new this.selectedCharacter(
       player,
       playerInfo.x,
@@ -347,7 +353,7 @@ export default class Endless extends Phaser.Scene {
                 });
 
                 this.time.addEvent({
-                  delay: 15000,
+                  delay: 10000,
                   callback: () => {
                     createdBy.destroy();
                     kelvin.destroy();

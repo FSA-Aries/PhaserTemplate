@@ -15,6 +15,8 @@ class Fireman extends Phaser.Physics.Arcade.Sprite {
     this.playerId = undefined;
     this.flame = true;
     this.flameAttack = undefined
+    this.flameCounter = 0;
+    this.burning = false;
     this.damage = 100;
     this.x = x;
     this.y = y;
@@ -127,14 +129,36 @@ class Fireman extends Phaser.Physics.Arcade.Sprite {
     }
 
     if (this.scene.input.keyboard.checkDown(this.cursors.shift, 9000)) {
-      this.ability();
+      if (this.cursors.shift.isDown && this.flameCounter <= 1) {
+        this.burning = true;
 
-      this.scene.time.addEvent({
-        delay: 3000,
-        callback: () => {
-          this.flameAttack.setVisible(false)
+        if (this.burning === true) {
+          this.ability();
+          this.burning = false;
         }
-      })
+
+        this.scene.time.addEvent({
+          delay: 100,
+          callback: () => {
+            this.flameAttack.setVisible(false)
+          }
+        })
+        this.flameCounter++
+      }
+      if (this.cursors.shift.isDown && this.flameCounter >= 2) {
+        let cantHeal = this.scene.add
+          .text(310, 370, "Out of gas", {
+            fontSize: "13px",
+            color: "white",
+          })
+          .setScrollFactor(0);
+        this.scene.time.addEvent({
+          delay: 3000,
+          callback: () => {
+            cantHeal.destroy();
+          }
+        })
+      }
     }
   }
 

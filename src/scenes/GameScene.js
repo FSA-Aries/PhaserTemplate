@@ -147,7 +147,7 @@ export default class GameScene extends Phaser.Scene {
         runChildUpdate: true,
       });
 
-      this.player.flameAttack = playerFlame.get().setVisible(false).setScale(.60, .40);
+      this.player.flameAttack = playerFlame.get().setVisible(false).setScale(.6, .4);
 
       this.physics.add.overlap(this.player.flameAttack, skeletonGroup, this.onBulletCollision, null, this);
       this.physics.add.overlap(this.player.flameAttack, zombieGroup, this.onBulletCollision, null, this);

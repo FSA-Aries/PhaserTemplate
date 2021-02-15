@@ -9,13 +9,13 @@ export default class Flame extends Phaser.Physics.Arcade.Sprite {
         this.direction = 0;
         this.xSpeed = 0;
         this.ySpeed = 0;
-        this.damage = 500;
+        this.damage = 20;
     }
 
 
     flameHit(target) {
         target.takesHit(this.damage);
-        //this.destroy();
+
     }
 
     setDamage(damage) {

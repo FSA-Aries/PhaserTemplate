@@ -138,6 +138,8 @@ assets.TILEMAZESET_URL = "assets/tilesets/TileMaze.png";
 //BACKGROUND
 assets.MENU_URL = "assets/backgrounds/SPMenuBackground.png";
 assets.WASD_URL = "assets/backgrounds/wasd.png";
+assets.SHIFT_URL = "assets/backgrounds/SPShift.png";
+assets.ESC_URL = "assets/backgrounds/SPEsc.png";
 
 assets.BACKBUTTON_KEY = "backbutton";
 assets.BACKBUTTON_URL =

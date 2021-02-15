@@ -35,10 +35,14 @@ class MenuScene extends BaseScene {
     });
     this.add.image(250, 700, "left-mouse-click").setDisplaySize(100, 100);
 
-    this.add.text(300, 600, "Ability", {
+    this.add.text(500, 600, "Skill", {
       fontSize: "40px",
     });
-    // this.add.image()
+    this.add.image(550, 700, "shift-button").setDisplaySize(100, 100);
+    this.add.text(650, 600, "Pause", {
+      fontSize: "40px",
+    });
+    this.add.image(700, 700, "esc-button").setDisplaySize(100, 100);
   }
 
   setupMenuEvents(menuItem) {

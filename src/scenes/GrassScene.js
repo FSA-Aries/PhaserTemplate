@@ -190,6 +190,9 @@ export default class GrassScene extends Phaser.Scene {
       this
     );
 
+    this.physics.add.collider(playerBullets, collisionLayer2, this.bulletWallCollision, null, this);
+    this.physics.add.collider(playerBullets, collisionLayer, this.bulletWallCollision, null, this);
+
     this.reticle = this.physics.add.sprite(0, 0, assets.RETICLE_KEY);
     this.reticle.setDisplaySize(25, 25).setCollideWorldBounds(true);
 
@@ -204,6 +207,11 @@ export default class GrassScene extends Phaser.Scene {
 
         if (bullet) {
           bullet.fire(this.player, this.reticle);
+        }
+        if (this.player.hidden === true) {
+          this.player.hidden = false;
+          this.player.body.checkCollision.none = false;
+          this.player.setAlpha(1)
         }
       },
       this
@@ -421,6 +429,10 @@ export default class GrassScene extends Phaser.Scene {
     } else {
       0;
     }
+  }
+
+  bulletWallCollision(bullet, map) {
+    bullet.destroy();
   }
 
   createScoreLabel(x, y, score) {

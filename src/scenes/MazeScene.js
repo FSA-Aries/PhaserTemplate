@@ -68,10 +68,14 @@ export default class MazeScene extends Phaser.Scene {
     this.playerGroup = this.add.group();
     //CREATE TILEMAP
     let map = this.make.tilemap({ key: assets.TILEMAZEMAP_KEY });
-    let tileMaze = map.addTilesetImage("Tilemaze", assets.TILEMAZESET_KEY);
+    let tileMaze = map.addTilesetImage(
+      "fantasy_tileset",
+      assets.TILEMAZESET_KEY
+    );
     map.createLayer("Base", tileMaze, 0, 0);
-    let collisionLayer = map.createLayer("Colliders", tileMaze, 0, 0);
-    let collisionLayer2 = map.createLayer("Colliders 2", tileMaze, 0, 0);
+    map.createLayer("Shadows", tileMaze, 0, 0);
+    let collisionLayer = map.createLayer("Walls", tileMaze, 0, 0);
+    let collisionLayer2 = map.createLayer("Doors", tileMaze, 0, 0);
 
     this.player = this.createPlayer(this, { x: 240, y: 50 });
 
@@ -146,8 +150,20 @@ export default class MazeScene extends Phaser.Scene {
       runChildUpdate: true,
     });
 
-    this.physics.add.collider(playerBullets, collisionLayer, this.bulletWallCollision, null, this);
-    this.physics.add.collider(playerBullets, collisionLayer2, this.bulletWallCollision, null, this);
+    this.physics.add.collider(
+      playerBullets,
+      collisionLayer,
+      this.bulletWallCollision,
+      null,
+      this
+    );
+    this.physics.add.collider(
+      playerBullets,
+      collisionLayer2,
+      this.bulletWallCollision,
+      null,
+      this
+    );
 
     if (this.player.flame) {
       let playerFlame = this.physics.add.group({
@@ -192,7 +208,7 @@ export default class MazeScene extends Phaser.Scene {
         if (this.player.hidden === true) {
           this.player.hidden = false;
           this.player.body.checkCollision.none = false;
-          this.player.setAlpha(1)
+          this.player.setAlpha(1);
         }
       },
       this

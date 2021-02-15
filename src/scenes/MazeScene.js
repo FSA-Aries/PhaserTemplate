@@ -103,17 +103,8 @@ export default class MazeScene extends Phaser.Scene {
     }
 
     //////Fix Enemy Class then replace one zombie per for loop with Vampire///
-
-    // for (let i = 0; i < 1; i++) {
-    //   this.time.addEvent({
-    //     delay: 3000,
-    //     callback: () => {
-    //       vampireGroup.add(this.createVampire());
-    //     },
-
-    //     repeat: 24,
-    //   });
-    // }
+    vampireGroup.add(this.createVampire());
+    vampireGroup.add(this.createVampire());
 
     this.physics.add.collider(
       this.playerGroup,
@@ -270,10 +261,12 @@ export default class MazeScene extends Phaser.Scene {
   }
 
   createVampire() {
+    const randomizedPositionx = this.enemyXSpawn();
+    const randomizedPositiony = this.enemyYSpawn();
     return new Vampire(
       this,
-      700,
-      30,
+      randomizedPositionx,
+      randomizedPositiony,
       assets.VAMPIRE_KEY,
       assets.VAMPIRE_URL,
       this.player

@@ -149,7 +149,7 @@ export default class CharacterSelect extends BaseScene {
         }
 
         if (this.gameType === "single") {
-          this.scene.start("grassScene", { character: this.selection });
+          this.scene.start("game-scene", { character: this.selection });
         }
       }
     );

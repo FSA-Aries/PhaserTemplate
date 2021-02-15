@@ -92,25 +92,30 @@ export default class GameScene extends Phaser.Scene {
     let skeletonGroup = this.physics.add.group();
     this.zombieGroup = zombieGroup;
 
-    for (let i = 0; i < 3; i++) {
-      this.time.addEvent({
-        delay: 3000,
-        callback: () => {
-          zombieGroup.add(this.createZombie());
-        },
-        repeat: 24,
-      });
-    }
-    for (let i = 0; i < 1; i++) {
-      this.time.addEvent({
-        delay: 3000,
-        callback: () => {
-          skeletonGroup.add(this.createSkeleton());
-        },
+    this.time.addEvent({
+      delay: 26000,
+      callback: () => {
+        for (let i = 0; i < 3; i++) {
+          this.time.addEvent({
+            delay: 3000,
+            callback: () => {
+              zombieGroup.add(this.createZombie());
+            },
+            repeat: 24,
+          });
+        }
+        for (let i = 0; i < 1; i++) {
+          this.time.addEvent({
+            delay: 3000,
+            callback: () => {
+              skeletonGroup.add(this.createSkeleton());
+            },
 
-        repeat: 24,
-      });
-    }
+            repeat: 24,
+          });
+        }
+      },
+    });
 
     this.physics.add.collider(
       this.playerGroup,
@@ -300,7 +305,7 @@ export default class GameScene extends Phaser.Scene {
 
   introText() {
     this.time.addEvent({
-      delay: 3000,
+      delay: 4000,
       callback: () => {
         let text1 = this.add.text(328, 365, "Welcome To", {
           fontSize: "25px",
@@ -314,11 +319,12 @@ export default class GameScene extends Phaser.Scene {
               fontSize: "25px",
               color: "red",
             });
-            // this.zombieGroup.add(this.createZombie());
             this.time.addEvent({
-              delay: 5000,
+              delay: 7000,
               callback: () => {
                 text2.destroy();
+                // this.zombieGroup.add(this.createZombie());
+
                 let createdBy = this.add.text(310, 370, "Created By", {
                   fontSize: "40px",
                   color: "red",

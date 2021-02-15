@@ -9,6 +9,8 @@ assets.TANKATK_KEY = "sword";
 assets.TANKATK_URL = "assets/arsenal/TankWeapon.png";
 assets.TANK_RETICLE_KEY = "tankReticle";
 assets.TANK_RETICLE_URL = "assets/arsenal/TankReticle.png";
+assets.FIRE_KEY = 'fireKey';
+assets.FIRE_URL = 'assets/arsenal/imgbin_pixel-art-fire-flame-png.png'
 
 // CHARACTERS
 assets.PLAYER_KEY = "player";

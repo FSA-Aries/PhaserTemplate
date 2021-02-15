@@ -6,6 +6,7 @@ import Vampire from "../classes/Enemies/Vampire.js";
 import Score from "../hud/score";
 import EventEmitter from "../events/Emitter";
 import Bullet from "../classes/Bullet";
+import Flame from "../classes/Flame"
 
 export default class MazeScene extends Phaser.Scene {
   constructor() {
@@ -141,6 +142,7 @@ export default class MazeScene extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys();
     this.cursors = this.input.keyboard.addKeys({
       esc: Phaser.Input.Keyboard.KeyCodes.ESC,
+      shift: Phaser.Input.Keyboard.KeyCodes.SHIFT,
     });
 
     let playerBullets = this.physics.add.group({
@@ -162,6 +164,18 @@ export default class MazeScene extends Phaser.Scene {
       null,
       this
     );
+
+    if (this.player.flame) {
+      let playerFlame = this.physics.add.group({
+        classType: Flame,
+        runChildUpdate: true,
+      });
+
+      this.player.flameAttack = playerFlame.get().setVisible(false).setScale(.6, .4);
+
+      this.physics.add.overlap(this.player.flameAttack, vampireGroup, this.onBulletCollision, null, this);
+      this.physics.add.overlap(this.player.flameAttack, zombieGroup, this.onBulletCollision, null, this);
+    }
 
     this.physics.add.collider(
       playerBullets,
@@ -224,6 +238,44 @@ export default class MazeScene extends Phaser.Scene {
     if (this.cursors.esc.isDown) {
       this.scene.pause();
       this.scene.launch("pause-scene", { key: this.name });
+    }
+
+    //Tank ability check
+    if (this.cursors.shift.isDown && this.player.abilityCounter <= 3) {
+      this.player.usingAbility = true;
+
+      if (this.player.usingAbility === true) {
+        this.player.ability();
+        this.player.usingAbility = false;
+      }
+
+    } else if (this.cursors.shift.isDown && this.player.abilityCounter >= 4) {
+      let cantHeal = this.add
+        .text(310, 370, "Out of heals", {
+          fontSize: "13px",
+          color: "white",
+        })
+        .setScrollFactor(0);
+      this.time.addEvent({
+        delay: 3000,
+        callback: () => {
+          cantHeal.destroy();
+        }
+      })
+    }
+
+    //Fireman Ability check
+    if (this.player.flame) {
+
+      this.player.flameAttack.setX(this.player.x)
+      this.player.flameAttack.setY(this.player.y)
+
+      if (this.player.flameAttack.visible) {
+        this.player.flameAttack.body.checkCollision.none = false;
+      } else if (this.player.flameAttack.visible !== true) {
+        this.player.flameAttack.body.checkCollision.none = true;
+      }
+
     }
   }
 
@@ -345,9 +397,13 @@ export default class MazeScene extends Phaser.Scene {
         });
       }
     }
-
-    bullet.hitsEnemy(monster);
+    if (bullet.texture.key === 'bullet') {
+      bullet.hitsEnemy(monster);
+    } else if (bullet.texture.key === 'fireKey') {
+      bullet.flameHit(monster);
+    }
   }
+
 
   bulletWallCollision(bullet, map) {
     bullet.destroy();

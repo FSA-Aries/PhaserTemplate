@@ -75,21 +75,21 @@ export default class Vampire extends Enemy {
       return;
     }
 
-    if (Phaser.Math.Distance.BetweenPoints(this.player, this) < 300) {
+    if (Phaser.Math.Distance.BetweenPoints(this.player, this) < 500) {
       if (Math.abs(this.x - this.player.x) > Math.abs(this.y - this.player.y)) {
         if (this.player.x < this.x) {
-          this.setVelocityX(-100);
+          this.setVelocityX(-200);
           this.anims.play("vampire-left", true);
         } else {
-          this.setVelocityX(100);
+          this.setVelocityX(200);
           this.anims.play("vampire-right", true);
         }
       } else {
         if (this.player.y < this.y) {
-          this.setVelocityY(-100);
+          this.setVelocityY(-200);
           this.anims.play("vampire-up", true);
         } else {
-          this.setVelocityY(100);
+          this.setVelocityY(200);
           this.anims.play("vampire-down", true);
         }
       }

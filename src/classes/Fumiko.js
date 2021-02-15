@@ -22,6 +22,8 @@ class Fumiko extends Phaser.Physics.Arcade.Sprite {
     this.initEvents();
   }
 
+
+
   init() {
     this.hasBeenHit = false;
     this.bounceVelocity = 250;
@@ -43,6 +45,7 @@ class Fumiko extends Phaser.Physics.Arcade.Sprite {
       3,
       this.health
     );
+
 
     this.anims.create({
       key: "left",
@@ -130,6 +133,10 @@ class Fumiko extends Phaser.Physics.Arcade.Sprite {
     }
 
     if (this.scene.input.keyboard.checkDown(this.cursors.shift, 9000)) {
+      this.scene.sound.add(assets.FUMIKOSKILL_KEY, {
+        loop: false,
+        volume: 0.3
+      }).play();
       if (this.hidden === false) {
         this.ability();
         this.scene.time.addEvent({

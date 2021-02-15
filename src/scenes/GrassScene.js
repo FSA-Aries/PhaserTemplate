@@ -49,6 +49,10 @@ export default class GrassScene extends Phaser.Scene {
 
     this.selectedCharacter.loadSprite(this);
 
+    this.load.audio(assets.FUMIKOSKILL_KEY, assets.FUMIKOSKILL_URL)
+    this.load.audio(assets.TANKSKILL_KEY, assets.TANKSKILL_URL)
+    this.load.audio(assets.FIREMANSKILL_KEY, assets.FIREMANSKILL_URL)
+
     this.load.audio(
       "zombie-attack",
       "assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3"

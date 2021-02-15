@@ -133,6 +133,10 @@ class Tank extends Phaser.Physics.Arcade.Sprite {
     if (this.health > 600) {
       this.health = 600
     }
+    this.scene.sound.add(assets.TANKSKILL_KEY, {
+      loop: false,
+      volume: 0.3
+    }).play();
     let healAnim = this.playHealTween();
     this.scene.time.delayedCall(300, () => {
       this.hasBeenHealed = false;

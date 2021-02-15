@@ -318,7 +318,7 @@ export default class LevelOne extends Phaser.Scene {
   onPlayerCollision(player, monster) {
     player.takesHit(monster);
     if (monster.zombieAttackSound) monster.zombieAttackSound.play();
-    if (monster.skeletonAttackSound) monster.zombieAttackSound.play();
+    if (monster.skeletonAttackSound) monster.skeletonAttackSound.play();
   }
 
   onBulletCollision(bullet, monster) {

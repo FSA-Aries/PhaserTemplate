@@ -34,6 +34,10 @@ export default class GrassScene extends Phaser.Scene {
     this.game.scale.pageAlignVertically = true;
     this.game.scale.refresh();
 
+    // this.load.image("static", "red-static.jpg");
+    this.load.image("hell", "hell-image.jpg");
+
+    this.load.image(assets.SOUND_OFF_KEY, assets.SOUND_OFF_URL);
     this.load.image(assets.SOUND_OFF_KEY, assets.SOUND_OFF_URL);
     this.load.image(assets.SOUND_ON_KEY, assets.SOUND_ON_URL);
 
@@ -49,6 +53,11 @@ export default class GrassScene extends Phaser.Scene {
       "assets/audio/Zombie-Aggressive-Attack-A6-www.fesliyanstudios.com-[AudioTrimmer.com].mp3"
     );
     this.load.audio("skeleton-attack", "assets/audio/skeleton-attack.wav");
+
+    this.load.audio(
+      "ending-audio",
+      "assets/audio/Ending Audio - 2:14:21, 6.48 PM.mp3"
+    );
 
     //Enemies
     this.load.spritesheet(assets.ZOMBIE_KEY, assets.ZOMBIE_URL, {
@@ -90,14 +99,27 @@ export default class GrassScene extends Phaser.Scene {
       config.rightTopCorner.y + 20
     ).setScale(0.07, 0.07);
 
+    this.time.addEvent({ delay: 5000, callback: () => {} });
+    this.time.addEvent({ delay: 5000, callback: () => {} });
+    this.time.addEvent({ delay: 5000, callback: () => {} });
+
+    // this.time.addEvent({
+    //   delay: 5000,
+    //   callback: () => {
+    //     this.add.image(0, 0, "static").setScale(2.5, 2.5);
+    //   },
+    // });
+
     //Zombie and Skeleton Groups
     let zombieGroup = this.physics.add.group();
     let skeletonGroup = this.physics.add.group();
 
     // Enemy Creation
 
+    this.endingText();
+
     this.time.addEvent({
-      delay: 14000,
+      delay: 45500,
       callback: () => {
         for (let i = 0; i < 6; i++) {
           this.time.addEvent({
@@ -221,13 +243,90 @@ export default class GrassScene extends Phaser.Scene {
   // PLAYER ANIMATION
 
   createPlayer(player, playerInfo) {
-    this.player = new this.selectedCharacter(
-      player,
-      playerInfo.x,
-      playerInfo.y
-    );
+    this.player = new this.selectedCharacter(player, 400, 400);
     this.player.createTexture();
     return this.player;
+  }
+
+  endingText() {
+    this.time.addEvent({
+      delay: 500,
+      callback: () => {
+        this.sound
+          .add("ending-audio", {
+            volume: 1.4,
+          })
+          .play();
+        let text1 = this.add.text(210, 365, "Congratulations!", {
+          fontSize: "47px",
+          color: "red",
+        });
+        this.time.addEvent({
+          delay: 1500,
+          callback: () => {
+            text1.destroy();
+            let text2 = this.add.text(190, 370, "You Won The Game :D", {
+              fontSize: "47px",
+              color: "red",
+            });
+            this.time.addEvent({
+              delay: 1000,
+              callback: () => {
+                text2.destroy();
+                let createdBy = this.add.text(310, 370, "Created By", {
+                  fontSize: "60px",
+                  color: "red",
+                });
+                let morgan = this.add.text(40, 40, "Morgan Hu", {
+                  fontSize: "45px",
+                  color: "red",
+                });
+                let juan = this.add.text(40, 600, "Juan Velazquez", {
+                  fontSize: "45px",
+                  color: "red",
+                });
+                let kelvin = this.add.text(500, 40, "Kelvin Lin", {
+                  fontSize: "45px",
+                  color: "red",
+                });
+                let brandon = this.add.text(500, 600, "Brandon Fox", {
+                  fontSize: "45px",
+                  color: "red",
+                });
+
+                this.time.addEvent({
+                  delay: 7000,
+                  callback: () => {
+                    createdBy.destroy();
+                    kelvin.destroy();
+                    juan.destroy();
+                    brandon.destroy();
+                    morgan.destroy();
+
+                    this.time.addEvent({
+                      delay: 1000,
+                      callback: () => {
+                        let redStatic = this.add
+                          .image(400, 400, "hell")
+                          .setScale(3, 3);
+                        this.physics.pause();
+                        this.time.addEvent({
+                          delay: 32000,
+                          callback: () => {
+                            redStatic.destroy();
+                            this.physics.resume();
+                          },
+                        });
+                      },
+                    });
+                  },
+                });
+              },
+            });
+          },
+        });
+      },
+    });
   }
 
   setupFollowupCameraOn(player) {

@@ -144,6 +144,7 @@ export default class LevelOne extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys();
     this.cursors = this.input.keyboard.addKeys({
       esc: Phaser.Input.Keyboard.KeyCodes.ESC,
+      shift: Phaser.Input.Keyboard.KeyCodes.SHIFT,
     });
     let playerBullets = this.physics.add.group({
       classType: Bullet,
@@ -217,6 +218,29 @@ export default class LevelOne extends Phaser.Scene {
     if (this.cursors.esc.isDown) {
       this.scene.pause();
       this.scene.launch("pause-scene", { key: this.name });
+    }
+
+    if (this.cursors.shift.isDown && this.player.abilityCounter <= 3) {
+      this.player.usingAbility = true;
+
+      if (this.player.usingAbility === true) {
+        this.player.ability();
+        this.player.usingAbility = false;
+      }
+
+    } else if (this.cursors.shift.isDown && this.player.abilityCounter > 3) {
+      let cantHeal = this.add
+        .text(310, 370, "Out of heals", {
+          fontSize: "13px",
+          color: "white",
+        })
+        .setScrollFactor(0);
+      this.time.addEvent({
+        delay: 3000,
+        callback: () => {
+          cantHeal.destroy();
+        }
+      })
     }
   }
 

@@ -12,7 +12,8 @@ class Tank extends Phaser.Physics.Arcade.Sprite {
     scene.physics.world.enable(this);
     this.cursors = undefined;
     this.playerId = undefined;
-
+    this.usingAbility = false;
+    this.abilityCounter = 0;
     this.damage = 50;
     this.x = x;
     this.y = y;
@@ -33,6 +34,7 @@ class Tank extends Phaser.Physics.Arcade.Sprite {
       down: Phaser.Input.Keyboard.KeyCodes.S,
       left: Phaser.Input.Keyboard.KeyCodes.A,
       right: Phaser.Input.Keyboard.KeyCodes.D,
+      shift: Phaser.Input.Keyboard.KeyCodes.SHIFT,
     });
     this.health = 500;
 
@@ -115,6 +117,23 @@ class Tank extends Phaser.Physics.Arcade.Sprite {
       else if (prevVelocity.y < 0) this.setTexture(assets.PLAYER_KEY, 10);
       else if (prevVelocity.y > 0) this.setTexture(assets.PLAYER_KEY, 1);
     }
+    if (this.scene.input.keyboard.checkDown(this.cursors.shift, 9000)) {
+      //this.ability();
+      this.abilityCounter++;
+    }
+  }
+
+  ability() {
+    this.health += 100
+    if (this.health > 600) {
+      this.health = 600
+    }
+    let healAnim = this.playHealTween();
+    this.scene.time.delayedCall(1000, () => {
+      healAnim.stop();
+      this.clearTint();
+    });
+
   }
 
   playDamageTween() {
@@ -125,6 +144,17 @@ class Tank extends Phaser.Physics.Arcade.Sprite {
       tint: 0xffffff,
     });
   }
+
+  playHealTween() {
+    return this.scene.tweens.add({
+      targets: this,
+      duration: 1000,
+      repeat: -1,
+      tint: 5 * 0xffffff
+    });
+
+  }
+
 
   bounceOff() {
     if (this.body.touching.right) {

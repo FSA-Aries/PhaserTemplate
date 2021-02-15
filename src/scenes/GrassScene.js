@@ -35,7 +35,7 @@ export default class GrassScene extends Phaser.Scene {
     this.game.scale.refresh();
 
     // this.load.image("static", "red-static.jpg");
-    this.load.image("hell", "hell-image.jpg");
+    this.load.image("hell", "assets/backgrounds/hell-image.jpg");
 
     this.load.image(assets.SOUND_OFF_KEY, assets.SOUND_OFF_URL);
     this.load.image(assets.SOUND_OFF_KEY, assets.SOUND_OFF_URL);

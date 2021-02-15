@@ -128,7 +128,7 @@ export default class Multiplayer extends Phaser.Scene {
           if (scene.secondScore === undefined) {
             scene.secondScore = scene.createScoreLabel(
               config.rightTopCorner.x + 5,
-              config.rightTopCorner.y + 50,
+              config.rightTopCorner.y + 100,
               score
             );
           } else {
@@ -159,7 +159,7 @@ export default class Multiplayer extends Phaser.Scene {
 
     this.score = this.createScoreLabel(
       config.rightTopCorner.x + 5,
-      config.rightTopCorner.y,
+      config.rightTopCorner.y + 50,
       0
     );
 

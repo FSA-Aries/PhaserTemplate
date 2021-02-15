@@ -13,6 +13,10 @@ export default class Skeleton extends Enemy {
 
   init() {
     this.setBodySize(32, 48, true);
+    this.setCollideWorldBounds(true);
+    this.skeletonAttackSound = this.scene.sound.add("skeleton-attack", {
+      volume: 0.3,
+    });
 
     this.anims.create({
       key: "skeleton-idleFront",

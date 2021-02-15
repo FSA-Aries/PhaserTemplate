@@ -8,6 +8,7 @@ import Fireman from "../classes/Fireman";
 import BaseScene from "./BaseScene";
 
 export default class CharacterSelect extends BaseScene {
+
     constructor() {
         super("characterSelect");
         this.selection = undefined;
@@ -166,8 +167,3 @@ export default class CharacterSelect extends BaseScene {
         );
     }
 }
-
-
-
-
-

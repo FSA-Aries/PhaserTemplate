@@ -13,10 +13,11 @@ export default class Vampire extends Enemy {
     this.player = player;
   }
 
-
-
   init() {
     this.setCollideWorldBounds(true);
+    this.vampireAttackSound = this.scene.sound.add("vampire-attack", {
+      volume: 0.35,
+    });
 
     this.anims.create({
       key: "vampire-down",

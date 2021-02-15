@@ -14,13 +14,15 @@ class TitleScene extends Phaser.Scene {
     this.input.keyboard.once("keydown", this.handleContinue, this);
   }
   handleContinue() {
-    this.sound.add(assets.SHOT_KEY, { loop: false, volume: 0.53 }).play();
-    this.cameras.main.fadeOut(1000, 0, 0, 0)
+    this.sound.add(assets.SHOT_KEY, { loop: false, volume: 0.08 }).play();
+    this.cameras.main.fadeOut(1000, 0, 0, 0);
 
-    this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
-      this.scene.start("menu-scene");
-
-    })
+    this.cameras.main.once(
+      Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
+      (cam, effect) => {
+        this.scene.start("menu-scene");
+      }
+    );
   }
 }
 

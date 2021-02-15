@@ -18,7 +18,7 @@ export default class Zombie extends Enemy {
     this.setBodySize(27, 35, true);
     this.setCollideWorldBounds(true);
     this.zombieAttackSound = this.scene.sound.add("zombie-attack", {
-      volume: 0.2,
+      volume: 0.25,
     });
 
     this.anims.create({

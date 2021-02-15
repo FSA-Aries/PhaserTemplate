@@ -144,7 +144,13 @@ export default class Endless extends Phaser.Scene {
       runChildUpdate: true,
     });
 
-    this.physics.add.collider(playerBullets, walls, this.bulletWallCollision, null, this);
+    this.physics.add.collider(
+      playerBullets,
+      walls,
+      this.bulletWallCollision,
+      null,
+      this
+    );
 
     this.physics.add.collider(
       playerBullets,
@@ -182,7 +188,7 @@ export default class Endless extends Phaser.Scene {
         if (this.player.hidden === true) {
           this.player.hidden = false;
           this.player.body.checkCollision.none = false;
-          this.player.setAlpha(1)
+          this.player.setAlpha(1);
         }
       },
       this

@@ -140,9 +140,12 @@ assets.TILEMAZESET_URL = "assets/tilesets/TileMaze.png";
 //BACKGROUND
 assets.MENU_URL = "assets/backgrounds/SPMenuBackground.png";
 assets.WASD_URL = "assets/backgrounds/wasd.png";
+assets.SHIFT_URL = "assets/backgrounds/SPShift.png";
+assets.ESC_URL = "assets/backgrounds/SPEsc.png";
 
-assets.BACKBUTTON_KEY = 'backbutton'
-assets.BACKBUTTON_URL = 'assets/backgrounds/cargill-organic-food-whole-foods-market-breakfast-back-button-955a31b8a0abcb0292f7aa38a622896a.png'
+assets.BACKBUTTON_KEY = "backbutton";
+assets.BACKBUTTON_URL =
+  "assets/backgrounds/cargill-organic-food-whole-foods-market-breakfast-back-button-955a31b8a0abcb0292f7aa38a622896a.png";
 
 //SELECT
 assets.FUMIKO_SELECT_KEY = "Fumiko";
@@ -154,6 +157,16 @@ assets.SMOL_SELECT_URL = "assets/characters/Select/smol guy.png";
 assets.FIREMAN_SELECT_KEY = "Fireman";
 assets.FIREMAN_SELECT_URL = "assets/characters/Select/Fireman-portrait.png";
 
+//WIKI
+assets.FUMIKO_STORY = "FumikoStory";
+assets.FUMIKO_STORY_URL = "assets/characters/Fumiko/Wiki/FumikoLibrary.png";
+assets.TANK_STORY = "TankStory";
+assets.TANK_STORY_URL = "assets/characters/TankLibrary/TankLibrary.png";
+assets.SMOL_STORY = "SmolStory";
+assets.SMOL_STORY_URL = "assets/characters/Smol/SmolLibrary.png";
+assets.FIREMAN_STORY = "fireStory";
+assets.FIREMAN_STORY_URL = "assets/characters/FiremanLibrary.png";
+
 //AUDIO
 assets.SOUND_ON_KEY = "sound-on";
 assets.SOUND_ON_URL = "assets/audio/SoundOn.png";
@@ -162,19 +175,22 @@ assets.SOUND_OFF_KEY = "sound-off";
 assets.SOUND_OFF_URL = "assets/audio/SoundOff.png";
 
 assets.SHOT_KEY = "shot";
-assets.SHOT_URL = "assets/audio/Desert-Eagle-.50-AE-Far-Single-Gunshot-A-www.fesliyanstudios.com.mp3";
+assets.SHOT_URL =
+  "assets/audio/Desert-Eagle-.50-AE-Far-Single-Gunshot-A-www.fesliyanstudios.com.mp3";
 
-assets.GUNCOCK_KEY = 'gunCock'
-assets.GUNCOCK_URL = 'assets/audio/GunCockSingle PE1096303.mp3'
+assets.GUNCOCK_KEY = "gunCock";
+assets.GUNCOCK_URL = "assets/audio/GunCockSingle PE1096303.mp3";
 
-assets.DMCMENU_KEY = 'dmcMenu'
-assets.DMCMENU_URL = 'assets/audio/devil-may-cry-menu-sound.mp3'
+assets.DMCMENU_KEY = "dmcMenu";
+assets.DMCMENU_URL = "assets/audio/devil-may-cry-menu-sound.mp3";
 
-assets.FALSEWIN_KEY = 'falsewin'
-assets.FALSEWIN_URL = 'assets/audio/final-fantasy-vii-victory-fanfare-hq-sound.mp3'
+assets.FALSEWIN_KEY = "falsewin";
+assets.FALSEWIN_URL =
+  "assets/audio/final-fantasy-vii-victory-fanfare-hq-sound.mp3";
 
-assets.MENUMOUSE_KEY = 'menuMouse'
-assets.MENUMOUSE_URL = 'assets/audio/final-fantasy-viii-sound-effects-cursor-move.mp3'
+assets.MENUMOUSE_KEY = "menuMouse";
+assets.MENUMOUSE_URL =
+  "assets/audio/final-fantasy-viii-sound-effects-cursor-move.mp3";
 
 assets.FUMIKOSKILL_KEY = 'fumikoSkill'
 assets.FUMIKOSKILL_URL = 'assets/audio/judgement-cut-sfx.mp3'

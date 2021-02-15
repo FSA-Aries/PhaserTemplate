@@ -7,8 +7,8 @@ export default class Vampire extends Enemy {
   constructor(scene, x, y, key, type, player) {
     super(scene, x, y, key, type);
 
-    this.health = 400;
-    this.damage = 75;
+    this.health = 300;
+    this.damage = 50;
     this.init();
     this.player = player;
   }
@@ -78,18 +78,18 @@ export default class Vampire extends Enemy {
     if (Phaser.Math.Distance.BetweenPoints(this.player, this) < 500) {
       if (Math.abs(this.x - this.player.x) > Math.abs(this.y - this.player.y)) {
         if (this.player.x < this.x) {
-          this.setVelocityX(-200);
+          this.setVelocityX(-175);
           this.anims.play("vampire-left", true);
         } else {
-          this.setVelocityX(200);
+          this.setVelocityX(175);
           this.anims.play("vampire-right", true);
         }
       } else {
         if (this.player.y < this.y) {
-          this.setVelocityY(-200);
+          this.setVelocityY(-175);
           this.anims.play("vampire-up", true);
         } else {
-          this.setVelocityY(200);
+          this.setVelocityY(175);
           this.anims.play("vampire-down", true);
         }
       }

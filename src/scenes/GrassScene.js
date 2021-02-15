@@ -69,6 +69,7 @@ export default class GrassScene extends Phaser.Scene {
 
   ///// CREATE /////
   create({ gameStatus }) {
+    this.cameras.main.fadeIn(1000, 0, 0, 0)
     this.playerGroup = this.add.group();
     let map = this.make.tilemap({ key: assets.SCALEDSPMAP_KEY });
     let tileSet = map.addTilesetImage("Terrain", assets.SCALEDSPSET_KEY);
@@ -96,9 +97,9 @@ export default class GrassScene extends Phaser.Scene {
       config.rightTopCorner.y + 20
     ).setScale(0.07, 0.07);
 
-    this.time.addEvent({ delay: 5000, callback: () => {} });
-    this.time.addEvent({ delay: 5000, callback: () => {} });
-    this.time.addEvent({ delay: 5000, callback: () => {} });
+    this.time.addEvent({ delay: 5000, callback: () => { } });
+    this.time.addEvent({ delay: 5000, callback: () => { } });
+    this.time.addEvent({ delay: 5000, callback: () => { } });
 
     // this.time.addEvent({
     //   delay: 5000,

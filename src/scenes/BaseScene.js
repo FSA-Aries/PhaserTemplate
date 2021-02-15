@@ -19,8 +19,8 @@ class BaseScene extends Phaser.Scene {
 
     this.load.audio("theme", "assets/audio/City-of-the-Disturbed_Looping.mp3");
 
-    this.load.image("arrow-keys", assets.WASD_URL);
-    this.load.image("left-mouse-click", "https://i.imgur.com/OGWM7Jm.png");
+    this.load.image("arrow-keys", "https://i.imgur.com/dKiVKt5.png");
+    this.load.image("left-mouse-click", "https://i.imgur.com/wC7Omrh.png");
     this.load.image("shift-button", assets.SHIFT_URL);
     this.load.image("esc-button", assets.ESC_URL);
 

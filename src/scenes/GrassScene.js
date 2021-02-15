@@ -54,10 +54,7 @@ export default class GrassScene extends Phaser.Scene {
     );
     this.load.audio("skeleton-attack", "assets/audio/skeleton-attack.wav");
 
-    this.load.audio(
-      "ending-audio",
-      "assets/audio/Ending Audio - 2:14:21, 6.48 PM.mp3"
-    );
+    this.load.audio("ending-audio", "assets/audio/ending-audio.mp3");
 
     //Enemies
     this.load.spritesheet(assets.ZOMBIE_KEY, assets.ZOMBIE_URL, {
@@ -190,8 +187,20 @@ export default class GrassScene extends Phaser.Scene {
       this
     );
 
-    this.physics.add.collider(playerBullets, collisionLayer2, this.bulletWallCollision, null, this);
-    this.physics.add.collider(playerBullets, collisionLayer, this.bulletWallCollision, null, this);
+    this.physics.add.collider(
+      playerBullets,
+      collisionLayer2,
+      this.bulletWallCollision,
+      null,
+      this
+    );
+    this.physics.add.collider(
+      playerBullets,
+      collisionLayer,
+      this.bulletWallCollision,
+      null,
+      this
+    );
 
     this.reticle = this.physics.add.sprite(0, 0, assets.RETICLE_KEY);
     this.reticle.setDisplaySize(25, 25).setCollideWorldBounds(true);
@@ -211,7 +220,7 @@ export default class GrassScene extends Phaser.Scene {
         if (this.player.hidden === true) {
           this.player.hidden = false;
           this.player.body.checkCollision.none = false;
-          this.player.setAlpha(1)
+          this.player.setAlpha(1);
         }
       },
       this

@@ -408,12 +408,23 @@ export default class DarknessLevel extends Phaser.Scene {
 
     if (monster.health - bullet.damage <= 0) {
       this.score.addPoints(1);
-      if (score >= 390) {
-        this.scene.start("grassScene", {
-          score: score,
-          character: this.selectedCharacter,
-        });
-      }
+      this.time.addEvent({
+        delay: 9000,
+        callback: () => {
+          this.cameras.main.fadeOut(1000, 0, 0, 0)
+          this.cameras.main.once(
+            Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
+            (cam, effect) => {
+              if (score >= 390) {
+                this.scene.start("grassScene", {
+                  score: score,
+                  character: this.selectedCharacter,
+                });
+              }
+            }
+          )
+        }
+      })
     }
     bullet.hitsEnemy(monster);
   }
@@ -450,5 +461,28 @@ export default class DarknessLevel extends Phaser.Scene {
     });
     this.add.existing(button);
     return button;
+  }
+
+  gameSceneNext() {
+    let text1 = this.add
+      .text(310, 370, "I barely beat that guy...", {
+        fontSize: "10px",
+        color: "white",
+      })
+      .setScrollFactor(0);
+
+    this.time.addEvent({
+      delay: 3000,
+      callback: () => {
+        text1.setText("I see the way out");
+
+        this.time.addEvent({
+          delay: 3000,
+          callback: () => {
+            text1.setText("This has to be the end...");
+          },
+        });
+      },
+    });
   }
 }

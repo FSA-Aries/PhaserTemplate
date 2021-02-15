@@ -150,7 +150,6 @@ export default class CharacterSelect extends BaseScene {
 
         if (this.gameType === "single") {
           this.scene.start("game-scene", { character: this.selection });
-          //   this.scene.start("darkness-level", { character: this.selection });
         }
       }
     );

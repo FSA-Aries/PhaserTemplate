@@ -19,8 +19,8 @@ class BaseScene extends Phaser.Scene {
 
     this.load.audio("theme", "assets/audio/City-of-the-Disturbed_Looping.mp3");
 
-    this.load.image("arrow-keys", "https://i.imgur.com/x89etdy.png");
-    this.load.image("left-mouse-click", "https://i.imgur.com/UgVw0p0.png");
+    this.load.image("arrow-keys", assets.WASD_URL);
+    this.load.image("left-mouse-click", "https://i.imgur.com/OGWM7Jm.png");
 
     this.load.audio(assets.MENUMOUSE_KEY, assets.MENUMOUSE_URL);
   }
@@ -85,6 +85,26 @@ class BaseScene extends Phaser.Scene {
       );
 
       lastMenuPositionX += this.lineHeight + 150;
+      setupMenuEvents(menuItem);
+    });
+  }
+  createCharacterLibrary(menu, setupMenuEvents) {
+    let lastMenuPositionX = -300;
+    let lastMenuPositionY = -100;
+
+    menu.forEach((menuItem) => {
+      const menuPosition = [
+        this.screenCenter[0] + lastMenuPositionX,
+        this.screenCenter[1] + lastMenuPositionY,
+      ];
+
+      menuItem.imageGO = this.add.image(
+        menuPosition[0],
+        menuPosition[1],
+        menuItem.key
+      );
+
+      lastMenuPositionY += this.lineHeight + 100;
       setupMenuEvents(menuItem);
     });
   }

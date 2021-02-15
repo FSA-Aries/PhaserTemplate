@@ -10,12 +10,13 @@ class MenuScene extends BaseScene {
       { scene: "PlayScene", text: "Campaign" },
       { scene: "WaitingRoom", text: "Two-Player" },
       { scene: "endless", text: "Endless" },
+      { scene: "characterLibrary", text: "Character Guide" },
     ];
   }
 
   create() {
     super.create();
-    this.cameras.main.fadeIn(1000, 0, 0, 0)
+    this.cameras.main.fadeIn(1000, 0, 0, 0);
 
     this.createSoundButton(config.rightTopCorner.x - 50, 700).setScale(
       0.25,
@@ -33,27 +34,30 @@ class MenuScene extends BaseScene {
       fontSize: "40px",
     });
     this.add.image(250, 700, "left-mouse-click").setDisplaySize(100, 100);
+
+    this.add.text(300, 600, "Ability", {
+      fontSize: "40px",
+    });
+    // this.add.image()
   }
 
   setupMenuEvents(menuItem) {
     const textGO = menuItem.textGO;
     textGO.setInteractive();
 
-
-    textGO.on('pointerover', () => {
-      this.sound.add(assets.MENUMOUSE_KEY, { loop: false, volume: 0.53 }).play();
-      textGO.setStyle({ fill: '#ff0' });
-
+    textGO.on("pointerover", () => {
+      this.sound
+        .add(assets.MENUMOUSE_KEY, { loop: false, volume: 0.53 })
+        .play();
+      textGO.setStyle({ fill: "#ff0" });
     });
 
     textGO.on("pointerout", () => {
       textGO.setStyle({ fill: "#fff" });
     });
 
-
     textGO.on("pointerup", () => {
       if (menuItem.text === "Campaign") {
-
         menuItem.scene &&
           this.scene.start("characterSelect", { gameType: "single" });
       }
@@ -63,6 +67,9 @@ class MenuScene extends BaseScene {
       }
       if (menuItem.text === "Endless") {
         this.scene.start("characterSelect", { gameType: "endless" });
+      }
+      if (menuItem.text === "Character Guide") {
+        this.scene.start("characterLibrary", { gametype: "wiki" });
       }
     });
   }
@@ -77,7 +84,6 @@ class MenuScene extends BaseScene {
         button.setTexture(assets.SOUND_OFF_KEY);
         this.sound.mute = true;
       } else {
-
         button.setTexture(assets.SOUND_ON_KEY);
         this.sound.mute = false;
       }

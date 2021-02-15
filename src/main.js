@@ -1,19 +1,20 @@
-import Phaser from 'phaser';
+import Phaser from "phaser";
 
-import GameScene from './scenes/GameScene';
-import WaitingRoom from './scenes/WaitingRoom';
-import MenuScene from './scenes/MenuScene';
-import LevelOne from './scenes/LevelOne';
-import FireLevel from './scenes/FireLevel';
-import DarknessLevel from './scenes/DarknessLevel';
-import GrassScene from './scenes/GrassScene';
-import MazeScene from './scenes/MazeScene';
-import Multiplayer from './scenes/Multiplayer';
-import GameOver from './scenes/GameOver';
-import CharacterSelect from './scenes/CharacterSelect';
-import PauseScene from './scenes/PauseMenu';
-import TitleScene from './scenes/TitleScene';
-import Endless from './scenes/Endless';
+import GameScene from "./scenes/GameScene";
+import WaitingRoom from "./scenes/WaitingRoom";
+import MenuScene from "./scenes/MenuScene";
+import LevelOne from "./scenes/LevelOne";
+import FireLevel from "./scenes/FireLevel";
+import DarknessLevel from "./scenes/DarknessLevel";
+import GrassScene from "./scenes/GrassScene";
+import MazeScene from "./scenes/MazeScene";
+import Multiplayer from "./scenes/Multiplayer";
+import GameOver from "./scenes/GameOver";
+import CharacterSelect from "./scenes/CharacterSelect";
+import PauseScene from "./scenes/PauseMenu";
+import TitleScene from "./scenes/TitleScene";
+import Endless from "./scenes/Endless";
+import CharacterLibrary from "./scenes/CharacterLibrary";
 
 const WIDTH = 800;
 
@@ -24,7 +25,7 @@ export const config = {
   type: Phaser.AUTO,
   mapOffset: MAP_WIDTH > WIDTH ? MAP_WIDTH - WIDTH : 0,
   scale: {
-    parent: 'mygame',
+    parent: "mygame",
   },
   width: WIDTH,
   height: HEIGHT,
@@ -38,7 +39,7 @@ export const config = {
     y: (HEIGHT - HEIGHT / ZOOM_FACTOR) / 2,
   },
   physics: {
-    default: 'arcade',
+    default: "arcade",
     arcade: {
       debug: false,
 
@@ -46,7 +47,7 @@ export const config = {
     },
   },
 
-  parent: 'mygame',
+  parent: "mygame",
   dom: {
     createContainer: true,
   },
@@ -66,6 +67,7 @@ export const config = {
     PauseScene,
     Multiplayer,
     Endless,
+    CharacterLibrary,
   ],
 };
 

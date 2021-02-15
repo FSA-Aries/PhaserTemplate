@@ -93,7 +93,7 @@ export default class GameScene extends Phaser.Scene {
     this.zombieGroup = zombieGroup;
 
     this.time.addEvent({
-      delay: 26000,
+      delay: 21000,
       callback: () => {
         for (let i = 0; i < 3; i++) {
           this.time.addEvent({
@@ -347,7 +347,7 @@ export default class GameScene extends Phaser.Scene {
                 });
 
                 this.time.addEvent({
-                  delay: 15000,
+                  delay: 10000,
                   callback: () => {
                     createdBy.destroy();
                     kelvin.destroy();

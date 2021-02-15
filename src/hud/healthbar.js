@@ -29,6 +29,13 @@ class HealthBar {
     }
   }
 
+  increase(amount) {
+
+    this.value = amount;
+    this.draw(this.x, this.y, this.scale);
+
+  }
+
   draw(x, y, scale) {
     this.bar.clear();
     const { width, height } = this.size;

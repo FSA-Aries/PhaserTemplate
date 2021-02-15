@@ -133,6 +133,7 @@ class Tank extends Phaser.Physics.Arcade.Sprite {
     if (this.health > 600) {
       this.health = 600
     }
+    this.hp.increase(this.health);
     this.scene.sound.add(assets.TANKSKILL_KEY, {
       loop: false,
       volume: 0.3

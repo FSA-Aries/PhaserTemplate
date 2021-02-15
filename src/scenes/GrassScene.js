@@ -328,7 +328,7 @@ export default class GrassScene extends Phaser.Scene {
       callback: () => {
         this.sound
           .add("ending-audio", {
-            volume: 1.4,
+            volume: 1.1,
           })
           .play();
         let text1 = this.add.text(210, 365, "Congratulations!", {

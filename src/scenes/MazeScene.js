@@ -112,11 +112,12 @@ export default class MazeScene extends Phaser.Scene {
         callback: () => {
           zombieGroup.add(this.createZombie());
         },
-        repeat: 24,
+        repeat: 23,
       });
     }
 
     //////Fix Enemy Class then replace one zombie per for loop with Vampire///
+    vampireGroup.add(this.createVampire());
     vampireGroup.add(this.createVampire());
     vampireGroup.add(this.createVampire());
 

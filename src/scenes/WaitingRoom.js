@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import socket from "../socket/index.js";
 import assets from "../../public/assets/index";
+import { config } from "../main.js";
 
 export default class WaitingRoom extends Phaser.Scene {
   constructor() {
@@ -79,7 +80,9 @@ export default class WaitingRoom extends Phaser.Scene {
     //right popup
     scene.boxes.strokeRect(425, 200, 275, 100);
     scene.boxes.fillRect(425, 200, 275, 100);
-    scene.inputElement = scene.add.dom(562.5, 350).createFromCache("codeform");
+    scene.inputElement = scene.add
+      .dom(config.rightTopCorner.x + 60, config.rightTopCorner.y + 100)
+      .createFromCache("codeform");
     scene.inputElement.addListener("click");
     scene.inputElement.on("click", function (event) {
       if (event.target.name === "enterRoom") {
